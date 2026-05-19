@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="WebUITopic5-Team4.csproj" />
+  <Project Path="WebUITopic5-Team4.Tests/WebUITopic5-Team4.Tests.csproj" />
 </Solution>

@@ -1,9 +1,14 @@
 /**
  * Cart Module Logic
  * Handles: Add to Cart, Update Quantity, Delete Item, and Notifications
+ * 
+ * Covers Use Cases: UC-CART-01, UC-CART-02, UC-CART-03
+ * Covers Test Cases: TC_CART_01 → TC_CART_09
  */
 
+// ============================================================
 // 1. Global Toast Notification
+// ============================================================
 function showToast(message, type = 'info') {
     const container = document.getElementById('toast-container');
     if (!container) return;
@@ -18,7 +23,9 @@ function showToast(message, type = 'info') {
     }, 3000);
 }
 
-// 2. Custom Confirm Modal
+// ============================================================
+// 2. Custom Confirm Modal (UC-CART-03: Xóa sản phẩm)
+// ============================================================
 function showConfirm(message, onConfirm, onCancel) {
     if ($('#custom-confirm-modal').length === 0) {
         $('body').append(`
@@ -27,14 +34,14 @@ function showConfirm(message, onConfirm, onCancel) {
                     <div class="custom-modal-icon">
                         <i class="fa fa-exclamation-triangle"></i>
                     </div>
-                    <h3 class="custom-modal-title">${$('html').attr('lang') === 'en' ? 'Confirm' : 'Xác nhận'}</h3>
+                    <h3 class="custom-modal-title">Xác nhận</h3>
                     <p class="custom-modal-message"></p>
                     <div class="modal-btns">
                         <button class="modal-btn btn-cancel">
-                            <i class="fa fa-times mr-1"></i> ${$('html').attr('lang') === 'en' ? 'Cancel' : 'Hủy bỏ'}
+                            <i class="fa fa-times mr-1"></i> Hủy bỏ
                         </button>
                         <button class="modal-btn btn-confirm">
-                            <i class="fa fa-check mr-1"></i> ${$('html').attr('lang') === 'en' ? 'OK' : 'Đồng ý'}
+                            <i class="fa fa-check mr-1"></i> Đồng ý
                         </button>
                     </div>
                 </div>
@@ -64,7 +71,12 @@ function closeConfirmModal() {
     setTimeout(() => modal.css('display', 'none'), 250);
 }
 
-// 3. Add to Cart Logic
+// ============================================================
+// 3. Add to Cart Logic (UC-CART-01)
+//    TC_CART_01: Thêm thành công
+//    TC_CART_02: Cộng dồn nếu đã tồn tại
+//    TC_CART_03: Chặn nếu vượt tồn kho
+// ============================================================
 function addToCart(productId, quantity = 1) {
     $.ajax({
         url: "/Cart/AddToCart",
@@ -79,13 +91,17 @@ function addToCart(productId, quantity = 1) {
             }
         },
         error: function() {
-            const isEn = $('html').attr('lang') === 'en';
-            showToast(isEn ? "Server connection error" : "Lỗi kết nối máy chủ", "error");
+            showToast("Lỗi kết nối máy chủ", "error");
         }
     });
 }
 
-// 4. Update Cart Quantity (Main Cart Page)
+// ============================================================
+// 4. Update Cart Quantity (UC-CART-02)
+//    TC_CART_04: Cập nhật hợp lệ → tính lại Total
+//    TC_CART_05: Nhập sai → reset về 1
+//    TC_CART_06: Vượt tồn kho → set max
+// ============================================================
 function updateCartQuantity(cartItemId, quantity, row) {
     $.ajax({
         url: "/Cart/UpdateQuantity",
@@ -93,32 +109,44 @@ function updateCartQuantity(cartItemId, quantity, row) {
         data: { cartItemId, quantity },
         success: function(response) {
             if (response.success) {
-                // Update specific row elements
+                // TC_CART_04: Cập nhật thành công
                 if (row && row.length) {
                     row.find(".qty-input").val(response.quantity);
                     row.find(".subtotal").text(response.subtotal + " ₫");
                 }
                 
-                // Update global totals
                 updateGlobalTotals(response.grandTotal, response.totalItems);
-                
-                // Update header cart preview
                 reloadCartPreview();
-            } else if (response.message) {
+            } else {
                 showToast(response.message, 'error');
-                if (row && row.length && response.quantity) {
-                    row.find(".qty-input").val(response.quantity);
+                
+                if (row && row.length) {
+                    // TC_CART_05: Server trả resetQty → reset input về 1
+                    if (response.resetQty) {
+                        row.find(".qty-input").val(response.resetQty);
+                        // Re-sync server với giá trị reset
+                        updateCartQuantity(cartItemId, response.resetQty, row);
+                    }
+                    // TC_CART_06: Server trả maxStock → set input về max
+                    else if (response.maxStock) {
+                        row.find(".qty-input").val(response.maxStock);
+                        // Re-sync server với giá trị max
+                        updateCartQuantity(cartItemId, response.maxStock, row);
+                    }
                 }
             }
         },
         error: function() {
-            const isEn = $('html').attr('lang') === 'en';
-            showToast(isEn ? "Cannot update quantity" : "Không thể cập nhật số lượng", "error");
+            showToast("Không thể cập nhật số lượng", "error");
         }
     });
 }
 
-// 5. Delete Cart Item
+// ============================================================
+// 5. Delete Cart Item (UC-CART-03)
+//    TC_CART_07: Xóa 1 sản phẩm → trừ tiền, giảm badge
+//    TC_CART_08: Xóa SP cuối → hiện "Giỏ hàng trống"
+// ============================================================
 function deleteCartItem(cartItemId, row, silent = false, onCancel) {
     const performDelete = function() {
         $.ajax({
@@ -130,14 +158,14 @@ function deleteCartItem(cartItemId, row, silent = false, onCancel) {
                     if (row) {
                         row.fadeOut(300, function() { 
                             $(this).remove(); 
+                            // TC_CART_08: Nếu không còn sản phẩm → reload trang hiện trạng thái trống
                             if ($(".cart-row").length === 0) location.reload(); 
                         });
                     }
                     updateGlobalTotals(response.grandTotal, response.totalItems);
                     reloadCartPreview();
                     if (!silent) {
-                        const isEn = $('html').attr('lang') === 'en';
-                        showToast(isEn ? "Product removed from cart" : "Đã xóa sản phẩm khỏi giỏ hàng", "success");
+                        showToast("Đã xóa sản phẩm khỏi giỏ hàng", "success");
                     }
                 }
             }
@@ -147,12 +175,13 @@ function deleteCartItem(cartItemId, row, silent = false, onCancel) {
     if (silent) {
         performDelete();
     } else {
-        const isEn = $('html').attr('lang') === 'en';
-        showConfirm(isEn ? "Are you sure you want to delete this product?" : "Bạn có chắc chắn muốn xóa sản phẩm này?", performDelete, onCancel);
+        showConfirm("Bạn có chắc chắn muốn xóa sản phẩm này?", performDelete, onCancel);
     }
 }
 
-// 6. Reload Cart Preview HTML (Fix recursion)
+// ============================================================
+// 6. Reload Cart Preview HTML (TC_CART_09: Badge AJAX)
+// ============================================================
 function reloadCartPreview() {
     $.get("/Cart/GetCartPreview", function(html) {
         $(".cart-vc-content").html(html);
@@ -169,15 +198,16 @@ function reloadCartPreview() {
     });
 }
 
-// 7. Update Totals in Cart Index
+// ============================================================
+// 7. Update Totals in Cart Index Page
+// ============================================================
 function updateGlobalTotals(grandTotal, totalItems) {
     // Update main checkout box
     $("#grand-total").text(grandTotal + " ₫");
+    $("#subtotal-display").text(grandTotal + " ₫");
     
-    // Target the first <li> for subtotal (Tạm tính)
+    // Fallback selectors
     $(".shoping__checkout ul li:contains('Tạm tính') span").text(grandTotal + " ₫");
-    
-    // Target the second <li> for total (Tổng cộng) - fallback if #grand-total is not enough
     $(".shoping__checkout ul li:contains('Tổng cộng') span").text(grandTotal + " ₫");
     
     // Update cart icon badge
@@ -187,86 +217,212 @@ function updateGlobalTotals(grandTotal, totalItems) {
     $(".header__cart__price span").text(grandTotal + " ₫");
 }
 
-    // 8. Event Listeners
-    $(document).ready(function() {
-        // Sync hamburger total price text on initial load
-        const initialTotal = $(".cart-dropdown__total strong").first().text();
-        if (initialTotal) {
-            $(".header__cart__price span").text(initialTotal);
+// ============================================================
+// 8. Validate Quantity Input (TC_CART_05: số âm, 0, chữ cái)
+// ============================================================
+function validateQtyInput(value) {
+    const parsed = parseInt(value);
+    if (isNaN(parsed) || parsed <= 0) {
+        return { valid: false, value: 1 };
+    }
+    return { valid: true, value: parsed };
+}
+
+// ============================================================
+// 9. Event Listeners
+// ============================================================
+$(document).ready(function() {
+    // Flag to track unsaved quantity changes in the cart
+    let isCartDirty = false;
+
+    // Sync hamburger total price text on initial load
+    const initialTotal = $(".cart-dropdown__total strong").first().text();
+    if (initialTotal) {
+        $(".header__cart__price span").text(initialTotal);
+    }
+
+    // ----------------------------------------------------------
+    // 9.1 Add to Cart (UC-CART-01)
+    // ----------------------------------------------------------
+    $(document).on("click", ".add-to-cart-btn, .add-to-cart", function(e) {
+        e.preventDefault();
+        const $btn = $(this);
+        
+        if ($btn.hasClass('btn-disabled') || $btn.is(':disabled')) {
+            showToast("Sản phẩm hiện đã hết hàng", "error");
+            return false;
         }
 
-        // Add to Cart
-        $(document).on("click", ".add-to-cart-btn, .add-to-cart", function(e) {
-            e.preventDefault();
-            const $btn = $(this);
-            
-            // Prevent adding to cart if out of stock
-            const isEn = $('html').attr('lang') === 'en';
-            if ($btn.hasClass('btn-disabled') || $btn.is(':disabled')) {
-                showToast(isEn ? "Product is currently out of stock" : "Sản phẩm hiện đã hết hàng", "error");
-                return false;
-            }
+        const productId = $btn.data("product-id");
+        const quantity = parseInt($("#productQuantity").val()) || 1;
+        
+        if (quantity <= 0) {
+            showToast("Số lượng không hợp lệ", "error");
+            return false;
+        }
+        
+        addToCart(productId, quantity);
+    });
 
-            const productId = $btn.data("product-id");
-            const quantity = parseInt($("#productQuantity").val()) || 1;
-            
-            if (quantity <= 0) {
-                showToast(isEn ? "Invalid quantity" : "Số lượng không hợp lệ", "error");
-                return false;
-            }
-            
-            addToCart(productId, quantity);
-        });
+    // ----------------------------------------------------------
+    // 9.2 Cart Page: +/- Button Quantity Controls (UC-CART-02)
+    // ----------------------------------------------------------
+    $(document).on("click", ".pro-qty-cart .qtybtn", function(e) {
+        e.preventDefault();
+        e.stopPropagation();
 
-        // Main Cart Page Quantity Logic (Manual control for pro-qty-cart)
-        $(document).on("click", ".pro-qty-cart .qtybtn", function(e) {
-            e.preventDefault();
-            e.stopPropagation();
+        const $button = $(this);
+        const $row = $button.closest(".cart-row");
+        const $input = $row.find(".qty-input");
+        
+        let currentVal = parseInt($input.val()) || 0;
+        let newVal = currentVal;
 
-            const $button = $(this);
-            const $row = $button.closest(".cart-row");
+        if ($button.hasClass('inc')) {
+            newVal = currentVal + 1;
+        } else {
+            newVal = currentVal - 1;
+        }
+
+        $input.val(newVal);
+        isCartDirty = true; // Mark cart as having unsaved changes
+
+        // Cập nhật thành tiền dòng sản phẩm ở Client-side để giao diện phản hồi tức thì
+        const priceText = $row.find(".shoping__cart__price").text();
+        const unitPrice = parseFloat(priceText.replace(/[^0-9]/g, ''));
+        const rowSubtotal = unitPrice * newVal;
+        $row.find(".subtotal").text(rowSubtotal.toLocaleString('vi-VN') + " ₫");
+    });
+
+    // Chỉ cho phép nhập số (0-9) và tối đa một dấu trừ ở đầu
+    $(document).on("input", ".pro-qty-cart .qty-input", function() {
+        this.value = this.value.replace(/(?!^-)[^0-9]/g, '');
+    });
+
+    // ----------------------------------------------------------
+    // 9.3 Cart Page: Direct Input (TC_CART_04, TC_CART_05)
+    //     Khách hàng gõ trực tiếp số lượng mới vào ô input
+    // ----------------------------------------------------------
+    $(document).on("change blur", ".pro-qty-cart .qty-input", function() {
+        const $input = $(this);
+        const $row = $input.closest(".cart-row");
+        
+        let qty = parseInt($input.val());
+        if (isNaN(qty)) {
+            qty = 0;
+        }
+
+        $input.val($input.val()); // Keep what the user typed (e.g. empty or negative number)
+        isCartDirty = true; // Mark cart as having unsaved changes
+
+        // Cập nhật thành tiền dòng sản phẩm ở Client-side
+        const priceText = $row.find(".shoping__cart__price").text();
+        const unitPrice = parseFloat(priceText.replace(/[^0-9]/g, ''));
+        const rowSubtotal = unitPrice * qty;
+        $row.find(".subtotal").text(rowSubtotal.toLocaleString('vi-VN') + " ₫");
+    });
+
+    // ----------------------------------------------------------
+    // 9.4 Cart Page: "CẬP NHẬT GIỎ HÀNG" Button (TC_CART_04)
+    //     Thực hiện đồng bộ dữ liệu giỏ hàng lên database thông qua AJAX
+    // ----------------------------------------------------------
+    $(document).on("click", "#btn-update-cart", function(e) {
+        e.preventDefault();
+        let hasError = false;
+        let updateCount = 0;
+        const totalRows = $(".cart-row").length;
+        
+        if (totalRows === 0) {
+            isCartDirty = false;
+            return;
+        }
+
+        $(".cart-row").each(function() {
+            const $row = $(this);
             const $input = $row.find(".qty-input");
             const cartItemId = $row.data("cart-item-id");
-            const maxStock = parseInt($button.parent().data("max-stock")) || 999;
             
-            let currentVal = parseInt($input.val()) || 0;
-            let newVal = currentVal;
-
-            if ($button.hasClass('inc')) {
-                newVal = currentVal + 1;
-            } else {
-                newVal = currentVal - 1;
+            // Client-side validation: Chỉ chuyển đổi về số nguyên thô, không tự tiện chặn số âm/không hợp lệ
+            let qty = parseInt($input.val());
+            if (isNaN(qty)) {
+                qty = 1;
             }
 
-            // Validation
-            if (newVal > maxStock) {
-                const isEn = $('html').attr('lang') === 'en';
-                showToast(isEn ? `Only ${maxStock} items left in stock` : `Chỉ còn ${maxStock} sản phẩm trong kho`, "error");
-                $input.val(maxStock);
-                updateCartQuantity(cartItemId, maxStock, $row);
-                return;
-            }
+            // Gọi AJAX cập nhật lên Server để thực thi các nghiệp vụ kiểm thử
+            $.ajax({
+                url: "/Cart/UpdateQuantity",
+                type: "POST",
+                data: { cartItemId, quantity: qty },
+                success: function(response) {
+                    updateCount++;
+                    
+                    if (response.success) {
+                        // ========================================================
+                        // [TEST CASE: TC_CART_04]
+                        // Nghiệp vụ: Cập nhật số lượng sản phẩm hợp lệ thành công.
+                        // Hoạt động: Cập nhật lại số lượng và cột Thành tiền (subtotal)
+                        //            của sản phẩm đó trên giao diện từ Server trả về.
+                        // ========================================================
+                        $row.find(".qty-input").val(response.quantity);
+                        $row.find(".subtotal").text(response.subtotal + " ₫");
+                        
+                        // Khi đã đồng bộ xong dòng cuối cùng
+                        if (updateCount === totalRows) {
+                            isCartDirty = false; // Tắt trạng thái chưa lưu
+                            updateGlobalTotals(response.grandTotal, response.totalItems);
+                            reloadCartPreview();
+                            
+                            // Nếu tất cả cập nhật thành công không có lỗi
+                            if (!hasError) {
+                                showToast("Giỏ hàng đã được cập nhật thành công", "success");
+                            }
+                        }
+                    } else {
+                        // ========================================================
+                        // [TEST CASE: TC_CART_05 & TC_CART_06]
+                        // Nghiệp vụ: Phát hiện lỗi kiểm thực từ Server và khôi phục giao diện.
+                        // ========================================================
+                        showToast(response.message, 'error');
+                        hasError = true;
 
-            if (newVal <= 0) {
-                $input.val(0); 
-                deleteCartItem(cartItemId, $row, false, function() {
-                    // ON CANCEL: Reset to 1 and sync
-                    $input.val(1);
-                    updateCartQuantity(cartItemId, 1, $row);
-                });
-            } else {
-                $input.val(newVal);
-                updateCartQuantity(cartItemId, newVal, $row);
-            }
+                        // [TC_CART_05] Server phát hiện số lượng âm/không hợp lệ -> trả về resetQty = 1
+                        if (response.resetQty) {
+                            $input.val(response.resetQty);
+                        } 
+                        // [TC_CART_06] Server phát hiện số lượng vượt quá tồn kho thực tế -> trả về maxStock
+                        else if (response.maxStock) {
+                            $input.val(response.maxStock);
+                        }
+
+                        // Khi dòng cuối cùng hoàn tất xử lý (kể cả khi thất bại), đồng bộ lại toàn bộ giỏ hàng
+                        if (updateCount === totalRows) {
+                            isCartDirty = false;
+                            // Tải lại trang để đồng bộ tuyệt đối giá trị điều chỉnh và tổng tiền từ Server
+                            setTimeout(function() {
+                                location.reload();
+                            }, 1000);
+                        }
+                    }
+                },
+                error: function() {
+                    updateCount++;
+                    showToast("Không thể kết nối máy chủ để cập nhật sản phẩm", "error");
+                }
+            });
         });
+    });
 
-        // Main Cart Page Delete
-        $(document).on("click", ".delete-cart-item", function(e) {
-            e.preventDefault();
-            deleteCartItem($(this).data("cart-item-id"), $(this).closest(".cart-row"));
-        });
+    // ----------------------------------------------------------
+    // 9.5 Cart Page: Delete Button (UC-CART-03)
+    // ----------------------------------------------------------
+    $(document).on("click", ".delete-cart-item", function(e) {
+        e.preventDefault();
+        deleteCartItem($(this).data("cart-item-id"), $(this).closest(".cart-row"));
+    });
 
-    // --- Preview Dropdown Quantity Controls ---
+    // ----------------------------------------------------------
+    // 9.6 Preview Dropdown Quantity Controls
+    // ----------------------------------------------------------
     $(document).on("click", ".cart-preview-dec", function(e) {
         e.preventDefault();
         const item = $(this).closest(".cart-dropdown__item");
@@ -275,7 +431,7 @@ function updateGlobalTotals(grandTotal, totalItems) {
         let qty = parseInt(countSpan.text()) - 1;
 
         if (qty <= 0) {
-            deleteCartItem(cartItemId, null, true); // Auto delete silent
+            deleteCartItem(cartItemId, null, true);
         } else {
             countSpan.text(qty);
             updateCartQuantity(cartItemId, qty, $()); 
@@ -291,12 +447,35 @@ function updateGlobalTotals(grandTotal, totalItems) {
         let qty = parseInt(countSpan.text()) + 1;
 
         if (qty > maxStock) {
-            const isEn = $('html').attr('lang') === 'en';
-            showToast(isEn ? `Exceeds stock limit (${maxStock})` : `Vượt quá số lượng tồn kho (${maxStock})`, "error");
+            showToast(`Vượt quá số lượng tồn kho (${maxStock})`, "error");
             return;
         }
 
         countSpan.text(qty);
         updateCartQuantity(cartItemId, qty, $());
+    });
+
+    // ----------------------------------------------------------
+    // 9.7 Safe Checkout: Auto-sync if there are unsaved changes
+    // ----------------------------------------------------------
+    $(document).on("click", "#btn-checkout", function(e) {
+        if (isCartDirty) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const checkoutUrl = $(this).attr("href");
+            showToast("Đang tự động đồng bộ giỏ hàng của bạn...", "info");
+            
+            // Tự động kích hoạt sự kiện click của nút "CẬP NHẬT GIỎ HÀNG"
+            $("#btn-update-cart").click();
+            
+            // Đợi AJAX đồng bộ hoàn tất (dirty flag về false) rồi mới chuyển hướng
+            const checkInterval = setInterval(function() {
+                if (!isCartDirty) {
+                    clearInterval(checkInterval);
+                    window.location.href = checkoutUrl;
+                }
+            }, 100);
+        }
     });
 });

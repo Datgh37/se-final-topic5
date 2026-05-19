@@ -7,6 +7,10 @@ namespace WebUITopic5_Team4
     {
         public static void Main(string[] args)
         {
+            var defaultCulture = new System.Globalization.CultureInfo("vi-VN");
+            System.Globalization.CultureInfo.DefaultThreadCurrentCulture = defaultCulture;
+            System.Globalization.CultureInfo.DefaultThreadCurrentUICulture = defaultCulture;
+
             var builder = WebApplication.CreateBuilder(args);
             var myConnectionString = builder.Configuration.GetConnectionString("MyConnectString"); 
             

@@ -52,7 +52,9 @@
                                         <td class="shoping__cart__quantity">
                                             <div class="pro-qty-cart" data-max-stock="@item.Product.StockQuantity">
                                                 <span class="dec qtybtn">-</span>
-                                                <input type="text" class="qty-input" value="@item.Quantity" readonly>
+                                                <input type="text" class="qty-input" value="@item.Quantity"
+                                                       data-cart-item-id="@item.CartItemId"
+                                                       data-max-stock="@item.Product.StockQuantity">
                                                 <span class="inc qtybtn">+</span>
                                             </div>
                                         </td>
@@ -74,8 +76,13 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="shoping__cart__btns">
-                        <a asp-controller="Products" asp-action="Index" class="site-btn rounded-pill">TIẾP TỤC MUA SẮM</a>
+                    <div class="shoping__cart__btns d-flex justify-content-between align-items-center flex-wrap">
+                        <a asp-controller="Products" asp-action="Index" class="site-btn rounded-pill">
+                            <i class="fa fa-arrow-left me-2"></i> TIẾP TỤC MUA SẮM
+                        </a>
+                        <button type="button" id="btn-update-cart" class="site-btn rounded-pill cart-update-btn">
+                            <i class="fa fa-refresh me-2"></i> CẬP NHẬT GIỎ HÀNG
+                        </button>
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -93,10 +100,12 @@
                     <div class="shoping__checkout">
                         <h5>Tổng đơn hàng</h5>
                         <ul>
-                            <li>Tạm tính <span>@grandTotal.ToString("N0") ₫</span></li>
+                            <li>Tạm tính <span id="subtotal-display">@grandTotal.ToString("N0") ₫</span></li>
                             <li>Tổng cộng <span id="grand-total">@grandTotal.ToString("N0") ₫</span></li>
                         </ul>
-                        <a asp-controller="Checkout" asp-action="Index" class="primary-btn rounded-pill w-100 text-center">TIẾN HÀNH THANH TOÁN</a>
+                        <a asp-controller="Checkout" asp-action="Index" class="primary-btn rounded-pill w-100 text-center" id="btn-checkout">
+                            TIẾN HÀNH THANH TOÁN
+                        </a>
                     </div>
                 </div>
             </div>

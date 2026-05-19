@@ -10,8 +10,8 @@
         <a asp-controller="Home" asp-action="Index"><h2>Electronic</h2></a>
     </div>
 
-    <!-- Phần người dùng -->
-    <div class="humberger__menu__user border-bottom pb-4 mb-4">
+    <!-- Phần người dùng (Tạm thời ẩn để tập trung trải nghiệm khách vãng lai) -->
+    <div class="humberger__menu__user border-bottom pb-4 mb-4 d-none-custom">
         @if (User.Identity!.IsAuthenticated)
         {
             <div class="d-flex align-items-center px-3">
@@ -57,12 +57,9 @@
             <li class="@(currentController == "Products" ? "active" : "")">
                 <a asp-controller="Products" asp-action="Index">Cửa hàng</a>
             </li>
-            @if (User.Identity.IsAuthenticated)
-            {
-                <li class="@(currentController == "Cart" ? "active" : "")">
-                    <a asp-controller="Cart" asp-action="Index">Giỏ hàng</a>
-                </li>
-            }
+            <li class="@(currentController == "Cart" ? "active" : "")">
+                <a asp-controller="Cart" asp-action="Index">Giỏ hàng</a>
+            </li>
         </ul>
     </nav>
     <div id="mobile-menu-wrap"></div>

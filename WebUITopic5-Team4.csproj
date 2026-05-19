@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>WebUITopic5_Team4</RootNamespace>
+    <DefaultItemExcludes>$(DefaultItemExcludes);WebUITopic5-Team4.Tests\**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
