@@ -1,0 +1,8 @@
+@model WebUITopic5_Team4.Models.ViewModels.ProductIndexViewModel
+
+<div id="product-results" class="col-lg-9 col-md-7">
+    <partial name="_SaleOffCarousel" model="Model.SaleOffProducts" />
+    <partial name="_SortBar" model="Model.SortOptions" />
+    <partial name="_ProductGrid" model="Model.Products" />
+    <partial name="_Pagination" model="Model.Pagination" />
+</div>

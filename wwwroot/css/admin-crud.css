@@ -1,0 +1,689 @@
+/*=====================================================
+  ADMIN CRUD UI STYLES
+  Trang trí các trang CRUD (Index, Create, Edit, Details, Delete)
+  theo phong cách Ogani template.
+  
+  LƯU Ý: main.js có $("select").niceSelect() biến tất cả <select>
+  thành nice-select. Các class .nice-select bên trong .crud-page
+  cần override lại để giữ giao diện form-control chuẩn Bootstrap.
+=====================================================*/
+
+/* ===== WRAPPER ===== */
+.crud-page {
+    padding: 20px 0 40px;
+}
+
+/* ===== PAGE HEADER (Breadcrumb + Title) ===== */
+.crud-page__header {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.crud-page__header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1c1c1c;
+    margin: 0 0 8px;
+    font-family: 'Saira', sans-serif;
+}
+
+.crud-page__header p {
+    font-size: 14px;
+    color: #888;
+    margin: 0;
+}
+
+.crud-page__breadcrumb {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 6px;
+}
+
+.crud-page__breadcrumb a {
+    color: #560bad;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.crud-page__breadcrumb a:hover {
+    color: #5a8c1a;
+}
+
+.crud-page__breadcrumb span {
+    margin: 0 6px;
+    color: #ccc;
+}
+
+/* ===== CARD WRAPPER ===== */
+.crud-card {
+    background: #ffffff;
+    border: 1px solid #ebebeb;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.crud-card__title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1c1c1c;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    font-family: 'Saira', sans-serif;
+}
+
+.crud-card__title i {
+    color: #560bad;
+    margin-right: 10px;
+}
+
+/* ===== TABLE WRAPPER (For vertical and horizontal scroll) ===== */
+.crud-table-wrapper {
+    max-height: 800px; /* Fits approximately 20 items comfortably */
+    overflow-y: auto;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid #ebebeb;
+    border-radius: 8px;
+}
+
+/* Elegant Thin Modern Scrollbar for both vertical and horizontal scroll */
+.crud-table-wrapper::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.crud-table-wrapper::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+.crud-table-wrapper::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 3px;
+}
+.crud-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #b5b5b5;
+}
+
+/* Sticky Header lock when scrolling vertically */
+.crud-table-wrapper thead th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #f8f9fa !important; /* Keep opaque solid background */
+    box-shadow: inset 0 -2px 0 #ebebeb !important; /* Bottom line that moves with sticky */
+}
+
+/* ===== TABLE STYLES ===== */
+.crud-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: none !important;
+    overflow: hidden;
+}
+
+.crud-table thead {
+    background: #f8f9fa;
+}
+
+.crud-table thead th {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1c1c1c;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 14px 16px;
+    border-bottom: 2px solid #ebebeb;
+    white-space: nowrap;
+    font-family: 'Saira', sans-serif;
+}
+
+.crud-table tbody tr {
+    transition: background 0.15s ease;
+}
+
+.crud-table tbody tr:hover {
+    background: #f9fdf5;
+}
+
+.crud-table tbody td {
+    font-size: 14px;
+    color: #555;
+    padding: 12px 16px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+}
+
+.crud-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* ===== ACTION BUTTONS (trong bảng) ===== */
+.crud-actions {
+    white-space: nowrap;
+}
+
+.crud-actions a,
+.crud-actions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    margin-right: 4px;
+    font-size: 13px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.crud-actions a:last-child {
+    margin-right: 0;
+}
+
+.crud-actions .crud-btn--edit {
+    color: #e2a03f;
+    background: #fef5e7;
+    border-color: #fcecd2;
+}
+.crud-actions .crud-btn--edit:hover {
+    background: #e2a03f;
+    color: #fff;
+}
+
+.crud-actions .crud-btn--detail {
+    color: #2196f3;
+    background: #e8f4fd;
+    border-color: #d0e9fa;
+}
+.crud-actions .crud-btn--detail:hover {
+    background: #2196f3;
+    color: #fff;
+}
+
+.crud-actions .crud-btn--delete {
+    color: #e7515a;
+    background: #fde8e9;
+    border-color: #fad4d6;
+}
+.crud-actions .crud-btn--delete:hover {
+    background: #e7515a;
+    color: #fff;
+}
+
+/* ===== FORM STYLES ===== */
+.crud-form .form-group {
+    margin-bottom: 20px;
+}
+
+.crud-form .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1c1c1c;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.crud-form .form-group .form-control {
+    width: 100%;
+    height: 45px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 8px 15px;
+    font-size: 14px;
+    color: #333;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background-color: #fff;
+    box-sizing: border-box;
+}
+
+.crud-form .form-group .form-control:focus {
+    border-color: #560bad;
+    box-shadow: 0 0 0 3px rgba(127, 173, 57, 0.12);
+    outline: none;
+}
+
+.crud-form .form-group textarea.form-control {
+    height: auto;
+    min-height: 100px;
+    resize: vertical;
+}
+
+.crud-form .text-danger {
+    font-size: 12px;
+    margin-top: 4px;
+    display: block;
+}
+
+/*
+ * FIX XỚI XUNG ĐỘT VỚI nice-select:
+ * main.js gọi $("select").niceSelect() → ẩn <select> gốc, 
+ * tạo <div class="nice-select"> thay thế.
+ * Trong form CRUD, ta cần nice-select hiển thị đúng kiểu form-control.
+ */
+.crud-form .nice-select {
+    width: 100% !important;
+    height: 45px !important;
+    line-height: 45px !important;
+    border: 1px solid #e0e0e0 !important;
+    border-radius: 6px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    padding-left: 15px !important;
+    font-size: 14px !important;
+    color: #333 !important;
+    font-weight: 400 !important;
+    float: none !important;
+    background-color: #fff !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.crud-form .nice-select:focus,
+.crud-form .nice-select.open {
+    border-color: #560bad !important;
+    box-shadow: 0 0 0 3px rgba(127, 173, 57, 0.12) !important;
+}
+
+.crud-form .nice-select .list {
+    width: 100% !important;
+    border-radius: 0 0 6px 6px !important;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.crud-form .nice-select .option {
+    font-size: 14px;
+    line-height: 38px;
+    min-height: 38px;
+}
+
+.crud-form .nice-select .option:hover,
+.crud-form .nice-select .option.selected {
+    background-color: #f9fdf5 !important;
+    color: #560bad;
+}
+
+/* ===== BUTTONS CHUNG ===== */
+.crud-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 24px;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    font-family: 'Saira', sans-serif;
+}
+
+.crud-btn i {
+    font-size: 14px;
+}
+
+.crud-btn--primary {
+    background: #560bad;
+    color: #fff;
+}
+.crud-btn--primary:hover {
+    background: #6a9530;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(127, 173, 57, 0.3);
+}
+
+.crud-btn--danger {
+    background: #e7515a;
+    color: #fff;
+}
+.crud-btn--danger:hover {
+    background: #c93c44;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(231, 81, 90, 0.3);
+}
+
+.crud-btn--secondary {
+    background: #f5f5f5;
+    color: #555;
+    border: 1px solid #e0e0e0;
+}
+.crud-btn--secondary:hover {
+    background: #e8e8e8;
+    color: #333;
+}
+
+.crud-btn--create {
+    background: #560bad;
+    color: #fff;
+    margin-bottom: 20px;
+}
+.crud-btn--create:hover {
+    background: #6a9530;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(127, 173, 57, 0.3);
+}
+
+.crud-btn-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #f0f0f0;
+}
+
+/* ===== DETAILS (dl/dt/dd) ===== */
+.crud-detail-list {
+    width: 100%;
+    margin: 0;
+}
+
+.crud-detail-list dt {
+    font-size: 12px;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 0 4px;
+    border: none;
+}
+
+.crud-detail-list dd {
+    font-size: 15px;
+    color: #1c1c1c;
+    padding: 0 0 12px;
+    margin-bottom: 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.crud-detail-list dd:last-of-type {
+    border-bottom: none;
+}
+
+/* ===== DELETE CONFIRM ===== */
+.crud-delete-warning {
+    background: #fff8f8;
+    border: 1px solid #fde8e9;
+    border-left: 4px solid #e7515a;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.crud-delete-warning i {
+    font-size: 20px;
+    color: #e7515a;
+}
+
+.crud-delete-warning span {
+    font-size: 14px;
+    color: #c93c44;
+    font-weight: 600;
+}
+
+/* ===== IMAGE PREVIEW ===== */
+.crud-img-preview {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 1px solid #ebebeb;
+}
+
+/* ===== BADGE / STATUS ===== */
+.crud-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.crud-badge--green {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.crud-badge--red {
+    background: #fde8e9;
+    color: #c93c44;
+}
+
+/* ===== RESPONSIVE & LAYOUT OPTIMIZATION (PC, TABLET, MOBILE) ===== */
+
+/* 1. PC & Tablet Details Grid (Screens >= 768px) */
+@media only screen and (min-width: 768px) {
+    .crud-detail-list {
+        display: grid !important;
+        grid-template-columns: 200px 1fr !important;
+        gap: 0 !important;
+        border: 1px solid #ebebeb !important;
+        border-radius: 8px !important;
+        overflow: hidden !important;
+    }
+    .crud-detail-list dt {
+        grid-column: 1 !important;
+        background: #f8f9fa !important;
+        border-right: 1px solid #ebebeb !important;
+        border-bottom: 1px solid #ebebeb !important;
+        padding: 16px 20px !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        font-weight: 700 !important;
+        color: #4a4a4a !important;
+    }
+    .crud-detail-list dd {
+        grid-column: 2 !important;
+        border-bottom: 1px solid #ebebeb !important;
+        padding: 16px 20px !important;
+        margin: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        color: #1c1c1c !important;
+    }
+    .crud-detail-list dt:last-of-type,
+    .crud-detail-list dd:last-of-type {
+        border-bottom: none !important;
+    }
+}
+
+/* 2. Tablet & Mobile Table Scroll (Screens <= 991px) */
+@media only screen and (max-width: 991px) {
+    .crud-card {
+        padding: 24px 20px !important;
+    }
+    .crud-table {
+        display: table !important;
+        width: 100% !important;
+        min-width: 950px !important;
+    }
+}
+
+/* 3. Mobile View Optimization (Screens <= 767px) */
+@media only screen and (max-width: 767px) {
+    .crud-page {
+        padding: 15px 0 30px !important;
+    }
+
+    .crud-card {
+        padding: 20px 15px !important;
+    }
+
+    .crud-page__header {
+        margin-bottom: 20px !important;
+        padding-bottom: 15px !important;
+    }
+
+    .crud-page__header h1 {
+        font-size: 22px !important;
+    }
+
+    /* iOS Camera Zoom Prevention on Input Focus */
+    .crud-form .form-group .form-control,
+    .crud-form .nice-select {
+        font-size: 16px !important;
+    }
+
+    /* Details List Stacked Layout on Mobile */
+    .crud-detail-list dt {
+        padding: 12px 0 4px !important;
+        font-size: 11px !important;
+        color: #888 !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    .crud-detail-list dd {
+        padding: 0 0 12px !important;
+        font-size: 15px !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+        margin-bottom: 8px !important;
+    }
+
+    .crud-detail-list dd:last-of-type {
+        border-bottom: none !important;
+        margin-bottom: 0 !important;
+    }
+}
+
+/* 4. Small Mobile Button Stacking (Screens <= 575px) */
+@media only screen and (max-width: 575px) {
+    .crud-btn-group {
+        flex-direction: column-reverse !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+    }
+
+    .crud-btn-group .crud-btn,
+    .crud-btn--create {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+    }
+
+    /* Gallery preview sizes */
+    .crud-main-image-wrapper {
+        height: 220px !important;
+    }
+
+    .crud-thumbnail-item {
+        width: 55px !important;
+        height: 55px !important;
+    }
+}
+
+/* ===== CRUD PRODUCT IMAGE UPLOADING & GALLERY ===== */
+.crud-has-sub-images-check {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.crud-has-sub-images-label {
+    cursor: pointer;
+    padding-left: 5px;
+}
+
+.crud-sub-images-section {
+    background: #f8f9fa;
+    border: 1px dashed #ced4da;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.crud-sub-images-title {
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 15px;
+}
+
+.crud-sub-image-input-btn {
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+}
+
+/* Details Page Gallery */
+.crud-main-image-wrapper {
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-bottom: 15px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.crud-main-image-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+    font-size: 0.8rem;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background-color: #28a745;
+    color: white;
+}
+
+.crud-main-gallery-img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    transition: all 0.3s;
+}
+
+.crud-thumbnails-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.crud-thumbnail-item {
+    cursor: pointer;
+    border: 1px solid #dee2e6;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background-color: white;
+    padding: 5px;
+    transition: border-color 0.25s;
+}
+
+.crud-thumbnail-item.active {
+    border: 2px solid #28a745 !important;
+}
+
+.crud-thumbnail-item img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.crud-category-details-img {
+    width: 150px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border: 1px solid #ddd;
+}

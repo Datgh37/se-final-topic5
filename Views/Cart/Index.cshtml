@@ -1,0 +1,122 @@
+@using WebUITopic5_Team4.Models.ViewModels
+@model List<CartItem>
+@{
+    ViewData["Title"] = "Giỏ hàng";
+    decimal grandTotal = Model.Sum(x => x.Quantity * x.Product.UnitPrice);
+
+    var breadcrumb = new BreadcrumbViewModel
+    {
+        Title = "Giỏ hàng",
+        Items = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem("Trang chủ", Url.Action("Index", "Home")),
+            new BreadcrumbItem("Chi tiết giỏ hàng")
+        }
+    };
+}
+
+@await Component.InvokeAsync("HeroSection", new { isHome = false })
+
+<partial name="_Breadcrumb" model="breadcrumb" />
+
+<section class="shoping-cart spad">
+    <div class="container">
+        @if (Model.Any())
+        {
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shoping__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="cart-product-header">Sản phẩm</th>
+                                    <th>Giá</th>
+                                    <th>Số lượng</th>
+                                    <th>Tổng cộng</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    var primaryImage = item.Product.ImageUrl ?? "~/images/Others/product-1.jpg";
+                                    decimal subtotal = item.Product.UnitPrice * item.Quantity;
+                                    <tr class="cart-row" data-cart-item-id="@item.CartItemId">
+                                        <td class="cart-product-cell">
+                                            <img src="@Url.Content(primaryImage)" class="cart-item-img" alt="@item.Product.ProductName">
+                                            <h5 class="cart-product-title">@item.Product.ProductName</h5>
+                                        </td>
+                                        <td class="shoping__cart__price">
+                                            @item.Product.UnitPrice.ToString("N0") ₫
+                                        </td>
+                                        <td class="shoping__cart__quantity">
+                                            <div class="pro-qty-cart" data-max-stock="@item.Product.StockQuantity">
+                                                <span class="dec qtybtn">-</span>
+                                                <input type="text" class="qty-input" value="@item.Quantity" readonly>
+                                                <span class="inc qtybtn">+</span>
+                                            </div>
+                                        </td>
+                                        <td class="shoping__cart__total subtotal">
+                                            @subtotal.ToString("N0") ₫
+                                        </td>
+                                        <td class="shoping__cart__item__close">
+                                            <a href="javascript:void(0)" class="delete-cart-item" data-cart-item-id="@item.CartItemId">
+                                                <span class="icon_close"></span>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shoping__cart__btns">
+                        <a asp-controller="Products" asp-action="Index" class="site-btn rounded-pill">TIẾP TỤC MUA SẮM</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="shoping__continue">
+                        <div class="shoping__discount">
+                            <h5>Mã giảm giá</h5>
+                            <form action="#">
+                                <input type="text" placeholder="Nhập mã giảm giá...">
+                                <button type="submit" class="site-btn rounded-pill">ÁP DỤNG</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="shoping__checkout">
+                        <h5>Tổng đơn hàng</h5>
+                        <ul>
+                            <li>Tạm tính <span>@grandTotal.ToString("N0") ₫</span></li>
+                            <li>Tổng cộng <span id="grand-total">@grandTotal.ToString("N0") ₫</span></li>
+                        </ul>
+                        <a asp-controller="Checkout" asp-action="Index" class="primary-btn rounded-pill w-100 text-center">TIẾN HÀNH THANH TOÁN</a>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="col-12">
+                    <div class="cart-empty text-center py-5">
+                        <div class="cart-empty__icon mb-4">
+                            <i class="fa fa-shopping-basket"></i>
+                        </div>
+                        <h5 class="mb-2">Giỏ hàng của bạn đang trống</h5>
+                        <p class="text-muted mb-4">Hãy khám phá cửa hàng và chọn những sản phẩm ưng ý nhất nhé!</p>
+                        <a asp-controller="Products" asp-action="Index" class="primary-btn rounded-pill">
+                            <i class="fa fa-shopping-bag me-2"></i> MUA SẮM NGAY
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>

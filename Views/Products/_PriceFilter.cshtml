@@ -1,0 +1,30 @@
+@model WebUITopic5_Team4.Models.ViewModels.PriceFilterViewModel
+
+<form asp-controller="Products" asp-action="Index" method="get" class="price-filter-form">
+    <input type="hidden" name="categoryId" value="@Model.Query.CategoryId" />
+    <input type="hidden" name="keyword" value="@Model.Query.Keyword" />
+    <input type="hidden" name="sort" value="@Model.Query.Sort" />
+    <input type="hidden" name="page" value="1" />
+
+    <div class="price-range-wrap">
+        <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
+             data-min="@Model.MinPrice"
+             data-max="@Model.MaxPrice"
+             data-selected-min="@Model.SelectedMinPrice"
+             data-selected-max="@Model.SelectedMaxPrice">
+            <div class="ui-slider-range ui-corner-all ui-widget-header"></div>
+            <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
+            <span tabindex="0" class="ui-slider-handle ui-corner-all ui-state-default"></span>
+        </div>
+        <div class="range-slider">
+            <div class="price-input">
+                <input type="text" id="minamount" readonly>
+                <input type="text" id="maxamount" readonly>
+                <input type="hidden" name="minPrice" id="minamount_hidden" value="@Model.SelectedMinPrice">
+                <input type="hidden" name="maxPrice" id="maxamount_hidden" value="@Model.SelectedMaxPrice">
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="site-btn" style="margin-top: 12px; width: 100%;">Lọc theo giá</button>
+</form>

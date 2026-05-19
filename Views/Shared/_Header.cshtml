@@ -1,0 +1,89 @@
+@{
+    var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
+}
+
+<partial name="_HeaderHamburger.cshtml" />
+
+<!-- Header Section Begin -->
+<header class="header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2 col-md-2 col-12">
+                <div class="header__logo">
+                    <a asp-controller="Home" asp-action="Index"><img src="~/images/Banner/logotoy.png" alt="Hobby Shop"></a>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6 d-none d-lg-block">
+                <nav class="header__menu">
+                    <ul>
+                        <li class="@(currentController == "Home" && currentAction == "Index" ? "active" : "")">
+                            <a asp-controller="Home" asp-action="Index">Trang chủ</a>
+                        </li>
+                        <li class="@(currentController == "Products" ? "active" : "")">
+                            <a asp-controller="Products" asp-action="Index">Cửa hàng</a>
+                        </li>
+                        <li>
+                            <a href="#">Trang</a>
+                            <ul class="header__menu__dropdown">
+                                @if (User.Identity!.IsAuthenticated)
+                                {
+                                    @if (User.FindFirst("RoleId")?.Value == "0")
+                                    {
+                                        <li><a asp-controller="Admin" asp-action="Products">Quản lý sản phẩm</a></li>
+                                        <li><a asp-controller="Admin" asp-action="Categories">Quản lý danh mục</a></li>
+                                    }
+                                    <li><a asp-controller="Cart" asp-action="Index">Giỏ hàng</a></li>
+                                }
+                            </ul>
+                        </li>
+                        <li><a href="#">Liên hệ</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-4 col-md-4 d-none d-lg-block">
+                <div class="h-right">
+                    <div class="header__tabs">
+                        <ul>
+                            <li><a asp-controller="Favorites" asp-action="Index"><i class="fa fa-heart"></i> <span id="favoriteCount">0</span></a></li>
+                            <li class="cart-preview-wrapper">
+                                <div class="cart-vc-content">
+                                    @await Component.InvokeAsync("Cart")
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="header__login">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="dropdown d-inline-block">
+                                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="@Url.Content(User.FindFirst("UserImage")?.Value ?? "~/images/user-default.png")" alt="Avatar" class="header__user-avatar">
+                                    <span class="header__user-name">@User.Identity.Name</span>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right shadow border-0" aria-labelledby="userDropdown" style="z-index: 10000; margin-top: 5px;">
+                                    <li><a class="dropdown-item py-2" asp-controller="Account" asp-action="Profile"><i class="fa fa-user me-2"></i> Hồ sơ</a></li>
+                                    <li><a class="dropdown-item py-2" asp-controller="Cart" asp-action="Index"><i class="fa fa-shopping-bag me-2"></i> Đơn hàng</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>
+                                        <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
+                                            <button type="submit" class="dropdown-item text-danger py-2" style="background:none; border:none; width:100%; text-align:left;"><i class="fa fa-sign-out me-2"></i> Đăng xuất</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login"><i class="fa fa-user"></i> Đăng nhập</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="humberger__open">
+            <i class="fa fa-bars"></i>
+        </div>
+    </div>
+</header>
+<!-- Header Section End -->

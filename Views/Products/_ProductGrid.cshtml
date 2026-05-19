@@ -1,0 +1,19 @@
+@model IReadOnlyList<WebUITopic5_Team4.Models.ViewModels.ProductCardViewModel>
+
+<div id="product-grid-row" class="row">
+    @if (Model.Count == 0)
+    {
+        <div class="col-12">
+            <div class="alert alert-info mb-0">No products found.</div>
+        </div>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <div class="col-lg-4 col-md-6 col-sm-6 col-6">
+                <partial name="_ProductListCard" model="item" />
+            </div>
+        }
+    }
+</div>

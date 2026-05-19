@@ -1,0 +1,58 @@
+@model WebUITopic5_Team4.Models.ViewModels.ProductCardViewModel
+
+@{
+    var isOutOfStock = Model.StockQuantity <= 0;
+}
+
+<div class="product__item @(isOutOfStock ? "is-sold-out" : "")">
+    <!-- 1. Picture Pillar -->
+    <div class="product__item__pic set-bg" data-setbg="@Url.Content(Model.PrimaryImage ?? "~/images/Others/product-1.jpg")">
+        @if (isOutOfStock)
+        {
+            <div class="sold-out-overlay">
+                <span class="sold-out-text">Hết hàng</span>
+            </div>
+        }
+        <ul class="product__item__pic__hover">
+            <li>
+                <a href="javascript:void(0)"
+                   class="add-to-cart-btn @(isOutOfStock ? "btn-disabled" : "")"
+                   data-product-id="@Model.ProductId"
+                   disabled="@(isOutOfStock ? "disabled" : null)">
+                    <i class="fa fa-shopping-cart"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 2. Text Pillar -->
+    <div class="product__item__text cursor-pointer" onclick="window.location.href='@Url.Action("Details", "Products", new { id = Model.ProductId })'">
+        <span class="product-category-label d-block text-muted small mb-1">@Model.CategoryName</span>
+        <h6><a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId">@Model.ProductName</a></h6>
+        
+        <!-- Detailed Info for List Mode -->
+        <div class="product__item__list-meta mb-2">
+            <div class="product__item__stock d-inline-block">
+                @if (!isOutOfStock)
+                {
+                    <span class="badge badge-stock badge-stock-in">Còn hàng (@Model.StockQuantity)</span>
+                }
+                else
+                {
+                    <span class="badge badge-stock badge-stock-out">Hết hàng</span>
+                }
+            </div>
+        </div>
+        
+        <h5 class="product-list-price-heading">@Model.UnitPrice.ToString("N0")₫</h5>
+    </div>
+
+    <!-- 3. Actions Pillar (Right side in List Mode) -->
+    <div class="product__item__list-actions">
+        <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId"
+           class="primary-btn @(isOutOfStock ? "btn-disabled" : "")"
+           onclick="@(isOutOfStock ? "return false;" : null)">
+            @(isOutOfStock ? "Hết hàng" : "Chi tiết")
+        </a>
+    </div>
+</div>

@@ -1,0 +1,58 @@
+@model WebUITopic5_Team4.Models.ViewModels.HeroSectionViewModel
+@{
+    var isHome = ViewData["IsHomePage"] as bool? ?? false;
+}
+
+<!-- Hero Section Begin -->
+<section class="hero @(isHome ? "" : "hero-normal")">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="hero__categories @(isHome ? "dropdown-open" : "")">
+                    <div class="hero__categories__all">
+                        <i class="fa fa-bars"></i>
+                        <span>Tất cả danh mục</span>
+                    </div>
+                    <ul>
+                        @foreach (var catItem in Model.Categories)
+                        {
+                            <li>
+                                <a asp-controller="Products" asp-action="Index" asp-route-categoryId="@catItem.CategoryId" class="hero-cat-link">
+                                    <span class="hero-cat-text">@catItem.CategoryName</span>
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="hero__search">
+                    <div class="hero__search__form">
+                        <form asp-controller="Products" asp-action="Index" method="get" class="hero-search-container">
+                            <div class="search-input-wrapper">
+                                <input type="text" name="keyword" id="heroSearchInput" placeholder="Bạn đang tìm gì?" autocomplete="off">
+                                <div id="liveSearchResults" class="live-search-dropdown"></div>
+                            </div>
+                            <button type="submit" class="site-btn">TÌM KIẾM</button>
+                        </form>
+                    </div>
+                    <div class="hero__search__phone">
+                        <div class="hero__search__phone__icon">
+                            <i class="fa fa-phone"></i>
+                        </div>
+                        <div class="hero__search__phone__text">
+                            <h5>+84 912 202 605</h5>
+                            <span>hỗ trợ 24/7</span>
+                        </div>
+                    </div>
+                </div>
+
+                @if (isHome)
+                {
+                    <partial name="_HomePageBanner" />
+                }
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Hero Section End -->

@@ -1,0 +1,37 @@
+@model IEnumerable<WebUITopic5_Team4.Models.Category>
+@{
+    var currentQuery = Context.Request.Query;
+    string? currentCategoryId = currentQuery["categoryId"];
+    string? currentKeyword = currentQuery["keyword"];
+    string? currentSort = currentQuery["sort"];
+    string? currentMinPrice = currentQuery["minPrice"];
+    string? currentMaxPrice = currentQuery["maxPrice"];
+}
+
+<li>
+    <a asp-controller="Products"
+       asp-action="Index"
+       asp-route-keyword="@currentKeyword"
+       asp-route-sort="@currentSort"
+       asp-route-minPrice="@currentMinPrice"
+       asp-route-maxPrice="@currentMaxPrice"
+       class="@(string.IsNullOrEmpty(currentCategoryId) ? "sidebar__category--active" : "")">
+        Tất cả
+    </a>
+</li>
+
+@foreach (var item in Model)
+{
+    <li>
+        <a asp-controller="Products"
+           asp-action="Index"
+           asp-route-categoryId="@item.CategoryId"
+           asp-route-keyword="@currentKeyword"
+           asp-route-sort="@currentSort"
+           asp-route-minPrice="@currentMinPrice"
+           asp-route-maxPrice="@currentMaxPrice"
+           class="@(currentCategoryId == item.CategoryId.ToString() ? "sidebar__category--active" : "")">
+            @item.CategoryName
+        </a>
+    </li>
+}

@@ -1,0 +1,3847 @@
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira-VariableFont.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Saira';
+  src: url('../fonts/Saira-Italic-VariableFont_wdth,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+}
+
+*, html, body, h1, h2, h3, h4, h5, h6, input, select, button, textarea, .hero__categories ul li a, .crud-btn, .crud-form-control {
+  font-family: 'Saira', sans-serif !important;
+}
+
+/* Restore icon fonts overridden by universal font selector */
+.fa, 
+[class^="fa-"], 
+[class*=" fa-"], 
+.fa::before, 
+.fa::after, 
+[class^="fa-"]::before, 
+[class*=" fa-"]::before,
+[class^="fa-"]::after, 
+[class*=" fa-"]::after {
+  font-family: 'FontAwesome' !important;
+}
+
+[class^="icon_"], 
+[class*=" icon_"], 
+[class^="arrow_"], 
+[class*=" arrow_"], 
+[class^="social_"], 
+[class*=" social_"], 
+.hero__categories__all::after,
+[class^="icon_"]::before, 
+[class*=" icon_"]::before, 
+[class^="arrow_"]::before, 
+[class*=" arrow_"]::before, 
+[class^="social_"]::before, 
+[class*=" social_"]::before,
+[class^="icon_"]::after, 
+[class*=" icon_"]::after, 
+[class^="arrow_"]::after, 
+[class*=" arrow_"]::after, 
+[class^="social_"]::after, 
+[class*=" social_"]::after {
+  font-family: 'ElegantIcons' !important;
+}
+
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+
+
+/* ============================================
+   Sticky Footer (flexbox pattern)
+   ============================================ */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.page-content {
+  flex: 1 0 auto;
+  padding-top: 35px; /* Added spacing below colored header */
+}
+
+.footer {
+  flex-shrink: 0;
+}
+
+/* ============================================
+   Header & Logo Adjustments
+   ============================================ */
+.header {
+  min-height: 85px;
+}
+
+.header__logo {
+  padding: 0; /* Remove default padding so logo touches header edges */
+}
+
+.header__logo img {
+  height: 85px; /* Fixed height for both desktop and mobile */
+  width: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 991.98px) {
+  .humberger__open {
+    /* Vertically center the hamburger icon alongside the centered logo */
+    top: 50% !important;
+    transform: translateY(-50%);
+    margin-top: 0;
+  }
+}
+
+/* ============================================
+   Breadcrumb Adjustments
+   ============================================ */
+.breadcrumb-section {
+  position: relative;
+  z-index: 1;
+  background-size: 100% cover!important;
+  background-position: center center !important;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+/* Lá»›p phá»§ tá»‘i mÃ u Ä‘á»ƒ lÃ m ná»•i báº­t text bÃªn trÃªn */
+.breadcrumb-section::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4); /* Äá»™ má» 40% Ä‘á»ƒ lÃ m tá»‘i background */
+  z-index: -1;
+}
+
+/* ============================================
+   ADVANCED VIEW MODE SYSTEM (REWRITTEN)
+   ============================================ */
+
+/* 1. Animation & Transition Classes */
+#product-list-partial {
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#product-list-partial.view-switching {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+/* 2. Sort Bar Stability (Mobile Fix) */
+.filter__option {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.view-mode-btn {
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 15px;
+    color: #b2b2b2;
+    transition: all 0.3s ease;
+}
+
+.view-mode-btn.active, .view-mode-btn:hover {
+    color: #560bad;
+}
+
+@media only screen and (max-width: 767px) {
+    .filter__sort span { font-size: 13px; }
+    .filter__sort .nice-select { font-size: 13px; height: 35px; line-height: 33px; }
+    .filter__found h6 { font-size: 12px; }
+    .view-mode-btn { margin-left: 10px; font-size: 16px; }
+}
+
+/* 3. Global Card Enhancements (Sale Badge for Home/Featured) */
+.product__discount__percent {
+    height: 40px;
+    width: 40px;
+    background: #dd2222;
+    border-radius: 50%;
+    font-size: 12px;
+    color: #ffffff;
+    line-height: 40px;
+    text-align: center;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    z-index: 5;
+    font-weight: 700;
+}
+
+/* Global Card Enhancements (Minimalist by default) */
+.product__category-label,
+.product__item__list-meta,
+.product__item__list-actions {
+    display: none; 
+}
+
+/* Sold Out Overlay */
+.product__item__pic, .product__details__pic__item {
+    position: relative;
+    overflow: hidden;
+}
+
+.sold-out-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.sold-out-text {
+    color: #fff;
+    font-weight: 800;
+    text-transform: uppercase;
+    background: rgba(221, 34, 34, 0.8); /* Aesthetic red from initial request */
+    border: 2px solid #fff;
+    padding: 5px 15px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    font-size: 14px; /* Default for PC */
+    transform: rotate(-20deg); /* Reintroduced diagonal rotation */
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+/* Tablet Scaling */
+@media only screen and (max-width: 991px) {
+    .sold-out-text {
+        font-size: 12px;
+        padding: 4px 10px;
+    }
+}
+
+/* Mobile Scaling */
+@media only screen and (max-width: 767px) {
+    .sold-out-text {
+        font-size: 10px;
+        padding: 3px 8px;
+        letter-spacing: 0.5px;
+    }
+}
+
+/* Global Sold Out Image Style (Cards) */
+.product__item.is-sold-out .product__item__pic,
+.featured__item.is-sold-out .featured__item__pic {
+    /* filter: grayscale(80%); */ /* MOVED to backdrop-filter below */
+    /* opacity: 0.8; */
+}
+
+/* Product Details: ONLY Main Image gets grayscale, NOT carousel */
+.product__details__pic.is-sold-out .product__details__main-img {
+    filter: grayscale(80%);
+    opacity: 0.8;
+}
+
+/* Ensure carousel thumbnails stay in full color */
+.product__details__pic__slider img {
+    filter: none !important;
+    opacity: 1 !important;
+}
+
+.btn-disabled {
+    background-color: #999 !important;
+    border-color: #999 !important;
+    color: #fff !important;
+    cursor: not-allowed !important;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.stock-status {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.stock-status.out-of-stock {
+    color: #dd2222;
+}
+
+/* Reusable Utility & Product Card Classes */
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.product-category-label {
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    display: block;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #b2b2b2;
+    font-weight: 400;
+}
+
+.old-price-sm {
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+.old-price-lg {
+    margin-left: 10px;
+    font-size: 15px;
+}
+
+.star-rating-icon {
+    color: #EDBB0E;
+    font-size: 13px;
+}
+
+.badge-stock {
+    font-weight: 400;
+    padding: 4px 8px;
+}
+
+.badge-stock-in {
+    background-color: #7fad39 !important;
+}
+
+.badge-stock-out {
+    background-color: #dd2222 !important;
+}
+
+.product-list-price-final {
+    font-size: 20px;
+    color: #1c1c1c;
+    font-weight: 700;
+    text-decoration: none !important; /* Fix: Ensure official price has no strikethrough */
+}
+
+.product-list-price-heading {
+    color: #1c1c1c;
+    font-weight: 700;
+}
+
+/* Cart Specific Styles */
+.shoping__cart__item {
+    padding-left: 30px !important;
+}
+
+.cart-item-img {
+    width: 100px !important;
+    height: 100px !important;
+    object-fit: contain !important;
+    background-color: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 8px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.shoping__cart__item h5 {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 20px;
+    font-weight: 700;
+    font-size: 16px;
+    color: #1c1c1c;
+    margin-bottom: 0;
+}
+
+.stock-status.in-stock {
+    color: #2b9348;
+}
+
+.product__discount__percent {
+    height: 40px;
+    width: 40px;
+    background: #dd2222;
+    border-radius: 50%;
+    font-size: 12px;
+    color: #ffffff;
+    line-height: 40px;
+    text-align: center;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    z-index: 5;
+    font-weight: 700;
+}
+
+/* 4. LIST VIEW (Detailed & Balanced Pillar Layout) */
+.list-view .product__item {
+    display: flex !important;
+    flex-direction: row;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #e1e1e1;
+    border-radius: 12px;
+    background: #fff;
+    margin-bottom: 20px !important;
+    position: relative;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.list-view .product__category-label,
+.list-view .product__item__list-meta,
+.list-view .product__item__list-actions {
+    display: block !important;
+}
+
+.list-view .product__item__list-actions {
+    display: flex !important;
+}
+
+/* Hover Effect: Purple border & subtle shadow */
+.list-view .product__item:hover {
+    border-color: #560bad;
+    box-shadow: 0 8px 25px rgba(86, 11, 173, 0.1);
+    transform: translateY(-2px);
+}
+
+.list-view .product__item__pic {
+    width: 180px;
+    height: 180px;
+    margin-right: 25px;
+    flex-shrink: 0;
+}
+
+.list-view .product__item__text {
+    flex-grow: 1;
+    text-align: left;
+    padding-top: 0 !important;
+}
+
+.list-view .product__item__text h6 {
+    margin-bottom: 12px;
+}
+
+.list-view .product__item__text h6 a {
+    font-size: 19px;
+    font-weight: 700;
+    color: #1c1c1c;
+}
+
+.list-view .product__item__list-actions {
+    display: flex !important;
+    align-items: center;
+    margin-left: 20px;
+    flex-shrink: 0;
+}
+
+/* Rounded Button */
+.list-view .product__item__list-actions .primary-btn {
+    border-radius: 8px; /* Bo gÃ³c nháº¹ nhÆ° yÃªu cáº§u */
+    padding: 12px 25px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* 5. RESPONSIVE LIST (Horizontal Compact) */
+@media only screen and (max-width: 575px) {
+    .list-view .product__item {
+        padding: 10px;
+        align-items: flex-start;
+    }
+
+    .list-view .product__item__pic {
+        width: 105px;
+        height: 105px;
+        margin-right: 12px;
+    }
+
+    .list-view .product__item__text h6 a {
+        font-size: 14px;
+    }
+
+    .list-view .product__item__list-actions {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        margin-left: 0;
+    }
+
+    .list-view .product__item__list-actions .primary-btn {
+        padding: 4px 10px;
+        font-size: 10px;
+        border-radius: 4px;
+    }
+
+    /* Grid Mode: Ensure 2 columns don't overflow */
+    .grid-view .product__item__pic {
+        height: 155px;
+    }
+
+    .list-view .product__item__list-meta {
+        display: none;
+    }
+}
+
+/* Force 1 column in List View regardless of Bootstrap classes */
+.list-view #product-grid-row > div {
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+}
+
+/* Use flexbox on the card so image + text stack properly */
+.product__item {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Fixed-height text area so all cards align regardless of name length */
+.product__item__text {
+  flex-shrink: 0;
+  min-height: 72px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Allow product name up to 2 lines, then truncate with ellipsis */
+.product__item__text h6 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.4;
+  max-height: 2.8em; /* 2 lines Ã— 1.4 line-height */
+}
+
+.product__item__text h6 a {
+  color: inherit;
+}
+
+/* Ensure each column wrapper has equal height via Bootstrap row */
+.product__item {
+  margin-bottom: 30px;
+}
+
+/* Ensure product card spacing on small screens */
+@media (max-width: 575.98px) {
+  .product__item {
+    margin-bottom: 16px;
+  }
+
+  .product__item__text {
+    min-height: 60px;
+    padding-top: 10px;
+  }
+
+  .product__item__text h5 {
+    font-size: 13px;
+  }
+
+  .product__item__text h6 {
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+}
+
+/* ============================================
+   Sidebar Collapse Styling
+   ============================================ */
+#shopSidebar .sidebar {
+  padding-bottom: 20px;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ebebeb;
+}
+
+@media (min-width: 992px) {
+  #shopSidebar .sidebar {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: none;
+  }
+}
+
+/* ============================================
+   Price Filter - wider inputs for VND
+   ============================================ */
+.price-range-wrap .price-input {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.price-range-wrap .price-input input {
+  width: 48%;
+  border: 1px solid #e0e0e0;
+  padding: 6px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  background: #f9f9f9;
+  border-radius: 3px;
+}
+
+/* ============================================
+   Filter Sort Bar - inline form fix
+   ============================================ */
+
+/* The <form> wrapper is block-level, breaking the inline flow.
+   Force filter__sort to use flexbox so "Sort By" text and the
+   form/nice-select dropdown stay on the same row. */
+.filter__sort {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter__sort > span {
+  margin-right: 4px;
+}
+
+.filter__sort form {
+  display: inline;
+}
+
+/* Mobile: shrink font and center the "Products found" text */
+@media (max-width: 767px) {
+  .filter__item {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 15px !important;
+    border-bottom: 1px solid #f2f2f2;
+  }
+
+  .filter__item .row {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin: 0 !important; /* Remove negative row margins */
+  }
+
+  .filter__item .row > div {
+    width: auto !important;
+    flex: 0 0 auto !important;
+    max-width: none !important;
+    padding: 0 5px !important;
+  }
+
+  /* Only hide the label "Sort By", keep the selected text */
+  .filter__sort > span {
+    display: none !important;
+  }
+
+  .filter__sort .nice-select {
+    font-size: 13px !important;
+    height: 36px !important;
+    line-height: 34px !important;
+    padding-left: 12px !important;
+    padding-right: 28px !important;
+    border-radius: 4px !important;
+    min-width: 120px;
+  }
+
+  /* Perfect arrow alignment */
+  .filter__sort .nice-select:after {
+    right: 12px !important;
+    top: 50% !important;
+    margin-top: 0 !important;
+    transform: translateY(-50%) rotate(45deg) !important;
+  }
+
+  .filter__found {
+    text-align: center !important;
+  }
+
+  .filter__found h6 {
+    font-size: 13px !important;
+    margin: 0 !important;
+    white-space: nowrap;
+  }
+
+  .filter__option {
+    text-align: right !important;
+  }
+
+  .filter__option span {
+    font-size: 16px !important;
+    margin-left: 8px !important;
+  }
+}
+
+/* ============================================
+   Pagination - active page highlight
+   ============================================ */
+.product__pagination a.active,
+.blog__pagination a.active {
+  background: #560bad;
+  border-color: #560bad;
+  color: #ffffff;
+}
+
+/* ============================================
+   Latest Products Sidebar - slide uniformity
+   ============================================ */
+.latest-prdouct__slider__item {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================
+   Price Filter UI Fixes
+   ============================================ */
+.price-range-wrap .range-slider .price-input input {
+  max-width: 45% !important; /* More space for 8+ digits VND */
+  width: 110px !important;
+}
+
+.price-range-wrap .range-slider .price-input:after {
+  left: 115px !important; /* Position dash after first input */
+  top: 14px !important;
+}
+
+#maxamount {
+  margin-left: 20px;
+}
+
+/* ============================================
+   Product Card - Sale Tag & Price Styling
+   ============================================ */
+
+/* Sale tag on regular product cards */
+.product__item__pic .product__discount__percent {
+  height: 45px;
+  width: 45px;
+  background: #dd2222;
+  border-radius: 50%;
+  font-size: 14px;
+  color: #ffffff;
+  line-height: 45px;
+  text-align: center;
+  position: absolute;
+  left: 15px;
+  top: 15px;
+}
+
+/* ============================================
+   FIX: Product Image Sizing (Contain vs Cover)
+   ============================================ */
+
+/* 1. Xá»­ lÃ½ cÃ¡c khung áº£nh dÃ¹ng background-image (Card ngoÃ i danh sÃ¡ch) */
+.product__item__pic,
+.product__discount__item__pic,
+.featured__item__pic,
+.categories__slider .categories__item,
+.latest-product__item__pic {
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+  background-color: #ffffff !important;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+/* Hiá»‡u á»©ng hover nháº¹ cho khung áº£nh */
+.product__item:hover .product__item__pic,
+.product__discount__item:hover .product__discount__item__pic,
+.featured__item:hover .featured__item__pic {
+  border-color: #d1d1d1;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+/* 2. Xá»­ lÃ½ cÃ¡c khung áº£nh dÃ¹ng tháº» <img> (Trang chi tiáº¿t, Giá» hÃ ng, Latest) */
+.product__details__pic__item img,
+.product__details__pic__slider img,
+.latest-product__item__pic img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  background-color: #ffffff !important;
+}
+
+/* Äáº£m báº£o khung áº£nh trong trang Chi tiáº¿t luÃ´n vuÃ´ng váº¯n vÃ  bÃ¡m sÃ¡t */
+.product__details__pic__item {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  overflow: hidden;
+  border: 1px solid #ebebeb;
+}
+
+/* Fix cho áº£nh nhá» (thumbnails) trong slider trang chi tiáº¿t */
+.product__details__pic__slider img {
+  aspect-ratio: 1 / 1;
+}
+
+/* Ensure the main price stays prominent and bold across all card types */
+.product__item__text h5,
+.featured__item__text h5,
+.product__item__price,
+.product__discount__item__text .product__item__price {
+  color: #1c1c1c;
+  font-weight: 700 !important;
+}
+
+/* Sale price span (the original price) should be normal weight */
+.product__item__text h5 span,
+.product__item__price span.old-price {
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 400 !important;
+  text-decoration: line-through;
+  margin-left: 10px;
+  color: #b2b2b2;
+}
+
+/* ============================================
+   Product Details Image Constraints
+   ============================================ */
+.product__details__main-img {
+  height: 450px;
+  width: 100%;
+  object-fit: contain;
+  background-color: #f7f7f7;
+  border-radius: 4px;
+}
+
+.product__details__thumb-img {
+  height: 120px;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* ============================================
+   Sidebar Category Styling
+   ============================================ */
+.sidebar__category--active {
+  font-weight: bold;
+  color: #560bad !important;
+}
+
+/* ============================================
+   Hero Categories Hierarchical Menu
+   ============================================ */
+.hero__categories ul {
+    padding-right: 20px; /* ThÃªm padding pháº£i cho tháº» ul theo yÃªu cáº§u */
+}
+
+/* Style cho tháº» a á»Ÿ menu chÃ­nh Ä‘á»ƒ há»— trá»£ text dÃ i vÃ  Flexbox */
+.hero-cat-link {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Giá»›i háº¡n Ä‘á»™ dÃ i chá»¯, áº©n bá»›t báº±ng dáº¥u 3 cháº¥m */
+.hero-cat-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+}
+
+/* Äá»•i mÃ u hover cho cáº£ menu chÃ­nh vÃ  menu con thÃ nh mÃ u tÃ­m, loáº¡i bá» background */
+.hero__categories ul li a:hover,
+.hero-submenu li a:hover {
+    color: #560bad !important;
+    background: transparent !important;
+}
+
+.has-hero-submenu {
+    position: relative;
+}
+
+.hero-submenu {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    width: 250px;
+    background: #ffffff;
+    box-shadow: 0px 10px 30px rgba(86, 11, 173, 0.08);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(10px);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    z-index: 99;
+    padding: 5px 0;
+    border-radius: 8px;
+    border: 1px solid #ebebeb;
+    border-left: 3px solid #560bad !important;
+}
+
+.has-hero-submenu:hover .hero-submenu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0);
+}
+
+.hero-submenu li {
+    list-style: none;
+    border-bottom: 1px solid #f5f5f5;
+}
+
+.hero-submenu li:last-child {
+    border-bottom: none !important;
+}
+
+.hero-submenu li a {
+    display: block;
+    padding: 6px 20px;
+    color: #1c1c1c;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    font-size: 14px;
+    
+    /* áº¨n bá»›t chá»¯ á»Ÿ submenu náº¿u quÃ¡ dÃ i */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hero-submenu li a:hover {
+    background: #faf5ff !important;
+    color: #560bad !important;
+    padding-left: 26px !important; /* Smooth text slide on hover */
+}
+
+/* ============================================
+   User Avatar & Dropdown (Header)
+   ============================================ */
+.user-dropdown-toggle {
+  cursor: pointer;
+}
+
+.user-avatar-sm {
+  width: 35px !important;
+  height: 35px !important;
+  object-fit: cover;
+  border: 2px solid #560bad;
+  margin-right: 8px;
+}
+
+.user-name-text {
+  font-size: 14px;
+}
+
+.user-dropdown-menu {
+  border-radius: 8px;
+  margin-top: 10px;
+  min-width: 150px;
+}
+
+.user-dropdown-icon {
+  width: 20px;
+}
+
+.user-avatar-lg {
+  width: 60px !important;
+  height: 60px !important;
+  object-fit: cover;
+  border: 2px solid #560bad;
+}
+
+.logout-btn-pill {
+  border-radius: 20px;
+}
+/* =========================
+   TOAST NOTIFICATION
+========================= */
+
+/* Toast Notification */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.toast-msg {
+    min-width: 250px;
+    padding: 15px 25px;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    animation: slideIn 0.5s, fadeOut 0.5s 2.5s forwards;
+    backdrop-filter: blur(5px);
+}
+
+.toast-success {
+    background: rgba(40, 167, 69, 0.9);
+}
+
+.toast-error {
+    background: rgba(220, 53, 69, 0.9);
+}
+
+.toast-info {
+    background: rgba(86, 11, 173, 0.9);
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+/* UI Improvements */
+.header__login .dropdown-menu { background: #ffffff !important; border: 1px solid #eeeeee !important; }
+.header__login .dropdown-item { color: #1c1c1c !important; font-size: 14px; font-weight: 500; }
+.header__login .dropdown-item:hover { background: #f5f5f5 !important; color: #560bad !important; }
+.header__login .dropdown-toggle::after { display: none; }
+
+/* Fix EditProfile inputs */
+.checkout__input input { color: #1c1c1c !important; font-weight: 500; }
+.checkout__input select { appearance: none; -webkit-appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23666%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'); background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 12px auto; padding-right: 40px !important; }
+
+/* ChangePassword Input Fix */
+.auth-input-small { padding: 10px 15px !important; height: auto !important; font-size: 15px !important; }
+.input-group-text-small { padding: 0 15px !important; background: #f8f9fa !important; border: 1px solid #e1e1e1 !important; border-right: none !important; }
+
+
+/* Header User Styles */
+.header__user-avatar { width: 35px; height: 35px; object-fit: cover; border: 2px solid #560bad; border-radius: 50%; margin-right: 8px; }
+.header__user-name { font-weight: 700; font-size: 14px; color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+.dropdown-menu-right { right: 0 !important; left: auto !important; border-radius: 8px !important; margin-top: 10px !important; min-width: 170px !important; }
+
+
+.checkout__input__select { height: 50px !important; border: 1px solid #e1e1e1 !important; color: #1c1c1c !important; border-radius: 4px !important; font-weight: 500 !important; line-height: 34px !important; padding-top: 8px !important; }
+
+
+/* Button and UI Helpers */
+.btn-cancel-custom { font-weight: 700 !important; color: #1c1c1c !important; background-color: #f8f9fa !important; border: 1px solid #e1e1e1 !important; }
+.btn-cancel-custom:hover { background-color: #e9ecef !important; }
+
+/* Step navigation */
+.step-hidden { display: none; }
+.step-visible { display: block; }
+
+
+.text-purple { color: #560bad !important; }
+
+
+
+/* Final UI Fixes */
+.header__user-name { color: #ffffff !important; font-weight: 700 !important; text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important; }
+.checkout__input__select { color: #1c1c1c !important; font-weight: 500 !important; }
+
+
+/* Profile Avatar Styling */
+.profile-avatar-preview { width: 150px; height: 150px; object-fit: cover; border: 4px solid #560bad; }
+.profile-avatar-label { position: absolute; bottom: 0; right: 0; background: #560bad; color: white; width: 40px; height: 40px; border-radius: 50%; line-height: 40px; cursor: pointer; border: 3px solid #ffffff; transition: all 0.3s ease; }
+.profile-avatar-label:hover { background: #3a0ca3; transform: scale(1.1); }
+
+
+/* Change Password UI Tweaks */
+.auth-input-small { height: 45px !important; padding: 10px 15px !important; font-size: 14px !important; border-radius: 0 5px 5px 0 !important; }
+.input-group-text-small { background-color: #f5f5f5 !important; border-right: none !important; color: #560bad !important; width: 45px !important; justify-content: center !important; height: 45px !important; border-radius: 5px 0 0 5px !important; }
+.text-purple { color: #560bad !important; }
+
+
+/* Password Toggle Styling */
+.password-wrapper { position: relative; }
+.password-toggle { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #888; z-index: 10; transition: color 0.3s; }
+.password-toggle:hover { color: #560bad; }
+
+
+/* Mobile & Card Enhancement */
+.header-mobile-avatar { 
+    width: 75px !important; 
+    height: 75px !important; 
+    object-fit: cover; 
+    border: 2px solid #560bad !important; 
+    box-shadow: 0 4px 10px rgba(86, 11, 173, 0.2); 
+    margin-right: 15px !important; 
+}
+.user-info {
+    text-align: left !important;
+}
+.auth-card-premium { box-shadow: 0 15px 35px rgba(0,0,0,0.12) !important; border: 1px solid rgba(0,0,0,0.08) !important; transition: transform 0.3s ease; }
+.auth-card-premium:hover { transform: translateY(-5px); }
+
+
+/* Enhanced Checkout Form for Edit Profile */
+.checkout-premium { background: #ffffff; padding: 50px; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); border-top: 4px solid #560bad; transition: all 0.3s ease; }
+.checkout-premium h4 { border-bottom: 2px solid #f2f2f2; padding-bottom: 20px; margin-bottom: 40px; color: #1c1c1c; font-weight: 700; }
+
+
+.shoping__cart__quantity {width: 220px;}
+.pro-qty {width: 140px !important;height: 50px;border: 1px solid #ebebeb; overflow: hidden;display: flex;align-items: center;justify-content: space-between;padding: 0 18px; margin: auto;}
+.pro-qty input {width: 40px; border: none;text-align: center;font-size: 16px;font-weight: 700;background: transparent;}
+.pro-qty .qtybtn { font-size: 22px;cursor: pointer; user-select: none; transition: 0.2s;}
+.pro-qty .qtybtn:hover { color: #560bad; }
+.shoping__cart__item__close {text-align: center;width: 80px;}
+/* Toast Notifications & Cart Enhancements */
+#toast-container { position: fixed; top: 70px; right: 20px; z-index: 999999; display: flex; flex-direction: column; gap: 12px; }
+.toast-msg { background: #333; color: #fff; padding: 15px 25px; border-radius: 50px; margin-bottom: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); display: flex; align-items: center; min-width: 250px; animation: slideIn 0.3s ease-out; transition: all 0.3s ease; }
+.toast-success { background: #28a745; border-left: 5px solid #1e7e34; }
+.toast-error { background: #dc3545; border-left: 5px solid #bd2130; }
+.toast-info { background: #560bad; border-left: 5px solid #3f0091; }
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* Cart Table Polish */
+.shoping__cart__table table tbody tr { transition: background 0.3s ease; }
+.shoping__cart__table table tbody tr:hover { background: #fbfbfb; }
+.shoping__cart__item h5 { font-weight: 700; color: #1c1c1c; }
+.shoping__cart__price, .shoping__cart__total { font-weight: 700; color: #560bad; font-size: 18px; }
+.shoping__checkout { background: #f5f5f5; padding: 40px; border-radius: 15px; border: 1px solid #ebebeb; }
+.shoping__checkout h5 { border-bottom: 2px solid #560bad; padding-bottom: 15px; margin-bottom: 25px; }
+
+
+/* Cart Badge Styling */
+
+
+
+/* Premium Custom Modal */
+.custom-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); display: none; align-items: center; justify-content: center; z-index: 10000; }
+.custom-modal { background: #fff; padding: 35px 30px; border-radius: 20px; max-width: 400px; width: 90%; text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.3); transform: scale(0.8); opacity: 0; transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.custom-modal.active { transform: scale(1); opacity: 1; }
+.custom-modal-icon { width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #ff6b6b, #ee5a24); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+.custom-modal-icon i { font-size: 28px; color: #fff; }
+.custom-modal-title { font-weight: 700; color: #1c1c1c; margin-bottom: 10px; font-size: 20px; }
+.custom-modal-message { color: #666; margin-bottom: 25px; font-size: 15px; line-height: 1.5; }
+.modal-btns { display: flex; gap: 12px; justify-content: center; }
+.modal-btn { padding: 12px 28px; border-radius: 50px; font-weight: 700; cursor: pointer; border: none; transition: all 0.25s ease; font-size: 14px; }
+.btn-confirm { background: linear-gradient(135deg, #560bad, #7c3aed); color: #fff; box-shadow: 0 4px 15px rgba(86, 11, 173, 0.3); }
+.btn-confirm:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(86, 11, 173, 0.4); }
+.btn-cancel { background: #f2f2f2; color: #555; }
+.btn-cancel:hover { background: #e0e0e0; transform: translateY(-1px); }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Fix separator alignment in Hamburger Menu */
+.humberger__menu__widget .header__top__right__language:after {
+    top: 50% !important;
+    transform: translateY(-50%);
+    height: 18px !important;
+    right: -10px !important; /* NhÃ­ch sang trÃ¡i */
+}
+
+.humberger__menu__widget .header__top__right__language {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+}
+
+
+.cart-link-icon { position: relative; display: inline-block; }
+
+/* ===================== Cart Badge ===================== */
+.header__tabs ul li a .cart-count,
+.humberger__menu__cart ul li a .cart-count {
+    height: 13px;
+    width: 13px;
+    /* background: #7fad39; */
+    font-size: 10px;
+    color: #ffffff;
+    line-height: 13px;
+    text-align: center;
+    font-weight: 700;
+    display: inline-block;
+    border-radius: 50%;
+    position: absolute;
+    top: -3px; /* NÃ¢ng lÃªn máº¡nh hÆ¡n Ä‘á»ƒ ghi Ä‘Ã¨ style gá»‘c */
+    right: -12px;
+}
+/* ===================== Cart Preview Dropdown ===================== */
+.cart-preview-wrapper { position: relative; }
+.cart-vc-content { display: contents; }
+
+.cart-dropdown {
+    position: absolute;
+    top: calc(100% + 18px);
+    right: -20px;
+    width: 350px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+.cart-dropdown::before {
+    content: '';
+    position: absolute;
+    top: -7px;
+    right: 25px;
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    transform: rotate(45deg);
+    box-shadow: -2px -2px 4px rgba(0,0,0,0.04);
+}
+.cart-preview-wrapper:hover .cart-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Header */
+.cart-dropdown__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    background: #fafafa;
+}
+.cart-dropdown__title {
+    font-weight: 800;
+    font-size: 15px;
+    color: #222;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.cart-dropdown__badge {
+    background: #7fad39;
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* Items list â€” vertical scroll only */
+.cart-dropdown__items {
+    max-height: 280px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.cart-dropdown__items::-webkit-scrollbar { width: 4px; }
+.cart-dropdown__items::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 4px; }
+
+/* Single item row */
+.cart-dropdown__item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    gap: 12px;
+    border-bottom: 1px solid #f8f8f8;
+    transition: background 0.2s;
+}
+.cart-dropdown__item:last-child { border-bottom: none; }
+.cart-dropdown__item:hover { background: #faf5ff; }
+
+.cart-dropdown__img {
+    width: 48px;
+    height: 48px;
+    border-radius: 0;
+    object-fit: contain;
+    flex-shrink: 0;
+    border: 1px solid #eee;
+}
+
+.cart-dropdown__info {
+    flex: 1;
+    min-width: 0;
+}
+.cart-dropdown__name {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+    margin-bottom: 2px;
+}
+.cart-dropdown__price {
+    font-size: 12px;
+    color: #560bad;
+    font-weight: 700;
+}
+
+/* Qty controls */
+.cart-dropdown__qty {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-shrink: 0;
+    border: 1px solid #e8e8e8;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.cart-preview-btn {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: #f5f5f5;
+    color: #555;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    padding: 0;
+    line-height: 1;
+}
+.cart-preview-btn:hover { background: #560bad; color: #fff; }
+.cart-preview-count {
+    width: 28px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #333;
+    background: #fff;
+}
+
+/* Footer */
+.cart-dropdown__footer {
+    padding: 16px 20px;
+    border-top: 1px solid #f0f0f0;
+    background: #fafafa;
+}
+.cart-dropdown__total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.cart-dropdown__total span { font-size: 13px; color: #888; font-weight: 600; }
+.cart-dropdown__total strong { font-size: 16px; color: #222; font-weight: 800; }
+
+.cart-dropdown__view-btn {
+    display: block;
+    text-align: center;
+    padding: 10px;
+    background: #560bad;
+    color: #fff !important;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: none !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+}
+.cart-dropdown__view-btn:hover { background: #7209b7; transform: translateY(-1px); }
+
+/* Empty state */
+.cart-dropdown__empty {
+    padding: 35px 20px;
+    text-align: center;
+}
+.cart-dropdown__empty i { font-size: 36px; color: #ddd; display: block; margin-bottom: 10px; }
+.cart-dropdown__empty p { color: #aaa; font-weight: 600; margin: 0; font-size: 14px; }
+
+/* ===================== Live Search Styles (Premium UI) ===================== */
+.hero-search-container { position: relative; display: flex !important; align-items: center; }
+.search-input-wrapper { position: relative; flex: 1; }
+
+.live-search-dropdown {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    background: #fff;
+    z-index: 1001;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.18);
+    display: none;
+    max-height: 450px;
+    overflow: hidden; /* Hide overflow to keep border radius */
+    border: 1px solid rgba(0,0,0,0.05);
+    animation: fadeInDown 0.2s ease-out;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.live-search-header {
+    padding: 12px 20px;
+    background: #fafafa;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 12px;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.live-search-results {
+    max-height: 340px;
+    overflow-y: auto;
+}
+
+.live-search-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    gap: 15px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.2s;
+    border-bottom: 1px solid #f8f8f8;
+}
+
+.live-search-item:last-child { border-bottom: none; }
+.live-search-item:hover { background: #faf5ff; }
+
+.live-search-img {
+    width: 52px;
+    height: 52px;
+    object-fit: cover;
+    border-radius: 10px;
+    flex-shrink: 0;
+    border: 1px solid #eee;
+    background: #fff;
+}
+
+.live-search-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.live-search-name {
+    font-weight: 600;
+    font-size: 14px;
+    color: #1c1c1c;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.live-search-price-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.live-search-price {
+    font-size: 13px;
+    color: #560bad;
+    font-weight: 700;
+}
+
+.live-search-price-old {
+    font-size: 11px;
+    text-decoration: line-through;
+    color: #b2b2b2;
+    font-weight: 400;
+}
+
+.live-search-footer {
+    padding: 10px 20px;
+    background: #fafafa;
+    border-top: 1px solid #f0f0f0;
+    text-align: center;
+}
+
+.live-search-view-all {
+    font-size: 12px;
+    font-weight: 700;
+    color: #560bad;
+    text-decoration: none;
+}
+
+.live-search-view-all:hover {
+    text-decoration: underline;
+}
+
+/* ============================================
+   Favorite Icon Styling
+   ============================================ */
+.toggle-favorite i {
+    transition: all 0.3s ease;
+    color: #1c1c1c; /* MÃ u Ä‘en máº·c Ä‘á»‹nh cá»§a Ogani */
+}
+
+.toggle-favorite i.is-favorite {
+    color: #dd2222 !important;
+}
+
+/* Fix for featured item icon color inheritance */
+.featured__item__pic__hover li a i,
+.product__item__pic__hover li a i {
+    color: inherit;
+}
+
+/* ============================================
+   Cart Quantity Control (Manual)
+   ============================================ */
+.pro-qty-cart {
+	width: 140px;
+	height: 50px;
+	display: inline-block;
+	position: relative;
+	text-align: center;
+	background: #f5f5f5;
+	margin-bottom: 5px;
+}
+
+.pro-qty-cart input {
+	height: 100%;
+	width: 100%;
+	font-size: 16px;
+	color: #6f6f6f;
+	width: 50px;
+	border: none;
+	background: #f5f5f5;
+	text-align: center;
+}
+
+/* ============================================
+   Cart Quantity Control (Manual)
+   ============================================ */
+.pro-qty-cart {
+    width: 124px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    background: #f5f5f5;
+    margin: 0 auto;
+    border: 1px solid #ebebeb;
+    overflow: hidden;
+}
+
+.pro-qty-cart .qtybtn {
+    width: 35px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    color: #1c1c1c;
+    transition: all 0.3s ease;
+    user-select: none;
+    font-weight: 500;
+}
+
+.pro-qty-cart .qtybtn:hover {
+    background: #7209B7; /* Purple background from layout */
+    color: #ffffff;
+}
+
+.pro-qty-cart input {
+    width: 54px;
+    height: 100%;
+    border: none;
+    background: transparent;
+    text-align: center;
+    font-size: 16px;
+    color: #1c1c1c;
+    font-weight: 700;
+    pointer-events: none; /* Already readonly, but this is safer */
+}
+
+/* Specific overrides for shopping cart table context */
+.shoping__cart__table table tbody tr td.shoping__cart__quantity .pro-qty-cart {
+    /* Keeping it contained within the table cell */
+    display: inline-flex;
+}
+
+/* ============================================
+   PRODUCT LIST VIEW (DETAILS MODE) - RESPONSIVE
+   ============================================ */
+
+/* Force full width for columns in List View mode */
+.list-view #product-grid-row > div {
+    max-width: 100% !important;
+    flex: 0 0 100% !important;
+    width: 100% !important;
+}
+
+/* Force horizontal layout for list mode across all screens */
+#product-list-partial.list-view #product-grid-row {
+    max-height: 1040px; /* PC/Tablet height */
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-top: 2px; /* Äá»ƒ khÃ´ng bá»‹ che hiá»‡u á»©ng hover cá»§a item Ä‘áº§u tiÃªn */
+}
+
+/* Mobile height adjustment for List View */
+@media only screen and (max-width: 767px) {
+    #product-list-partial.list-view #product-grid-row {
+        max-height: 600px; /* Smaller height for mobile screens */
+    }
+}
+
+/* Custom scrollbar for Product Grid internal scroll */
+#product-list-partial.list-view #product-grid-row::-webkit-scrollbar {
+    width: 6px;
+}
+#product-list-partial.list-view #product-grid-row::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+#product-list-partial.list-view #product-grid-row::-webkit-scrollbar-thumb {
+    background: rgba(86, 11, 173, 0.4);
+    border-radius: 10px;
+}
+
+#product-list-partial.list-view .product__item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #ebebeb;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    gap: 20px;
+    width: 100%;
+    overflow: hidden;
+    transition: all 0.3s ease; /* Smooth hover transition */
+}
+
+#product-list-partial.list-view .product__item:hover {
+    border-color: #7209B7 !important; /* Purple glow border */
+    box-shadow: 0 4px 15px rgba(114, 9, 183, 0.15); /* Soft purple shadow */
+    transform: translateY(-2px);
+}
+
+#product-list-partial.list-view .product__item__pic {
+    flex: 0 0 180px !important;
+    width: 180px !important;
+    max-width: 180px !important;
+    height: 180px !important;
+    margin-bottom: 0 !important;
+    overflow: hidden !important;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 1px solid #ebebeb;
+}
+
+#product-list-partial.list-view .product__item__pic img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+}
+
+#product-list-partial.list-view .product__item__text {
+    flex: 1 !important;
+    min-width: 0 !important; /* Prevents flex items from growing beyond their container */
+    text-align: left;
+    padding-top: 0;
+    overflow: hidden;
+}
+
+#product-list-partial.list-view .product__item__text h6 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+}
+
+#product-list-partial.list-view .product__item__list-meta {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 10px;
+}
+
+#product-list-partial.list-view .product__item__list-actions {
+    flex: 0 0 160px !important;
+    width: 160px !important;
+    max-width: 160px !important;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Tablet & Smaller Desktop Fix (991px and down) */
+@media only screen and (max-width: 991px) {
+    #product-list-partial.list-view .product__item__pic {
+        flex: 0 0 140px !important;
+        width: 140px !important;
+        max-width: 140px !important;
+        height: 140px !important;
+    }
+    
+    #product-list-partial.list-view .product__item__list-actions {
+        flex: 0 0 130px !important;
+        width: 130px !important;
+        max-width: 130px !important;
+    }
+}
+
+/* Mobile Specific (Horizontal Compact - 767px and down) */
+@media only screen and (max-width: 767px) {
+    #product-list-partial.list-view .product__item {
+        padding: 10px 8px !important;
+        gap: 12px !important;
+        align-items: center;
+    }
+
+    #product-list-partial.list-view .product__item__pic {
+        flex: 0 0 95px !important;
+        width: 95px !important;
+        max-width: 95px !important;
+        height: 95px !important;
+    }
+
+    #product-list-partial.list-view .product__item__text h6 {
+        font-size: 13px !important;
+        margin-bottom: 2px !important;
+        line-height: 1.3 !important;
+    }
+
+    #product-list-partial.list-view .product-category-label {
+        font-size: 9px !important;
+        margin-bottom: 2px !important;
+    }
+
+    #product-list-partial.list-view .product__item__list-meta {
+        margin-bottom: 4px !important;
+        line-height: 1 !important;
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow: hidden;
+    }
+
+    #product-list-partial.list-view .product__item__list-meta > div {
+        margin-right: 6px !important;
+        font-size: 10px !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 80px; /* Limit width of each meta item on mobile */
+    }
+    
+    #product-list-partial.list-view .product__item__list-meta .badge-stock {
+        padding: 2px 4px !important;
+        font-size: 9px !important;
+        max-width: none; /* Badge should show full text if possible or be very short */
+    }
+
+    #product-list-partial.list-view .product__item .product-list-price-final {
+        font-size: 15px !important;
+    }
+
+    #product-list-partial.list-view .product__item .old-price {
+        font-size: 11px !important;
+    }
+
+    #product-list-partial.list-view .product__item__list-actions {
+        position: static !important; /* Fix: Reset from absolute positioning */
+        flex: 0 0 80px !important;
+        width: 80px !important;
+        max-width: 80px !important;
+        margin-left: 5px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 100% !important; /* Allow centering within container height */
+    }
+
+    #product-list-partial.list-view .product__item__list-actions .primary-btn {
+        padding: 8px 4px !important;
+        font-size: 10px !important;
+        letter-spacing: 0;
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Fix popup icons: Very small & Hover synchronized */
+    #product-list-partial.list-view .product__item__pic__hover {
+        bottom: -40px !important; /* Hide by default */
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    #product-list-partial.list-view .product__item:hover .product__item__pic__hover {
+        bottom: 5px !important; /* Show on hover */
+        opacity: 1;
+        visibility: visible;
+    }
+
+    #product-list-partial.list-view .product__item__pic__hover li a {
+        width: 24px !important;
+        height: 24px !important;
+        line-height: 24px !important;
+        font-size: 10px !important;
+    }
+    
+    #product-list-partial.list-view .product__item__pic__hover li {
+        margin-right: 1px !important;
+    }
+
+    #product-list-partial.list-view .product__item__pic__hover li {
+        margin-right: 1px !important;
+    }
+}
+
+/* Base adjustment for List View icons (Tablet/Desktop) */
+#product-list-partial.list-view .product__item__pic__hover {
+    bottom: -50px; /* Hide by default in list mode */
+}
+
+#product-list-partial.list-view .product__item:hover .product__item__pic__hover {
+    bottom: 15px; /* Show on hover */
+}
+
+#product-list-partial.list-view .product__item__pic__hover li a {
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    font-size: 14px;
+}
+
+/* Proportional Discount Tag Scaling (approx 16% of image size) */
+.product__discount__percent {
+    height: 45px !important; /* PC Grid (270px image) */
+    width: 45px !important;
+    line-height: 45px !important;
+    font-size: 13px !important;
+    left: 10px !important;
+    top: 10px !important;
+}
+
+/* Tablet / Mobile Grid (2-column, image approx 160-200px) */
+@media only screen and (max-width: 991px) {
+    .product__discount__percent {
+        height: 32px !important;
+        width: 32px !important;
+        line-height: 32px !important;
+        font-size: 10px !important;
+        left: 8px !important;
+        top: 8px !important;
+    }
+}
+
+/* List View (PC/Tablet) - Thumb approx 200px */
+#product-list-partial.list-view .product__discount__percent {
+    height: 36px !important;
+    width: 36px !important;
+    line-height: 36px !important;
+    font-size: 11px !important;
+}
+
+/* List View (Mobile) - Thumb is 95px */
+@media only screen and (max-width: 767px) {
+    #product-list-partial.list-view .product__discount__percent {
+        height: 18px !important; /* ~18% ratio for readability */
+        width: 18px !important;
+        line-height: 18px !important;
+        font-size: 7px !important;
+        left: 4px !important;
+        top: 4px !important;
+    }
+}
+
+/* Global Components - Auth Button (Minimal Soft Rounded) */
+.auth-btn {
+    background-color: #560bad !important;
+    color: white !important;
+    border-radius: 5px !important; /* Minimal rounded */
+    padding: 10px 20px !important;
+    font-weight: 600 !important;
+    letter-spacing: 1px !important;
+    transition: all 0.3s ease !important;
+    border: none !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+}
+.auth-btn:hover {
+    background-color: #3a0ca3 !important;
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(86, 11, 173, 0.4);
+}
+
+/* Global Colors - Bright Accent Override */
+:root {
+    --bright-accent: #00a2ff; /* New brighter blue for active state only */
+}
+
+/* CUSTOM SLIM SCROLLBAR (PC & Tablet) */
+@media (min-width: 768px) {
+    ::-webkit-scrollbar {
+        width: 8px; /* Slim width */
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent; /* Makes it look like an overlay */
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: rgba(86, 11, 173, 0.3); /* Glassmorphism Purple */
+        border-radius: 10px;
+        border: 2px solid transparent; /* Padding around the thumb */
+        background-clip: content-box;
+        transition: background 0.3s;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(86, 11, 173, 0.6);
+        background-clip: content-box;
+    }
+    
+    /* Firefox Support */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(86, 11, 173, 0.3) transparent;
+    }
+}
+
+/* HIDE SCROLLBAR ON MOBILE */
+@media (max-width: 767px) {
+    ::-webkit-scrollbar {
+        display: none;
+    }
+    * {
+        scrollbar-width: none;
+    }
+}
+
+/* Upgrade Active states that were originally blue */
+.header__menu ul li.active a {
+    color: var(--bright-accent) !important;
+}
+
+/* Revert Hover states to original muted blue */
+.header__menu ul li:hover a,
+.header__menu__dropdown li a:hover {
+    color: #4361ee !important; 
+}
+
+/* Sidebar Categories - Purple Theme */
+.sidebar__item ul li a:hover,
+.sidebar__category--active a {
+    color: #560bad !important;
+}
+
+/* Fix Header Menu Overflow on PC/Tablet (below 1200px) - Balanced Version */
+@media only screen and (max-width: 1200px) {
+    /* Slightly increase spacing back to 35px for a more relaxed look */
+    .header__menu ul li {
+        margin-right: 35px !important;
+    }
+    
+    .header__menu ul li:last-child {
+        margin-right: 0 !important;
+    }
+    
+    /* Restore font size to original but keep letter-spacing tight */
+    .header__menu ul li a {
+        font-size: 14px !important;
+    }
+    
+    /* Optimize right-side spacing */
+    .header__cart ul {
+        margin-right: 15px !important;
+    }
+}
+
+/* ============================================
+   MODERN MINIMAL SOFT ROUNDED (4px - 8px)
+   ============================================ */
+
+/* 1. Buttons & Links */
+.primary-btn, .site-btn, .blog__btn, .contact__form button, .sidebar__item__size label, .auth-btn {
+    border-radius: 5px !important;
+    color: #ffffff !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important; /* Smooth premium transition */
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Specific rounding for humberger without breaking desktop display */
+.humberger__open {
+    border-radius: 5px !important;
+}
+
+/* Fix: Align "Add to Cart" button height with Quantity input */
+.product__details__text .primary-btn {
+    height: 50px !important;
+    padding: 0 30px !important;
+    line-height: 50px !important;
+    margin-bottom: 10px !important;
+    vertical-align: middle;
+}
+
+.product__details__quantity {
+    vertical-align: middle;
+}
+
+/* Simple & Clean Hover for all Buttons */
+.primary-btn:hover, .site-btn:hover, .blog__btn:hover, .contact__form button:hover, .auth-btn:hover {
+    color: #ffffff !important;
+    text-decoration: none !important;
+    opacity: 0.85; /* Gentle opacity change instead of moving */
+}
+
+.primary-btn:active, .site-btn:active, .blog__btn:active, .contact__form button:active, .auth-btn:active {
+    transform: translateY(1px); /* Very subtle push down */
+}
+
+/* Fix for buttons getting "stuck" */
+.primary-btn:focus, .site-btn:focus, .blog__btn:focus, .contact__form button:focus {
+    color: #ffffff !important;
+    outline: none !important;
+}
+
+.hero__categories__all {
+    border-radius: 5px 5px 0 0 !important;
+}
+
+/* Disable text selection for Hero Banner */
+.hero__text {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* 2. Form Inputs & Selects */
+input[type="text"], input[type="password"], input[type="email"], input[type="tel"],
+textarea, select, .nice-select, .form-control, .checkout__input input, .checkout__input__select {
+    border-radius: 5px !important;
+}
+
+/* 3. Hero Search Form & Button */
+.hero__search__form {
+    border-radius: 6px !important;
+    position: relative;
+    /* overflow: hidden; */ /* REMOVED: This was cutting off the dropdown list */
+}
+
+.hero__search__form .nice-select {
+    z-index: 95 !important; /* Ensure series dropdown is on top of page content, but below mobile sidebar overlay */
+}
+
+.hero__search__form form button {
+    border-radius: 0 6px 6px 0 !important;
+}
+
+/* 4. Category Section Cards */
+.categories__item {
+    border-radius: 8px !important;
+}
+
+/* 5. Product Cards & Images */
+.product__item__pic, .featured__item__pic, .product__discount__item__pic, .latest-product__item__pic {
+    border-radius: 6px !important;
+}
+
+.product__item, .list-view .product__item {
+    border-radius: 8px !important;
+}
+
+/* 6. Shopping Cart & Checkout Blocks */
+.shoping__checkout, .checkout-premium, .custom-modal {
+    border-radius: 10px !important;
+}
+
+.cart-item-img {
+    border-radius: 5px !important;
+}
+
+.pro-qty, .pro-qty-cart {
+    border-radius: 5px !important;
+}
+
+/* 7. Profile & Account Specifics - Circular Avatars */
+.profile-avatar-preview, .user-avatar-lg, .header__user-avatar, .user-avatar-sm {
+    border-radius: 50% !important;
+}
+
+.profile-avatar-label {
+    border-radius: 5px !important;
+}
+
+.user-dropdown-menu, .dropdown-menu {
+    border-radius: 6px !important;
+    overflow: hidden;
+}
+
+.hero__categories ul {
+    border-radius: 0 0 6px 6px !important;
+    z-index: 90 !important; /* Fix: Ensure dropdown is above page content, but below mobile sidebar overlay */
+    background: #ffffff !important;
+}
+
+/* Fix for Hero Categories on non-home pages being "pushed" or "hidden" */
+.hero.hero-normal .hero__categories {
+    overflow: visible !important;
+}
+
+/* Premium border-radius micro-interaction for Categories Menu Header */
+.hero__categories__all {
+    border-radius: 6px !important; /* Máº·c Ä‘á»‹nh khi Ä‘Ã³ng: bo trÃ²n Ä‘á»u cáº£ 4 gÃ³c */
+    transition: border-radius 0.2s ease-in-out !important;
+}
+
+/* Khi danh sÃ¡ch Ä‘ang Ä‘Æ°á»£c má»Ÿ (cÃ³ class .dropdown-open trÃªn cha): pháº³ng 2 gÃ³c dÆ°á»›i */
+.hero__categories.dropdown-open .hero__categories__all {
+    border-radius: 6px 6px 0 0 !important;
+}
+
+/* ============================================
+   MOBILE HUMBERGER MENU OPTIMIZATION
+   ============================================ */
+
+.humberger__menu__wrapper {
+    overflow-x: hidden !important; /* Block horizontal scroll */
+    max-width: 100vw;
+}
+
+/* Hide scrollbars but keep functionality */
+.humberger__menu__wrapper {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+.humberger__menu__wrapper::-webkit-scrollbar {
+    display: none; /* Chrome/Safari/Webkit */
+}
+
+/* Ensure content fits within the 300px width */
+.humberger__menu__wrapper > * {
+    max-width: 100% !important;
+    box-sizing: border-box;
+}
+
+.humberger__menu__nav ul li a {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+/* Fix social icons or widgets that might overflow */
+.humberger__menu__widget, .header__top__right__social, .humberger__menu__contact {
+    width: 100% !important;
+    overflow: hidden;
+}
+
+/* ============================================
+   MOBILE RESPONSIVE FIXES
+   ============================================ */
+
+/* Global overflow prevention */
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* Fix search form width causing horizontal scroll */
+@media only screen and (max-width: 991px) {
+    .hero__search__form {
+        width: 100% !important;
+        float: none !important;
+    }
+    
+    .hero__search__phone {
+        float: none !important;
+        margin-top: 20px;
+    }
+    
+    .hero__search__form .nice-select {
+        z-index: 5 !important; /* Low z-index on mobile/tablet to never overlap with mobile hamburger overlay or sidebar contents */
+    }
+
+    /* Tablet: Align banner with layout by reducing left padding */
+    .hero__item {
+        padding-left: 45px !important; /* Adjust as needed for alignment */
+    }
+}
+
+/* Fix Product Card Aspect Ratio on Tablet & Mobile */
+@media only screen and (max-width: 991px) {
+    .product__item__pic,
+    .featured__item__pic {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 1 / 1 !important; /* Force a perfect square */
+        background-size: cover !important;
+        background-position: center !important;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    /* Banner Responsive Adjustments */
+    .hero__item {
+        height: auto !important;
+        min-height: 250px;
+        padding: 30px 20px !important;
+        padding-left: 20px !important; /* Fix: Add a little padding to prevent touching edge */
+        background-size: cover !important;
+        background-position: center right !important;
+        display: flex;
+        align-items: center;
+    }
+
+    .hero__text {
+        padding: 0 !important;
+    }
+
+    .hero__text h2 {
+        font-size: 24px !important;
+        line-height: 30px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .hero__text span {
+        font-size: 12px !important;
+        letter-spacing: 2px !important;
+    }
+
+    .hero__text p {
+        font-size: 14px !important;
+        margin-bottom: 15px !important;
+    }
+
+    .hero__text .primary-btn {
+        padding: 10px 20px !important;
+        font-size: 13px !important;
+    }
+
+    /* Shrink footer logo on mobile */
+    .footer__about__logo img {
+        max-width: 150px;
+        height: auto;
+    }
+}
+
+@media only screen and (max-width: 479px) {
+    .hero__item {
+        min-height: 200px;
+    }
+    
+    .hero__text h2 {
+        font-size: 20px !important;
+        line-height: 26px !important;
+    }
+
+}
+
+/* ============================================
+   PRODUCT DETAIL & CARD FIXES
+   ============================================ */
+
+/* 1. Align Add to Cart button with Quantity Input */
+.product__details__quantity {
+    display: inline-block !important;
+    vertical-align: middle !important;
+    margin-right: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+.product__details__text .primary-btn {
+    display: inline-block !important;
+    vertical-align: middle !important;
+    height: 50px !important; /* Match Ogani pro-qty height */
+    line-height: 48px !important; /* Adjust for border if any */
+    padding: 0 30px !important;
+    margin-bottom: 10px !important;
+}
+
+/* 2. Sold Out Overlay & Hover Icons Priority */
+.sold-out-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.3); /* Subtle white wash */
+    backdrop-filter: grayscale(80%) blur(1px); /* Professional grayscale effect on background only */
+    -webkit-backdrop-filter: grayscale(80%) blur(1px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2 !important; /* Below the hover icons */
+    pointer-events: none; /* Allow clicks to pass through to the image/icons if needed */
+}
+
+/* Sold out text styles moved to top consolidated block */
+
+/* Ensure Hover Icons are always on top */
+.product__item__pic__hover, 
+.featured__item__pic__hover,
+.product__discount__item__pic__hover {
+    z-index: 10 !important;
+}
+
+/* Make icons more visible on the white overlay */
+.is-sold-out .product__item__pic__hover li a,
+.is-sold-out .featured__item__pic__hover li a {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* 3. Lock Quantity to 0 for Out of Stock */
+.qty-disabled {
+    pointer-events: none !important;
+    opacity: 0.6;
+    background: #ebebeb !important;
+}
+
+.qty-disabled .qtybtn {
+    visibility: hidden; /* Hide +/- buttons */
+}
+
+.qty-disabled input {
+    color: #999 !important;
+}
+
+/* 4. Fine-tuning List View 'Chi tiáº¿t' Button (Mobile Only) */
+@media only screen and (max-width: 767px) {
+    .product__item__list-actions .primary-btn {
+        padding: 8px 8px 8px 6px !important; /* Thu háº¹p thÃªm chiá»u ngang */
+        letter-spacing: 0.5px !important;
+        font-size: 11px !important;
+        text-align: center !important;
+        justify-content: center !important;
+        width: auto !important;
+        min-width: 80px; /* Thu háº¹p min-width */
+        margin-right: 5px; /* Giá»¯ khoáº£ng cÃ¡ch vá»›i mÃ©p container */
+    }
+}
+
+/* 5. Header & Hamburger Icon Alignment Fix */
+.header__tabs ul, 
+.humberger__menu__cart ul {
+    display: flex !important;
+    align-items: center !important;
+    margin-bottom: 0 !important;
+    list-style: none;
+    padding: 0;
+}
+
+.header__tabs ul li, 
+.humberger__menu__cart ul li {
+    display: flex !important;
+    align-items: center !important;
+    margin-right: 25px !important;
+}
+
+.header__tabs ul li:last-child, 
+.humberger__menu__cart ul li:last-child {
+    margin-right: 0 !important;
+}
+
+.header__tabs ul li a, 
+.humberger__menu__cart ul li a {
+    display: flex !important;
+    align-items: center !important;
+    line-height: 1 !important;
+}
+
+/* Fix vertical offset for heart icon */
+.header__tabs ul li a i, 
+.humberger__menu__cart ul li a i {
+    margin-top: 2px; /* Slight nudge for optical alignment */
+}
+
+/* Specific optical alignment nudge for heart icon to be 100% aligned with the shopping bag */
+.header__tabs ul li a i.fa-heart, 
+.humberger__menu__cart ul li a i.fa-heart {
+    margin-top: 5px !important; /* Shift down slightly by 2 more pixels */
+}
+
+/* Ensure the cart view component content also aligns */
+.cart-vc-content {
+    display: flex;
+    align-items: center;
+}
+
+/* 6. Synchronize Notification Badges (Counts) */
+.header__tabs ul li a span, 
+.humberger__menu__cart ul li a span,
+.cart-count {
+    position: absolute !important;
+    top: -2px !important; /* Giá»‘ng nhau vá» Ä‘á»™ cao */
+    right: -10px !important; /* Giá»‘ng nhau vá» khoáº£ng cÃ¡ch lá» */
+    height: 14px !important;
+    width: 14px !important;
+    line-height: 14px !important;
+    font-size: 9px !important;
+    background: #7fad39 !important; /* Green for Header & Cart */
+    color: #ffffff !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-weight: 700 !important;
+    padding: 0 !important;
+}
+
+/* Revert Hamburger badges to original Purple theme */
+.humberger__menu__cart ul li a span {
+    background: #560bad !important;
+}
+
+/* Specific styling for the heart (favorite) count badge */
+.header__tabs ul li a span:not(.cart-count), 
+.humberger__menu__cart ul li a span:not(.cart-count) {
+    top: -2px !important; /* Kept high at its default baseline */
+    right: -13px !important; /* Specifically wider right margin */
+}
+
+.header__tabs ul li a span.cart-count, 
+.humberger__menu__cart ul li a span.cart-count,
+.cart-count {
+    top: -4px !important; /* PC default horizontal symmetry */
+    right: -10px !important; /* Kept at default horizontal margin */
+}
+
+/* Specific lower shift for mobile hamburger cart badge to align perfectly with mobile heart badge */
+.humberger__menu__cart ul li a span.cart-count {
+    top: -3.5px !important; /* Lowered by 2px to align perfectly on mobile, winning the specificity battle! */
+}
+
+/* Reset relative positioning for the icon containers to anchor the badges */
+.header__tabs ul li a, 
+.humberger__menu__cart ul li a,
+.cart-link-icon {
+    position: relative !important;
+    display: inline-block !important;
+}
+
+/* Mobile & Tablet Category Dropdown Navigation under Hamburger Menu */
+@media (max-width: 991.98px) {
+    .has-hero-submenu {
+        position: relative;
+    }
+    
+    .hero-submenu {
+        position: static !important;
+        width: 100% !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        transition: all 0.3s ease;
+    }
+    
+    .has-hero-submenu:hover .hero-submenu,
+    .has-hero-submenu:focus-within .hero-submenu {
+        opacity: 1 !important;
+        visibility: visible !important;
+        height: auto !important;
+        overflow: visible !important;
+        padding: 8px 0 8px 15px !important;
+        background: #fdfdfd !important;
+        border-left: 3px solid #560bad !important;
+        margin-top: 5px !important;
+        margin-bottom: 5px !important;
+    }
+
+    .hero-submenu li {
+        border-bottom: 1px solid #f2f2f2 !important;
+    }
+
+    .hero-submenu li:last-child {
+        border-bottom: none !important;
+    }
+
+    .hero-submenu li a {
+        padding: 6px 15px !important;
+        line-height: 1.5 !important;
+        font-size: 14px !important;
+    }
+
+    /* Hover rotation for categories submenu arrow on mobile layout */
+    .has-hero-submenu .hero-cat-link i.fa-angle-right {
+        transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+        display: inline-block !important; /* Ensure rotation works smoothly */
+    }
+    .has-hero-submenu:hover .hero-cat-link i.fa-angle-right {
+        transform: rotate(90deg) !important; /* Rotates 90 degrees clockwise pointing down */
+    }
+
+    /* Premium mobile dropdown entry animation for language picker in Hamburger */
+    .humberger__menu__widget .header__top__right__language ul {
+        top: 23px !important; /* Stable position */
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important; /* Prevent hover area overlap issues entirely */
+        transition: opacity 0.4s ease, visibility 0.4s ease !important; /* Smooth slow fade-in/out */
+        box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.3) !important;
+        border-radius: 8px !important;
+        background: #222222 !important; /* Matches humberger sidebar dark theme */
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .humberger__menu__widget .header__top__right__language:hover ul {
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important; /* Enable clicks when visible */
+    }
+
+    /* Make language items hover feel premium */
+    .humberger__menu__widget .header__top__right__language ul li a {
+        transition: all 0.2s ease !important;
+        border-radius: 4px !important;
+    }
+    .humberger__menu__widget .header__top__right__language ul li a:hover {
+        background: rgba(86, 11, 173, 0.15) !important;
+        color: #560bad !important;
+    }
+}
+
+/* ==========================================================================
+   Premium Desktop Dropdown Navigation Styling
+   ========================================================================== */
+@media (min-width: 992px) {
+    /* Main Dropdown Container */
+    /* Main Dropdown Container */
+    .header__menu ul li .header__menu__dropdown {
+        position: absolute;
+        left: -15px !important;
+        top: 50px !important;
+        background: #ffffff !important;
+        width: 200px !important;
+        z-index: 999 !important;
+        padding: 8px 0 !important;
+        border-radius: 12px !important;
+        border: 1px solid rgba(0, 0, 0, 0.07) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important; /* Ignore hover/clicks while hidden */
+        transform: translateY(10px) !important;
+        transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                    visibility 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    /* Hover Activation with Slide-up Animation */
+    .header__menu ul li:hover .header__menu__dropdown {
+        top: 40px !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important; /* Allow interactions when visible */
+        transform: translateY(0) !important;
+    }
+
+    /* Pure CSS invisible bridge to eliminate mouse hover loss in transparent gap for Pages dropdown */
+    .header__menu ul li .header__menu__dropdown::after {
+        content: "" !important;
+        position: absolute !important;
+        top: -30px !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 30px !important;
+        background: transparent !important;
+        z-index: -1 !important;
+        display: block !important;
+    }
+
+    /* Popover Arrow Indicator */
+    .header__menu ul li .header__menu__dropdown::before {
+        content: '' !important;
+        position: absolute !important;
+        top: -6px !important;
+        left: 30px !important;
+        width: 10px !important;
+        height: 10px !important;
+        background: #ffffff !important;
+        transform: rotate(45deg) !important;
+        border-left: 1px solid rgba(0, 0, 0, 0.07) !important;
+        border-top: 1px solid rgba(0, 0, 0, 0.07) !important;
+        z-index: 1 !important;
+    }
+
+    /* Dropdown List Item Wrapper */
+    .header__menu ul li .header__menu__dropdown li {
+        margin-right: 0 !important;
+        display: block !important;
+        padding: 0 6px !important;
+    }
+
+    /* Dropdown Item Link */
+    .header__menu ul li .header__menu__dropdown li a {
+        text-transform: capitalize !important;
+        color: #4a4a4a !important;
+        font-weight: 500 !important;
+        font-size: 14px !important;
+        padding: 8px 16px !important;
+        border-radius: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        transition: all 0.2s ease !important;
+        letter-spacing: normal !important;
+    }
+
+    /* Dropdown Item Link Hover */
+    .header__menu ul li .header__menu__dropdown li a:hover {
+        background: rgba(86, 11, 173, 0.05) !important;
+        color: #560bad !important;
+    }
+
+    /* ==========================================================================
+       Language Dropdown Container (Desktop) - Unified with Pages Dropdown
+       ========================================================================== */
+    .header__lang ul {
+        position: absolute !important;
+        left: -15px !important;
+        top: 45px !important; /* Starts slightly lower for smooth upward transition */
+        background: #ffffff !important;
+        width: 140px !important;
+        z-index: 999 !important;
+        padding: 8px 0 !important;
+        border-radius: 12px !important;
+        border: 1px solid rgba(0, 0, 0, 0.07) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important; /* Ignore hover/clicks while hidden */
+        transform: translateY(10px) !important;
+        transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+                    visibility 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    /* Hover Activation with Slide-up Animation */
+    .header__lang:hover ul {
+        top: 28px !important; /* Slid up smoothly closer to trigger text */
+        opacity: 1 !important;
+        visibility: visible !important;
+        pointer-events: auto !important; /* Allow interactions when visible */
+        transform: translateY(0) !important;
+    }
+
+    /* Pure CSS invisible bridge to eliminate mouse hover loss in transparent gap */
+    .header__lang ul::after {
+        content: "" !important;
+        position: absolute !important;
+        top: -30px !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 30px !important;
+        background: transparent !important;
+        z-index: -1 !important;
+        display: block !important;
+    }
+
+    /* Popover Arrow Indicator (Same style as Pages dropdown) */
+    .header__lang ul::before {
+        content: '' !important;
+        position: absolute !important;
+        top: -6px !important;
+        left: 20px !important; /* Positioned left near flag */
+        width: 10px !important;
+        height: 10px !important;
+        background: #ffffff !important;
+        transform: rotate(45deg) !important;
+        border-left: 1px solid rgba(0, 0, 0, 0.07) !important;
+        border-top: 1px solid rgba(0, 0, 0, 0.07) !important;
+        z-index: 1 !important;
+    }
+
+    /* Dropdown Items (Unified spacing & border-radius hover) */
+    .header__lang ul li {
+        margin-right: 0 !important;
+        display: block !important;
+        padding: 0 6px !important;
+    }
+
+    .header__lang ul li a {
+        color: #4a4a4a !important;
+        font-weight: 500 !important;
+        font-size: 14px !important;
+        padding: 8px 12px !important;
+        border-radius: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        transition: all 0.2s ease !important;
+        letter-spacing: normal !important;
+        text-transform: none !important;
+        background: transparent !important;
+    }
+
+    /* Dropdown Item Link Hover */
+    .header__lang ul li a:hover {
+        background: rgba(86, 11, 173, 0.05) !important;
+        color: #560bad !important;
+    }
+}
+
+/* ============================================
+   STYLING FOR PRODUCT SIDEBAR TOGGLE BUTTON (MOBILE/TABLET)
+   ============================================ */
+.shop-filter-toggle-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #ffffff !important;
+    color: #560bad !important;
+    border: 2px solid #560bad !important;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 24px;
+    border-radius: 8px !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 4px 10px rgba(86, 11, 173, 0.08) !important;
+    cursor: pointer;
+    font-family: 'Saira', sans-serif !important;
+    width: 100%;
+}
+
+.shop-filter-toggle-btn i {
+    font-size: 16px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* Hover & Active States */
+.shop-filter-toggle-btn:hover {
+    background: #560bad !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 15px rgba(86, 11, 173, 0.2) !important;
+}
+
+.shop-filter-toggle-btn:hover i {
+    transform: rotate(15deg) scale(1.1);
+}
+
+.shop-filter-toggle-btn:active {
+    transform: scale(0.98);
+}
+
+/* When the collapse is open (aria-expanded="true"), style it dynamically! */
+.shop-filter-toggle-btn[aria-expanded="true"] {
+    background: #560bad !important;
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(86, 11, 173, 0.15) !important;
+}
+
+.shop-filter-toggle-btn[aria-expanded="true"] i {
+    transform: rotate(90deg);
+}
+
+/* ============================================
+   MOBILE RESPONSIVENESS: ENHANCED PAGE CONTAINER PADDING
+   ============================================ */
+@media screen and (max-width: 767px) {
+    /* TÄƒng khoáº£ng cÃ¡ch 2 bÃªn mÃ©p mÃ n hÃ¬nh trÃªn thiáº¿t bá»‹ di Ä‘á»™ng */
+    .container {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+    
+    /* Äáº£m báº£o cÃ¡c hÃ ng (row) khÃ´ng bá»‹ lá»“i ra ngoÃ i mÃ©p mÃ n hÃ¬nh */
+    .row {
+        margin-left: -10px !important;
+        margin-right: -10px !important;
+    }
+    
+    /* Tinh chá»‰nh cá»™t Ä‘á»ƒ cÃ³ khoáº£ng há»Ÿ 2 bÃªn Ä‘áº¹p máº¯t */
+    .row > [class*="col-"] {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    /* Tinh chá»‰nh tiÃªu Ä‘á» vÃ  cÃ¡c pháº§n khÃ¡c trÃªn mobile */
+    .section-title h2 {
+        font-size: 22px !important;
+    }
+
+    /* GiÃ£n cÃ¡ch cÃ¡c pháº§n section Ä‘á»ƒ thoÃ¡ng Ä‘Ã£ng hÆ¡n */
+    section.spad {
+        padding-top: 40px !important;
+        padding-bottom: 40px !important;
+    }
+}
+
+/* Prevent hero search form and phone widget from wrapping on desktop/laptops under 1200px */
+@media screen and (min-width: 992px) {
+    .hero__search {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 20px !important;
+    }
+
+    .hero__search__form {
+        flex: 1 !important;
+        max-width: 610px !important;
+        width: auto !important;
+        float: none !important;
+    }
+
+    .hero__search__phone {
+        flex-shrink: 0 !important;
+        float: none !important;
+        margin-top: 0 !important;
+    }
+}
+
+/* ============================================
+   Favorites Page Styling
+   ============================================ */
+
+/* Empty state */
+.favorites-empty {
+    padding: 60px 20px;
+}
+
+.favorites-empty__icon {
+    font-size: 80px;
+    color: #ddd;
+    line-height: 1;
+}
+
+    .favorites-empty__icon .fa-heart-o {
+        color: #e0c0c0;
+    }
+
+/* Count badge next to title */
+.favorites-count-badge {
+    background: #dd2222;
+    color: #fff;
+    font-size: 13px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    vertical-align: middle;
+}
+
+/* Category badge */
+.fav-category-badge {
+    background: #f3f0fa;
+    color: #560bad;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+/* Price */
+.fav-final-price {
+    font-weight: 700;
+    color: #dd2222;
+    font-size: 15px;
+}
+
+/* Stock badges */
+.fav-stock-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.fav-stock-in {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.fav-stock-out {
+    background: #fdecea;
+    color: #c62828;
+}
+
+/* Date column */
+.fav-date {
+    font-size: 13px;
+    color: #888;
+    white-space: nowrap;
+}
+
+/* Product image in favorites table */
+.fav-item-img {
+    width: 70px !important;
+    height: 70px !important;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #f0f0f0;
+}
+
+/* Actions group */
+.fav-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* Small primary button for Add to Cart */
+.primary-btn--sm {
+    padding: 8px 14px !important;
+    font-size: 13px !important;
+    height: auto !important;
+    line-height: 1.4 !important;
+    letter-spacing: 0 !important;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+}
+
+    .primary-btn--sm.disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+
+/* Remove button */
+.fav-remove-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #b2b2b2;
+    font-size: 18px;
+    padding: 4px 8px;
+    transition: color 0.2s;
+    line-height: 1;
+}
+
+    .fav-remove-btn:hover {
+        color: #dd2222;
+    }
+
+/* Table row fade animation */
+.fav-row {
+    transition: opacity 0.3s ease;
+}
+
+/* Responsive tweaks */
+@media (max-width: 767px) {
+    .fav-date {
+        display: none;
+    }
+
+    .fav-item-img {
+        width: 50px !important;
+        height: 50px !important;
+    }
+}
+
+/* Empty shopping cart state */
+.cart-empty {
+    padding: 60px 20px;
+}
+
+.cart-empty__icon {
+    font-size: 80px;
+    color: #ddd;
+    line-height: 1;
+}
+
+    .cart-empty__icon .fa-shopping-basket {
+        color: #d1c4e9; /* Light purple tint to match Trinity Hobby Shop theme! */
+    }
+
+/* Prevent text highlighting on all header navigation elements (PC & Mobile) */
+.header__menu,
+.humberger__menu__nav,
+.humberger__menu__wrapper {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* ============================================
+   Redesigned, Responsive Cart & Wishlist tables
+   ============================================ */
+
+/* General Table Fixes for both pages */
+.shoping__cart__table table {
+    width: 100%;
+}
+
+.shoping__cart__table table tbody tr td {
+    vertical-align: middle !important;
+}
+
+/* 1. WISHLIST TABLE COLUMN WIDTHS (Perfect horizontal distribution across 100% width) */
+#favorites-table {
+    table-layout: fixed; /* Lock columns for pixel-perfect alignment */
+    width: 100%;
+}
+
+#favorites-table th.fav-product-header,
+#favorites-table td.fav-product-cell {
+    width: 58% !important; /* Increased product column width to accommodate name, meta, and category beautifully */
+    padding-left: 30px !important; /* Push image away from left border */
+}
+
+/* Ensure Cart Details page product column header and cell align perfectly too */
+.shoping__cart__table table thead th.cart-product-header,
+.shoping__cart__table table tbody tr td.cart-product-cell {
+    padding-left: 30px !important; /* Push image away from left border */
+}
+
+#favorites-table th.fav-price-cell,
+#favorites-table td.fav-price-cell {
+    width: 16% !important; /* Perfectly balanced price column */
+    text-align: center;
+}
+
+#favorites-table th.fav-status-cell,
+#favorites-table td.fav-status-cell {
+    width: 14% !important; /* Spacious stock status column */
+    text-align: center;
+}
+
+#favorites-table th.shoping__cart__item__close,
+#favorites-table td.shoping__cart__item__close {
+    width: 12% !important; /* Give action buttons comfortable breathing room and right margin */
+    text-align: right;
+    padding-right: 20px !important; /* Shift column content away from the absolute right edge */
+}
+
+/* Category badge */
+.fav-category-badge {
+    background: #f3f0fa;
+    color: #560bad;
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+    display: inline-block;
+}
+
+/* Price */
+.fav-final-price {
+    font-weight: 700;
+    color: #1c1c1c; /* Native dark charcoal black to align with cart page */
+    font-size: 16px;
+}
+
+.old-price-sm {
+    font-size: 12px;
+    color: #b2b2b2;
+    text-decoration: line-through;
+}
+
+/* Stock badges in Wishlist */
+.fav-stock-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.fav-stock-in {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.fav-stock-out {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+/* Flexbox layout for Wishlist Product Item */
+#favorites-table td.fav-product-cell {
+    display: flex !important;
+    align-items: center !important;
+    border-bottom: 1px solid #ebebeb;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    width: auto !important;
+    min-height: 130px;
+}
+
+#favorites-table td.fav-product-cell > a,
+#favorites-table td.fav-product-cell > img {
+    display: block !important;
+    flex-shrink: 0 !important;
+    margin-right: 25px !important;
+}
+
+#favorites-table td.fav-product-cell h5.fav-product-title-wrapper {
+    flex: 1 !important;
+    display: block !important;
+    padding-left: 0 !important;
+    margin: 0 !important;
+    text-align: left !important;
+    min-width: 0; /* Essential for text-overflow to work in flexbox */
+}
+
+/* Flexbox layout for Cart Product Item */
+.shoping__cart__table table tbody tr td.cart-product-cell {
+    display: flex !important;
+    align-items: center !important;
+    border-bottom: 1px solid #ebebeb;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    width: auto !important;
+    min-height: 130px;
+}
+
+.shoping__cart__table table tbody tr td.cart-product-cell > img,
+.shoping__cart__table table tbody tr td.cart-product-cell > a {
+    display: block !important;
+    flex-shrink: 0 !important;
+    margin-right: 25px !important;
+}
+
+.shoping__cart__table table tbody tr td.cart-product-cell h5.cart-product-title {
+    flex: 1 !important;
+    display: block !important;
+    padding-left: 0 !important;
+    margin: 0 !important;
+    text-align: left !important;
+    min-width: 0; /* Essential for text-overflow to work in flexbox */
+}
+
+/* Product Meta styling (Rating & Views) */
+.fav-product-meta {
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.fav-meta-sep {
+    color: #d8d8d8;
+    margin: 0 10px;
+    font-size: 12px;
+}
+
+.fav-rating i {
+    color: #ffb300 !important; /* Warm gold stars */
+}
+
+.fav-views i {
+    color: #888888;
+    margin-right: 4px;
+}
+
+/* Dedicated Wishlist Product Title */
+.fav-product-title {
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+    max-height: 2.8em;
+    font-size: 16px;
+    font-weight: 600;
+    white-space: normal !important;
+    color: #1c1c1c !important;
+    transition: color 0.2s ease-in-out;
+}
+
+.fav-product-title:hover {
+    color: #7f27ff !important; /* Theme purple hover for Wishlist */
+}
+
+/* Dedicated Cart Product Title */
+.cart-product-title {
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4;
+    max-height: 2.8em;
+    font-size: 16px;
+    font-weight: 600;
+    white-space: normal !important;
+    color: #1c1c1c !important;
+    transition: color 0.2s ease-in-out;
+}
+
+.cart-product-title:hover {
+    color: #7fad39 !important; /* Theme green hover for Cart */
+}
+
+/* Action buttons alignment in close cell */
+.fav-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 15px; /* Comfortable padding to prevent buttons from touching the table edge */
+}
+
+.fav-remove-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #b2b2b2 !important;
+    cursor: pointer;
+    transition: color 0.3s;
+    padding: 0;
+}
+
+.fav-remove-btn:hover {
+    color: #dd2222 !important;
+}
+
+/* ============================================
+   2. RESPONSIVE FOR TABLET PLATFORM (768px to 991px)
+   ============================================ */
+@media (max-width: 991px) {
+    /* Compact row height and font scaling */
+    .shoping__cart__table table tbody tr td {
+        padding-top: 15px !important;
+        padding-bottom: 15px !important;
+    }
+    
+    .shoping__cart__table table thead th {
+        font-size: 16px !important;
+        padding-bottom: 12px !important;
+    }
+    
+    /* Shrink product images */
+    .cart-item-img, .fav-item-img {
+        width: 60px !important;
+        height: 60px !important;
+        margin-right: 15px !important;
+    }
+    
+    #favorites-table td.fav-product-cell > a,
+    .shoping__cart__table table tbody tr td.cart-product-cell > a {
+        margin-right: 15px !important;
+    }
+    
+    /* Shrink title and text sizes */
+    .fav-product-title,
+    .cart-product-title {
+        font-size: 14px !important; /* Increased for tablet layout readability */
+    }
+    
+    .fav-category-badge {
+        font-size: 11px !important;
+        padding: 4px 8px !important;
+    }
+    
+    .fav-stock-badge {
+        font-size: 11px !important;
+        padding: 4px 8px !important;
+    }
+    
+    .fav-final-price,
+    .shoping__cart__table table tbody tr td.shoping__cart__price,
+    .shoping__cart__table table tbody tr td.shoping__cart__total {
+        font-size: 14px !important;
+    }
+
+    .fav-product-meta {
+        margin-top: 4px;
+    }
+}
+
+/* ============================================
+   3. RESPONSIVE FOR MOBILE PLATFORM (< 768px)
+   ============================================ */
+@media (max-width: 767px) {
+    /* Enforce compact horizontal widths without scrolling */
+    .shoping__cart__table table {
+        table-layout: fixed !important;
+        width: 100% !important;
+    }
+    
+    /* Redistribute remaining Wishlist columns beautifully */
+    #favorites-table th.fav-product-header,
+    #favorites-table td.fav-product-cell {
+        width: 60% !important; /* Product column gets 60% width on Mobile */
+    }
+    
+    #favorites-table th.fav-price-cell,
+    #favorites-table td.fav-price-cell {
+        width: 18% !important;
+    }
+    
+    #favorites-table th.fav-status-cell,
+    #favorites-table td.fav-status-cell {
+        width: 12% !important;
+    }
+    
+    #favorites-table th.shoping__cart__item__close,
+    #favorites-table td.shoping__cart__item__close {
+        width: 10% !important;
+    }
+    
+    /* Cart Table - Distribute columns beautifully for mobile screen */
+    .shoping__cart__table table thead th:nth-child(2), /* Price */
+    .shoping__cart__table table tbody tr td.shoping__cart__price {
+        width: 18% !important;
+        text-align: center !important;
+    }
+    
+    .shoping__cart__table table thead th:nth-child(3), /* Quantity */
+    .shoping__cart__table table tbody tr td.shoping__cart__quantity {
+        width: 28% !important;
+        text-align: center !important;
+    }
+    
+    .shoping__cart__table table thead th:nth-child(4), /* Total */
+    .shoping__cart__table table tbody tr td.shoping__cart__total {
+        width: 18% !important;
+        text-align: center !important;
+    }
+    
+    .shoping__cart__table table thead th:last-child, /* Close button */
+    .shoping__cart__table table tbody tr td.shoping__cart__item__close {
+        width: 10% !important;
+    }
+    
+    /* Micro image size for mobile */
+    .cart-item-img, .fav-item-img {
+        width: 45px !important;
+        height: 45px !important;
+        margin-right: 8px !important;
+    }
+    
+    #favorites-table td.fav-product-cell > a,
+    .shoping__cart__table table tbody tr td.cart-product-cell > a {
+        margin-right: 8px !important;
+    }
+    
+    /* Micro padding for mobile cells */
+    .shoping__cart__table table tbody tr td {
+        padding: 10px 4px !important;
+    }
+    
+    /* Micro font sizes for mobile viewport */
+    .fav-product-title,
+    .cart-product-title {
+        font-size: 12px !important; /* Increased for mobile screen readability */
+        line-height: 1.3 !important;
+    }
+
+    .fav-product-meta {
+        display: none !important; /* Hide rating & views on mobile to maximize space */
+    }
+    
+    .fav-stock-badge {
+        font-size: 9px !important;
+        padding: 3px 4px !important;
+    }
+    
+    .fav-final-price,
+    .shoping__cart__table table tbody tr td.shoping__cart__price,
+    .shoping__cart__table table tbody tr td.shoping__cart__total {
+        font-size: 11px !important;
+    }
+    
+    .old-price-sm {
+        font-size: 9px !important;
+    }
+    
+    /* Wishlist actions stack on mobile */
+    .fav-actions {
+        flex-direction: column !important;
+        gap: 6px !important;
+        align-items: flex-end !important;
+    }
+    
+    .btn-add-to-cart-fav {
+        padding: 6px 8px !important;
+        font-size: 11px !important;
+    }
+    
+    .fav-remove-btn {
+        font-size: 18px !important;
+    }
+    
+    /* Compact mobile quantity spinner */
+    .pro-qty-cart {
+        width: 75px !important;
+        height: 28px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        background: #f5f5f5 !important;
+        border-radius: 4px !important;
+    }
+    
+    .pro-qty-cart .qtybtn {
+        width: 18px !important;
+        line-height: 26px !important;
+        font-size: 12px !important;
+    }
+    
+    .pro-qty-cart input {
+        width: 30px !important;
+        height: 26px !important;
+        font-size: 11px !important;
+    }
+}
+
+/* Custom Language Flag and Emoji Styles (Non-inline CSS) */
+.lang-flag-emoji {
+    font-size: 18px;
+    margin-right: 5px;
+}
+
+.lang-flag-emoji-dropdown {
+    font-size: 16px;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.lang-flag-img {
+    width: 18px;
+    height: auto;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.lang-flag-img-dropdown {
+    width: 16px;
+    height: auto;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.disabled-lang {
+    cursor: default !important;
+    opacity: 0.5 !important;
+    pointer-events: none !important; /* Disable all interactions naturally */
+}
+
+.active-lang {
+    font-weight: bold !important; /* Emphasize active language selection */
+}
+
+/* Align mobile cart price horizontally with heart and cart icons */
+.humberger__menu__cart {
+    display: flex !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    gap: 15px !important;
+}
+
+.humberger__menu__cart ul {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin-right: 0 !important;
+    margin-bottom: 0 !important;
+    padding-left: 0 !important;
+}
+
+.humberger__menu__cart ul li {
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+.humberger__menu__cart .header__cart__price {
+    display: inline-flex !important;
+    align-items: center !important;
+    margin-bottom: 0 !important;
+    margin-top: 2px !important;
+}
+
+/* -------------------------------------------------------------
+   PREMIUM COLLAPSIBLE ACCORDION LANGUAGE DROPDOWNS FOR HAMBURGER
+------------------------------------------------------------- */
+.humberger__menu__widget {
+    margin-bottom: 0px !important; /* Minimized bottom margin for an ultra-compact vertical space! */
+}
+
+.humberger__menu__widget .header__top__right__language {
+    position: relative !important;
+    display: block !important; /* Make it full block width on mobile */
+    cursor: pointer !important;
+    padding: 8px 0 !important;
+    width: 100% !important;
+}
+
+/* Force iOS touch bubbling by setting cursor pointer on mobile descendants */
+.humberger__menu__widget .header__top__right__language * {
+    cursor: pointer !important;
+}
+
+/* Render the mobile list inline inside the document layout flow */
+.humberger__menu__widget .header__top__right__language ul {
+    display: none !important;
+    position: relative !important; /* Forces normal document flow, absolutely immune to clipping/covering! */
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    background-color: #f7f7f7 !important; /* Premium light gray background for clear separation */
+    padding: 0 !important;
+    margin-top: 10px !important;
+    border-radius: 6px !important;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+    z-index: 1 !important;
+    overflow: hidden !important;
+}
+
+.humberger__menu__widget .header__top__right__language ul.show-lang-dropdown {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.humberger__menu__widget .header__top__right__language ul li {
+    display: block !important;
+    width: 100% !important;
+    border-bottom: 1px solid #e9e9e9 !important;
+}
+
+.humberger__menu__widget .header__top__right__language ul li:last-child {
+    border-bottom: none !important;
+}
+
+.humberger__menu__widget .header__top__right__language ul li a {
+    display: flex !important;
+    align-items: center !important;
+    padding: 12px 16px !important;
+    color: #2b2b2b !important; /* Clean dark text for superb contrast on light gray bg */
+    font-size: 14px !important;
+    text-decoration: none !important;
+    transition: background-color 0.2s ease !important;
+    width: 100% !important;
+}
+
+.humberger__menu__widget .header__top__right__language ul li a:hover {
+    background-color: #ededed !important;
+    color: #2b2b2b !important;
+}
+
+/* -------------------------------------------------------------
+   GLOBAL DROPDOWN ALIGNMENT POLISH (ICONS & TEXT PERFECT ALIGN)
+------------------------------------------------------------- */
+.dropdown-menu .dropdown-item {
+    display: flex !important;
+    align-items: center !important;
+    text-align: left !important;
+    border: none !important;
+    background: transparent !important;
+    width: 100% !important;
+}
+
+.dropdown-menu .dropdown-item i {
+    width: 18px !important; /* Fixed width forces perfect vertical alignment of text! */
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-right: 10px !important; /* Premium spacing between icon and text */
+}
+
+.dropdown-menu .dropdown-item.text-danger {
+    color: #dc3545 !important; /* Premium bootstrap red by default */
+}
+
+.dropdown-menu .dropdown-item.text-danger i {
+    color: #dc3545 !important;
+}
+
+.dropdown-menu .dropdown-item.text-danger:hover {
+    background-color: #fff5f5 !important; /* Soft, premium red hover background */
+    color: #bd2130 !important; /* Slightly darker red on hover */
+}
+
+.dropdown-menu .dropdown-item.text-danger:hover i {
+    color: #bd2130 !important;
+}
+
+/* =============================================================
+   ABSOLUTE BULLETPROOF VERTICAL ALIGNMENT FOR HEADER COLUMNS
+   ============================================================= */
+.header {
+    height: 85px !important;
+    min-height: 85px !important;
+    background: linear-gradient(90deg, rgba(114, 9, 183, 1) 0%, rgba(58, 12, 163, 1) 84%, rgba(67, 97, 238, 1) 100%);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.header > .container {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+}
+
+.header .row {
+    width: 100% !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    height: 85px !important;
+}
+
+/* Logo Styling */
+.header__logo {
+    height: 85px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.header__logo a {
+    display: flex !important;
+    align-items: center !important;
+    height: 100% !important;
+}
+
+.header__logo img {
+    height: 55px !important;
+    max-height: 55px !important;
+    width: auto !important;
+    object-fit: contain !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Navigation Menu Styling */
+.header__menu {
+    height: 85px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.header__menu ul {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    list-style: none !important;
+    height: 100% !important;
+}
+
+.header__menu ul li {
+    margin-right: 35px !important;
+    margin-bottom: 0 !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    height: 100% !important;
+}
+
+.header__menu ul li:last-child {
+    margin-right: 0 !important;
+}
+
+.header__menu ul li a {
+    color: white !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: inline-block !important;
+    line-height: normal !important;
+}
+
+.header__menu ul li.active a {
+    color: #43aaff !important;
+}
+
+/* Menu Dropdown override positioning */
+.header__menu ul li .header__menu__dropdown {
+    top: 75px !important;
+    background: #222222 !important;
+    display: block !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    position: absolute !important;
+    left: 0 !important;
+    z-index: 9999 !important;
+    padding: 8px 0 !important;
+    width: 180px !important;
+    border-radius: 4px !important;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15) !important;
+    transition: all 0.3s ease !important;
+}
+
+.header__menu ul li:hover .header__menu__dropdown {
+    top: 60px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.header__menu ul li .header__menu__dropdown li {
+    width: 100% !important;
+    height: auto !important;
+    margin: 0 !important;
+    display: block !important;
+}
+
+.header__menu ul li .header__menu__dropdown li a {
+    color: white !important;
+    padding: 8px 15px !important;
+    display: block !important;
+    font-weight: 500 !important;
+    text-transform: none !important;
+    font-size: 13px !important;
+}
+
+.header__menu ul li .header__menu__dropdown li a:hover {
+    color: #4361ee !important;
+    background: rgba(255,255,255,0.08) !important;
+}
+
+/* Right Section Styling */
+.h-right {
+    height: 85px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    gap: 20px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.header__tabs {
+    display: flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.header__tabs ul {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.header__tabs ul li {
+    margin-right: 20px !important;
+    margin-bottom: 0 !important;
+    list-style: none !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.header__tabs ul li:last-child {
+    margin-right: 0 !important;
+}
+
+.header__tabs ul li a {
+    display: flex !important;
+    align-items: center !important;
+    position: relative !important;
+}
+
+.header__tabs ul li a i {
+    font-size: 20px !important;
+    color: white !important;
+}
+
+.header__tabs ul li a span {
+    height: 16px !important;
+    width: 16px !important;
+    background: #dd2222 !important;
+    font-size: 10px !important;
+    color: #ffffff !important;
+    line-height: 16px !important;
+    text-align: center !important;
+    font-weight: 700 !important;
+    display: inline-block !important;
+    border-radius: 50% !important;
+    position: absolute !important;
+    top: -6px !important;
+    right: -10px !important;
+}
+
+/* User Profile & Auth */
+.header__login {
+    display: flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100% !important;
+}
+
+.header__login a {
+    color: white !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    text-transform: uppercase !important;
+    display: flex !important;
+    align-items: center !important;
+    line-height: normal !important;
+    text-decoration: none !important;
+}
+
+.header__login a i {
+    font-size: 16px !important;
+    margin-right: 6px !important;
+}
+
+.header__user-avatar {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    margin-right: 8px !important;
+    border: 2px solid rgba(255,255,255,0.3) !important;
+}
+
+.header__user-name {
+    color: white !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+}

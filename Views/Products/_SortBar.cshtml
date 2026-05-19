@@ -1,0 +1,53 @@
+@model WebUITopic5_Team4.Models.ViewModels.SortOptionsViewModel
+
+<div class="filter__item">
+    <div class="row align-items-center">
+        <div class="col-lg-4 col-md-5 col-sm-5 col-6">
+            <div class="filter__sort">
+                <span>Sắp xếp</span>
+                <form asp-controller="Products" asp-action="Index" method="get">
+                    <input type="hidden" name="categoryId" value="@Model.Query.CategoryId" />
+                    <input type="hidden" name="keyword" value="@Model.Query.Keyword" />
+                    <input type="hidden" name="minPrice" value="@Model.Query.MinPrice" />
+                    <input type="hidden" name="maxPrice" value="@Model.Query.MaxPrice" />
+                    <input type="hidden" name="page" value="1" />
+                    <select name="sort" onchange="this.form.submit()">
+                        @foreach (var option in Model.Options)
+                        {
+                            var localizedText = option.Text switch {
+                                "Default" => "Mặc định",
+                                "Price: Low to High" => "Giá: Thấp đến Cao",
+                                "Price: High to Low" => "Giá: Cao đến Thấp",
+                                "Newest" => "Mới nhất",
+                                "Top Rated" => "Đánh giá cao nhất",
+                                "Discount Highest" => "Khuyến mãi tốt nhất",
+                                "Most Viewed" => "Xem nhiều nhất",
+                                _ => option.Text
+                            };
+                            
+                            if (option.Value == Model.SelectedSort)
+                            {
+                                <option value="@option.Value" selected="selected">@localizedText</option>
+                            }
+                            else
+                            {
+                                <option value="@option.Value">@localizedText</option>
+                            }
+                        }
+                    </select>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 col-6">
+            <div class="filter__found">
+                <h6><span>@Model.TotalCount</span> sản phẩm tìm thấy</h6>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-3 col-sm-3 col-3">
+            <div class="filter__option">
+                <span class="icon_grid-2x2 view-mode-btn active" data-mode="grid" title="Xem dạng lưới"></span>
+                <span class="icon_ul view-mode-btn" data-mode="list" title="Xem dạng danh sách"></span>
+            </div>
+        </div>
+    </div>
+</div>

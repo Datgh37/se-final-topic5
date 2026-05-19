@@ -1,0 +1,49 @@
+@model WebUITopic5_Team4.Models.ViewModels.CartPreviewViewModel
+
+<!-- Icon Giỏ hàng và Badge số lượng -->
+<a asp-controller="Cart" asp-action="Index" class="cart-link-icon">
+    <i class="fa fa-shopping-bag"></i>
+    <span class="cart-count">@Model.TotalItems</span>
+</a>
+
+<!-- Cart Dropdown Preview -->
+<div class="cart-dropdown" data-total-count="@Model.TotalItems">
+    @if (Model.Items.Any())
+    {
+        <div class="cart-dropdown__header">
+            <span class="cart-dropdown__title">Giỏ hàng</span>
+            <span class="cart-dropdown__badge">@Model.TotalItems</span>
+        </div>
+        <div class="cart-dropdown__items">
+            @foreach (var item in Model.Items)
+            {
+                <div class="cart-dropdown__item" data-cart-item-id="@item.CartItemId" data-max-stock="@item.StockQuantity">
+                    <img src="@Url.Content(item.ImageUrl)" alt="@item.ProductName" class="cart-dropdown__img">
+                    <div class="cart-dropdown__info">
+                        <span class="cart-dropdown__name">@item.ProductName</span>
+                        <span class="cart-dropdown__price">@item.UnitPrice.ToString("N0") ₫</span>
+                    </div>
+                    <div class="cart-dropdown__qty">
+                        <button type="button" class="cart-preview-btn cart-preview-dec">−</button>
+                        <span class="cart-preview-count">@item.Quantity</span>
+                        <button type="button" class="cart-preview-btn cart-preview-inc">+</button>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="cart-dropdown__footer">
+            <div class="cart-dropdown__total">
+                <span>Tổng cộng</span>
+                <strong>@Model.GrandTotal.ToString("N0") ₫</strong>
+            </div>
+            <a asp-controller="Cart" asp-action="Index" class="cart-dropdown__view-btn">Xem giỏ hàng</a>
+        </div>
+    }
+    else
+    {
+        <div class="cart-dropdown__empty">
+            <i class="fa fa-shopping-basket"></i>
+            <p>Giỏ hàng trống</p>
+        </div>
+    }
+</div>

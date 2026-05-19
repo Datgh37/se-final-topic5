@@ -1,0 +1,211 @@
+/* Auth Layout specific */
+.auth-body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background-color: #f3f2ee;
+}
+
+/* Auth Pages Styling */
+.auth-wrapper {
+    min-height: 100vh;
+    background-color: #ffffff;
+}
+.auth-banner {
+    background: linear-gradient(135deg, rgba(86, 11, 173, 0.8), rgba(63, 55, 201, 0.8)), url('/images/Categories/gundam.png') center/cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    padding: 40px;
+    text-align: center;
+    height: 100vh;
+}
+.auth-banner h2 {
+    color: #ffffff;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+.auth-form-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow-y: auto;
+}
+.auth-form-container {
+    padding: 40px;
+    width: 100%;
+    max-width: 500px;
+}
+.auth-btn {
+    background-color: #560bad;
+    color: white;
+    border-radius: 30px;
+    padding: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    border: none;
+}
+.auth-btn:hover {
+    background-color: #3a0ca3;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(86, 11, 173, 0.4);
+}
+.auth-input {
+    border-radius: 30px;
+    padding: 12px 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+}
+.auth-input:focus {
+    border-color: #560bad;
+    box-shadow: 0 0 0 0.2rem rgba(86, 11, 173, 0.25);
+}
+.auth-link {
+    color: #560bad;
+    font-weight: 600;
+    text-decoration: none;
+}
+.auth-link:hover {
+    color: #3a0ca3;
+    text-decoration: underline;
+}
+.back-home {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: #560bad;
+    font-weight: 600;
+    text-decoration: none;
+    z-index: 10;
+}
+.back-home:hover {
+    color: #3a0ca3;
+}
+
+/* Auth Banner Text Improvement */
+.auth-banner h2 { color: #ffffff !important; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+.auth-banner p { color: #f8f9fa !important; font-weight: 400; opacity: 1 !important; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+
+/* Forgot Password UI Alignment */
+.otp-input-group { display: flex; gap: 10px; }
+.otp-input-group .form-control { flex: 1; border-radius: 30px !important; }
+.otp-input-group .btn { white-space: nowrap; border-radius: 30px !important; padding: 0 25px !important; }
+
+
+/* OTP and Group Styling */
+.otp-group-input { border-radius: 30px 0 0 30px !important; }
+.otp-group-button { border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important; background-color: #560bad !important; border: none !important; font-weight: 600 !important; padding: 0 25px !important; color: white !important; transition: all 0.3s ease; border-top-right-radius: 30px !important; border-bottom-right-radius: 30px !important; }
+.otp-group-button:hover { background-color: #3a0ca3 !important; }
+
+
+.otp-group-button:hover { background-color: #3a0ca3 !important; box-shadow: -2px 0 10px rgba(86, 11, 173, 0.2); }
+
+
+.auth-banner p { color: #ffffff !important; opacity: 1 !important; font-weight: 500 !important; text-shadow: 0 1px 3px rgba(0,0,0,0.3) !important; }
+.otp-group-button { border-radius: 0 30px 30px 0 !important; background-color: #560bad !important; color: white !important; font-weight: 600 !important; border: none !important; transition: all 0.3s ease !important; padding: 0 25px !important; }
+.otp-group-button:hover { background-color: #3a0ca3 !important; box-shadow: 0 4px 12px rgba(86, 11, 173, 0.3) !important; }
+
+
+
+/* New Utility Classes for Auth */
+.auth-title { color: #560bad !important; font-size: 32px !important; }
+.auth-footer-text { font-size: 15px !important; }
+.auth-helper-text { font-size: 14px !important; }
+.otp-input-aesthetic { letter-spacing: 5px !important; font-size: 20px !important; font-weight: bold !important; }
+.no-decoration { text-decoration: none !important; }
+
+
+/* Password Toggle Styling */
+.password-wrapper { position: relative; }
+.password-toggle { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #888; z-index: 10; transition: color 0.3s; }
+.password-toggle:hover { color: #560bad; }
+
+/* Custom Checkbox checked color (purple checkmark) */
+.form-check-input {
+    accent-color: #560bad !important; /* Modern native browser checkbox compatibility */
+    cursor: pointer;
+}
+.form-check-input:checked {
+    background-color: #560bad !important;
+    border-color: #560bad !important;
+}
+.form-check-input:focus {
+    border-color: #560bad !important;
+    box-shadow: 0 0 0 0.25rem rgba(86, 11, 173, 0.25) !important;
+}
+
+/* Auth Header Actions (Top Right Actions Container) */
+.auth-header-actions {
+    position: absolute;
+    top: 25px;
+    right: 35px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    z-index: 10;
+    font-family: 'Saira', sans-serif !important;
+}
+
+.back-home-link {
+    color: #560bad;
+    font-weight: 600;
+    text-decoration: none !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    transition: color 0.2s ease;
+}
+
+.back-home-link:hover {
+    color: #3a0ca3;
+}
+
+.back-home-link i {
+    font-size: 14px;
+}
+
+.auth-divider {
+    color: #dee2e6;
+    font-weight: 300;
+    user-select: none;
+}
+
+/* Custom Auth Language Dropdown adjustments */
+.auth-lang-picker {
+    padding: 2px 0;
+    transition: transform 0.2s ease;
+}
+
+.auth-lang-picker:hover {
+    transform: translateY(-1px);
+}
+
+.auth-lang-picker .header__lang__text {
+    color: #560bad !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+.auth-lang-picker .arrow_carrot-down {
+    color: #560bad !important;
+    font-size: 14px !important;
+}
+
+/* Align dropdown and popover arrow to the left edge of the selector */
+.auth-lang-picker ul {
+    left: -15px !important;
+    right: auto !important;
+}
+
+.auth-lang-picker ul::before {
+    left: 20px !important;
+    right: auto !important;
+}
+
+

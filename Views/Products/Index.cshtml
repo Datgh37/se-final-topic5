@@ -1,0 +1,71 @@
+@using WebUITopic5_Team4.Models.ViewModels
+@model ProductIndexViewModel
+@{
+    ViewData["Title"] = "Cửa hàng";
+    
+    var breadcrumb = new BreadcrumbViewModel
+    {
+        Title = "Cửa hàng",
+        Items = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem("Trang chủ", Url.Action("Index", "Home")),
+            new BreadcrumbItem("Cửa hàng")
+        }
+    };
+}
+
+@await Component.InvokeAsync("HeroSection", new { isHome = false })
+
+<partial name="_Breadcrumb" model="breadcrumb" />
+
+<!-- Product Section Begin -->
+<section class="product spad">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar Toggle Button (tablet/mobile only) -->
+            <div class="col-12 d-lg-none mb-3">
+                <button class="shop-filter-toggle-btn w-100" type="button" data-bs-toggle="collapse" data-bs-target="#shopSidebar" aria-expanded="false" aria-controls="shopSidebar">
+                    <i class="fa fa-filter"></i> Bộ lọc sản phẩm
+                </button>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-3 col-md-12">
+                <div class="collapse d-lg-block" id="shopSidebar">
+                    <div class="sidebar">
+                        <!--Categories Filter Sidebar-->
+                        <div class="sidebar__item">
+                            <h4>Danh mục</h4>
+                            <ul>
+                                @await Component.InvokeAsync("ProductSidebarCategories")
+                            </ul>
+                        </div>
+
+                        <!-- Price Sidebar-->
+                        <div class="sidebar__item">
+                            <h4>Giá</h4>
+                            <partial name="_PriceFilter" model="Model.PriceFilter" />
+                        </div>
+
+                        <!--Latest Product Sidebar-->
+                        <div class="sidebar__item">
+                            <div class="latest-product__text">
+                                <h4>Sản phẩm mới</h4>
+                                @await Component.InvokeAsync("ProductLatestProducts", new { take = 6 })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-lg-9 col-md-12">
+                <partial name="_SaleOffCarousel" model="Model.SaleOffProducts" />
+                <div id="product-list-container">
+                    <partial name="_ProductListPartial" model="Model" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Product Section End -->

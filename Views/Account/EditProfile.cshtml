@@ -1,0 +1,173 @@
+@using WebUITopic5_Team4.Models.ViewModels
+@model WebUITopic5_Team4.Models.ViewModels.EditProfileViewModel
+@{
+    ViewData["Title"] = "Chỉnh sửa hồ sơ";
+
+    var breadcrumb = new BreadcrumbViewModel
+    {
+        Title = "Chỉnh sửa hồ sơ",
+        Items = new List<BreadcrumbItem>
+        {
+            new BreadcrumbItem("Trang chủ", Url.Action("Index", "Home")),
+            new BreadcrumbItem("Hồ sơ cá nhân", Url.Action("Profile", "Account")),
+            new BreadcrumbItem("Chỉnh sửa")
+        }
+    };
+}
+
+<partial name="_Breadcrumb" model="breadcrumb" />
+
+<section class="checkout spad">
+    <div class="container">
+        <div class="checkout-premium">
+            <h4 class="text-center">Chỉnh sửa hồ sơ cá nhân</h4>
+            <form asp-action="EditProfile" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                <input type="hidden" asp-for="AccountId" />
+                <input type="hidden" asp-for="Image" />
+
+                <div class="row">
+                    <div class="col-lg-8 col-md-10 offset-lg-2 offset-md-1">
+                        <!-- Avatar Upload Section -->
+                        <div class="text-center mb-5">
+                            <div class="position-relative d-inline-block">
+                                <img id="avatarPreview" src="@Url.Content(Model.Image ?? "~/images/user-default.png")"
+                                      alt="Avatar" class="rounded-circle shadow profile-avatar-preview">
+                                <label for="avatarUpload" class="profile-avatar-label">
+                                    <i class="fa fa-camera"></i>
+                                </label>
+                                <input type="file" id="avatarUpload" asp-for="AvatarFile" class="d-none" accept="image/*" onchange="previewImage(this)">
+                            </div>
+                            <p class="text-muted small mt-2">Nhấp vào biểu tượng camera để thay đổi ảnh</p>
+                            <span asp-validation-for="AvatarFile" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="checkout__input">
+                                    <p>Họ và Tên<span>*</span></p>
+                                    <input asp-for="FullName" placeholder="Nhập họ và tên...">
+                                    <span asp-validation-for="FullName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Email<span>*</span></p>
+                                    <input asp-for="Email" placeholder="example@email.com">
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Số điện thoại</p>
+                                    <input asp-for="PhoneNumber" placeholder="0123 456 789">
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="checkout__input">
+                            <p>Địa chỉ</p>
+                            <input asp-for="Address" placeholder="Nhập địa chỉ của bạn...">
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Ngày sinh</p>
+                                    <input asp-for="BirthDate" type="date" max="@DateTime.Today.AddYears(-18).ToString("yyyy-MM-dd")">
+                                    <span asp-validation-for="BirthDate" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="checkout__input">
+                                    <p>Giới tính</p>
+                                    <select asp-for="Gender" class="w-100 no-nice-select form-control custom-gender-select">
+                                        <option value="True">Nam</option>
+                                        <option value="False">Nữ</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 text-center d-flex flex-column align-items-center">
+                            <button type="submit" class="site-btn rounded-pill px-5 text-uppercase mb-3">
+                                <i class="fa fa-save mr-2"></i> Lưu thay đổi
+                            </button>
+                            <a asp-action="Profile" class="text-muted no-decoration"><i class="fa fa-arrow-left mr-2"></i> Quay lại hồ sơ</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function() {
+            // Vô hiệu hóa nice-select cho ô chọn giới tính
+            $('.no-nice-select').niceSelect('destroy');
+
+            // AJAX Edit Profile
+            $('form[asp-action="EditProfile"]').on('submit', function(e) {
+                e.preventDefault();
+
+                // Validate 18+ on Frontend
+                const birthDateVal = $('#BirthDate').val();
+                if (birthDateVal) {
+                    const birthDate = new Date(birthDateVal);
+                    const today = new Date();
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const monthDiff = today.getMonth() - birthDate.getMonth();
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
+                    }
+                    if (age < 18) {
+                        showToast("Bạn phải đủ 18 tuổi để cập nhật thông tin.", "error");
+                        return false;
+                    }
+                }
+
+                const form = $(this);
+                const formData = new FormData(this);
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        if (response.success) {
+                            showToast(response.message, 'success');
+                            setTimeout(() => {
+                                window.location.href = '@Url.Action("Profile", "Account")';
+                            }, 1500);
+                        } else {
+                            showToast(response.message, 'error');
+                        }
+                    },
+                    error: function() {
+                        showToast("Đã có lỗi xảy ra khi cập nhật hồ sơ.", "error");
+                    }
+                });
+            });
+        });
+
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#avatarPreview').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}

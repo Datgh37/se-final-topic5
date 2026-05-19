@@ -1,0 +1,76 @@
+@{
+    var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
+}
+
+<!-- Humberger Begin -->
+<div class="humberger__menu__overlay"></div>
+<div class="humberger__menu__wrapper">
+    <div class="humberger__menu__logo">
+        <a asp-controller="Home" asp-action="Index"><h2>Electronic</h2></a>
+    </div>
+
+    <!-- Phần người dùng -->
+    <div class="humberger__menu__user border-bottom pb-4 mb-4">
+        @if (User.Identity!.IsAuthenticated)
+        {
+            <div class="d-flex align-items-center px-3">
+                <img src="@Url.Content(User.FindFirst("UserImage")?.Value ?? "~/images/user-default.png")"
+                     alt="Avatar" class="rounded-circle header-mobile-avatar mr-3" style="width: 40px; height: 40px; object-fit: cover;">
+                <div class="user-info">
+                    <span class="d-block text-dark fw-bold h6 mb-1">@User.Identity.Name</span>
+                    <a asp-controller="Account" asp-action="Profile" class="d-block small text-purple text-decoration-none font-weight-bold mb-1">Hồ sơ cá nhân <i class="fa fa-angle-right"></i></a>
+                    <form asp-controller="Account" asp-action="Logout" method="post" class="d-block">
+                        <button type="submit" class="btn btn-link text-danger p-0 small text-decoration-none font-weight-bold" style="font-size: 85%; vertical-align: middle;">
+                            <i class="fa fa-sign-out"></i> Đăng xuất
+                        </button>
+                    </form>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="px-3">
+                <a asp-controller="Account" asp-action="Login" class="btn auth-btn w-100 text-white rounded-pill py-2" style="background-color: #7fad39;">
+                    <i class="fa fa-user mr-2"></i> Đăng nhập
+                </a>
+            </div>
+        }
+    </div>
+
+    <div class="humberger__menu__cart">
+        <ul>
+            <li>
+                <div class="cart-vc-content">
+                    @await Component.InvokeAsync("Cart")
+                </div>
+            </li>
+        </ul>
+        <div class="header__cart__price">Giỏ hàng</div>
+    </div>
+
+    <nav class="humberger__menu__nav mobile-menu">
+        <ul>
+            <li class="@(currentController == "Home" && currentAction == "Index" ? "active" : "")">
+                <a asp-controller="Home" asp-action="Index">Trang chủ</a>
+            </li>
+            <li class="@(currentController == "Products" ? "active" : "")">
+                <a asp-controller="Products" asp-action="Index">Cửa hàng</a>
+            </li>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li class="@(currentController == "Cart" ? "active" : "")">
+                    <a asp-controller="Cart" asp-action="Index">Giỏ hàng</a>
+                </li>
+            }
+        </ul>
+    </nav>
+    <div id="mobile-menu-wrap"></div>
+    <div class="humberger__menu__contact">
+        <ul>
+            <li><i class="fa fa-envelope"></i> hello@nhom4.com</li>
+            <li>Miễn phí vận chuyển cho đơn hàng từ 99.000 ₫</li>
+        </ul>
+    </div>
+</div>
+<!-- Humberger End -->
