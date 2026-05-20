@@ -234,6 +234,8 @@ function validateQtyInput(value) {
 $(document).ready(function() {
     // Flag to track unsaved quantity changes in the cart
     let isCartDirty = false;
+    // Flag to track if the last update had errors (prevent checkout)
+    let hasCartError = false;
 
     // Sync hamburger total price text on initial load
     const initialTotal = $(".cart-dropdown__total strong").first().text();
@@ -328,6 +330,7 @@ $(document).ready(function() {
     // ----------------------------------------------------------
     $(document).on("click", "#btn-update-cart", function(e) {
         e.preventDefault();
+        hasCartError = false; // Reset error flag
         let hasError = false;
         let updateCount = 0;
         const totalRows = $(".cart-row").length;
@@ -384,23 +387,23 @@ $(document).ready(function() {
                         // ========================================================
                         showToast(response.message, 'error');
                         hasError = true;
+                        hasCartError = true;
 
                         // [TC_CART_05] Server phát hiện số lượng âm/không hợp lệ -> trả về resetQty = 1
                         if (response.resetQty) {
                             $input.val(response.resetQty);
+                            updateCartQuantity(cartItemId, response.resetQty, $row); // Re-sync Server
                         } 
                         // [TC_CART_06] Server phát hiện số lượng vượt quá tồn kho thực tế -> trả về maxStock
                         else if (response.maxStock) {
                             $input.val(response.maxStock);
+                            updateCartQuantity(cartItemId, response.maxStock, $row); // Re-sync Server
                         }
 
                         // Khi dòng cuối cùng hoàn tất xử lý (kể cả khi thất bại), đồng bộ lại toàn bộ giỏ hàng
                         if (updateCount === totalRows) {
                             isCartDirty = false;
-                            // Tải lại trang để đồng bộ tuyệt đối giá trị điều chỉnh và tổng tiền từ Server
-                            setTimeout(function() {
-                                location.reload();
-                            }, 1000);
+                            // Đã loại bỏ location.reload() để UI mượt mà, updateCartQuantity phía trên sẽ tự lo việc hiển thị Total lại
                         }
                     }
                 },
@@ -473,7 +476,11 @@ $(document).ready(function() {
             const checkInterval = setInterval(function() {
                 if (!isCartDirty) {
                     clearInterval(checkInterval);
-                    window.location.href = checkoutUrl;
+                    if (!hasCartError) {
+                        window.location.href = checkoutUrl;
+                    } else {
+                        showToast("Vui lòng kiểm tra lại giỏ hàng trước khi thanh toán", "error");
+                    }
                 }
             }, 100);
         }

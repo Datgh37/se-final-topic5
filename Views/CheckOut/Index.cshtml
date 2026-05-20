@@ -1,4 +1,4 @@
-﻿@model WebUITopic5_Team4.Models.Cart
+@model WebUITopic5_Team4.Models.Cart
 @{
     decimal total = Model.CartItems.Sum(x => x.Product.UnitPrice * x.Quantity);
 }
@@ -14,6 +14,13 @@
         <div class="checkout__form">
             <h4>Thông tin giao hàng</h4>
             <form asp-controller="Checkout" asp-action="PlaceOrder" method="post">
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger mb-4">
+                        <h5 class="alert-heading mb-2"><i class="fa fa-exclamation-triangle"></i> Lỗi đặt hàng</h5>
+                        @Html.ValidationSummary(false, "", new { @class = "text-danger mb-0" })
+                    </div>
+                }
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
                         <div class="checkout__input">
