@@ -13,20 +13,20 @@
         </div>
         <div class="checkout__form">
             <h4>Thông tin giao hàng</h4>
-            <form action="#">
+            <form asp-controller="Checkout" asp-action="PlaceOrder" method="post">
                 <div class="row">
                     <div class="col-lg-6 col-md-6">
                         <div class="checkout__input">
                             <p>Họ và Tên<span>*</span></p>
-                            <input type="text">
+                            <input name="FullName" type="text" required>
                         </div>
                         <div class="checkout__input">
                             <p>Số điện thoại<span>*</span></p>
-                            <input type="text">
+                            <input name="PhoneNumber" type="text" required>
                         </div>
                         <div class="checkout__input">
                             <p>Email<span>*</span></p>
-                            <input type="text">
+                            <input name="Email" type="text" required>
                         </div>
                         <div class="checkout__input">
                             <p>Tỉnh / Thành phố <span>*</span></p>
@@ -36,9 +36,11 @@
                                 <!-- input search + hiển thị value -->
                                 <input type="text"
                                        id="provinceInput"
+                                       name="TownCity"
                                        class="select-input"
                                        placeholder="Chọn tỉnh / thành phố"
-                                       autocomplete="off">
+                                       autocomplete="off"
+                                       required>
 
                                 <!-- dropdown -->
                                 <div class="dropdown" id="provinceDropdown">
@@ -81,14 +83,14 @@
                         </div>
                         <div class="checkout__input">
                             <p>Địa chỉ nhận hàng<span>*</span></p>
-                            <input type="text">
+                            <input name="Address" type="text" required>
                         </div>
                         <div class="checkout__input">
                             <p>Ghi chú về đơn hàng<span></span></p>
-                            <input type="text">
+                            <input name="OrderNotes" type="text">
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6">
+                    <div class="col-lg-6 col-md-6">
 
                         <div class="checkout-summary">
                             <div class="checkout__order__products">
@@ -124,19 +126,19 @@
                             <div class="payment-methods">
                                 <h4>Phương thức thanh toán</h4>
                                 <div class="payment-method">
-                                    <input type="radio" name="payment" id="cod" checked>
-                                    <label for="cod">Thanh toán khi nhận hàng (COD)</label>
+                                    <input type="radio" name="PaymentMethod" value="COD" checked>
+                                    <label>Thanh toán khi nhận hàng (COD)</label>
                                 </div>
                                 <div class="payment-method">
-                                    <input type="radio" name="payment" id="bank">
-                                    <label for="bank">Chuyển khoản ngân hàng</label>
+                                    <input type="radio" name="PaymentMethod" value="Bank">
+                                    <label>Chuyển khoản ngân hàng</label>
                                 </div>
                                 <div class="payment-method">
-                                    <input type="radio" name="payment" id="card">
-                                    <label for="card">Thẻ tín dụng / Ghi nợ</label>
+                                    <input type="radio" name="PaymentMethod" value="Card">
+                                    <label>Thẻ tín dụng / Ghi nợ</label>
                                 </div>
                             </div>
-                            <button class="btn-submit">XÁC NHẬN ĐẶT HÀNG</button>
+                            <button type="submit" class="btn-submit">XÁC NHẬN ĐẶT HÀNG</button>
                         </div>
                     </div>
                 </div>
