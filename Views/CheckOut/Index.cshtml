@@ -1,0 +1,152 @@
+﻿@model WebUITopic5_Team4.Models.Cart
+@{
+    decimal total = Model.CartItems.Sum(x => x.Product.UnitPrice * x.Quantity);
+}
+<link rel="stylesheet" href="~/css/checkout.css" />
+<!-- Checkout Section Begin -->
+<section class="checkout spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2 style="text-align: center;">CHECK OUT</h2>
+            </div>
+        </div>
+        <div class="checkout__form">
+            <h4>Thông tin giao hàng</h4>
+            <form asp-controller="Checkout" asp-action="PlaceOrder" method="post">
+                <div class="row">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="checkout__input">
+                            <p>Họ và Tên<span>*</span></p>
+                            <input name="FullName" type="text" required>
+                        </div>
+                        <div class="checkout__input">
+                            <p>Số điện thoại<span>*</span></p>
+                            <input name="PhoneNumber" type="text" required>
+                        </div>
+                        <div class="checkout__input">
+                            <p>Email<span>*</span></p>
+                            <input name="Email" type="text" required>
+                        </div>
+                        <div class="checkout__input">
+                            <p>Tỉnh / Thành phố <span>*</span></p>
+
+                            <div class="custom-select">
+
+                                <!-- input search + hiển thị value -->
+                                <input type="text"
+                                       id="provinceInput"
+                                       name="TownCity"
+                                       class="select-input"
+                                       placeholder="Chọn tỉnh / thành phố"
+                                       autocomplete="off"
+                                       required>
+
+                                <!-- dropdown -->
+                                <div class="dropdown" id="provinceDropdown">
+                                    <div class="option">TP Hà Nội</div>
+                                    <div class="option">TP Hồ Chí Minh</div>
+                                    <div class="option">TP Hải Phòng</div>
+                                    <div class="option">TP Đà Nẵng</div>
+                                    <div class="option">TP Đồng Nai</div>
+                                    <div class="option">TP Cần Thơ</div>
+                                    <div class="option">An Giang</div>
+                                    <div class="option">Bắc Ninh</div>
+                                    <div class="option">Cà Mau</div>
+                                    <div class="option">Cao Bằng</div>
+                                    <div class="option">Đắk Lắk</div>
+                                    <div class="option">Điện Biên</div>
+                                    <div class="option">Đồng Tháp</div>
+                                    <div class="option">Gia Lai</div>
+                                    <div class="option">Hà Tĩnh</div>
+                                    <div class="option">Hưng Yên</div>
+                                    <div class="option">Khánh Hòa</div>
+                                    <div class="option">Lai Châu</div>
+                                    <div class="option">Lâm Đồng</div>
+                                    <div class="option">Lạng Sơn</div>
+                                    <div class="option">Lào Cai</div>
+                                    <div class="option">Nghệ An</div>
+                                    <div class="option">Ninh Bình</div>
+                                    <div class="option">Phú Thọ</div>
+                                    <div class="option">Quảng Ngãi</div>
+                                    <div class="option">Quảng Ninh</div>
+                                    <div class="option">Quảng Trị</div>
+                                    <div class="option">Sơn La</div>
+                                    <div class="option">Tây Ninh</div>
+                                    <div class="option">Thái Nguyên</div>
+                                    <div class="option">Thanh Hóa</div>
+                                    <div class="option">Thừa Thiên Huế</div>
+                                    <div class="option">Tuyên Quang</div>
+                                    <div class="option">Vĩnh Long</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkout__input">
+                            <p>Địa chỉ nhận hàng<span>*</span></p>
+                            <input name="Address" type="text" required>
+                        </div>
+                        <div class="checkout__input">
+                            <p>Ghi chú về đơn hàng<span></span></p>
+                            <input name="OrderNotes" type="text">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6">
+
+                        <div class="checkout-summary">
+                            <div class="checkout__order__products">
+                                Products <span>Đơn hàng của bạn</span>
+                            </div>
+                            <ul>
+                                @foreach (var item in Model.CartItems)
+                                {
+                                    <li>
+                                        @item.Product.ProductName
+                                        x @item.Quantity
+
+                                        <span>
+                                            @((item.Product.UnitPrice * item.Quantity).ToString("N0")) ₫
+                                        </span>
+                                    </li>
+                                }
+                            </ul>
+                            <div class="checkout__order__subtotal">
+                                Tạm tính
+                                <span>@total.ToString("N0") ₫</span>
+                            </div>
+
+                            <div class="summary-row">
+                                <span>Phí vận chuyển:</span>
+                                <span>Miễn phí</span>
+                            </div>
+                            <div class="checkout__order__total">
+                                Tổng cộng
+                                <span>@total.ToString("N0") ₫</span>
+                            </div>
+
+                            <div class="payment-methods">
+                                <h4>Phương thức thanh toán</h4>
+                                <div class="payment-method">
+                                    <input type="radio" name="PaymentMethod" value="COD" checked>
+                                    <label>Thanh toán khi nhận hàng (COD)</label>
+                                </div>
+                                <div class="payment-method">
+                                    <input type="radio" name="PaymentMethod" value="Bank">
+                                    <label>Chuyển khoản ngân hàng</label>
+                                </div>
+                                <div class="payment-method">
+                                    <input type="radio" name="PaymentMethod" value="Card">
+                                    <label>Thẻ tín dụng / Ghi nợ</label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-submit">XÁC NHẬN ĐẶT HÀNG</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+<!-- Checkout Section End -->
+@section Scripts {
+    <script src="~/js/checkout.js"></script>
+}

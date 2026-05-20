@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="~/css/slicknav.min.css" type="text/css" asp-append-version="true">
     <link rel="stylesheet" href="~/css/style.css" type="text/css" asp-append-version="true">
     <link rel="stylesheet" href="~/css/site.css" type="text/css" asp-append-version="true">
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
 </head>
 <body>
     @Html.AntiForgeryToken()
@@ -55,5 +56,6 @@
     <script src="~/js/cart.js" asp-append-version="true"></script>
     <script src="~/js/product-ajax.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 </body>
 </html>
