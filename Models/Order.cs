@@ -12,7 +12,7 @@ public partial class Order
     public string Address { get; set; } = null!;
     public string TownCity { get; set; } = null!;
     public string PhoneNumber { get; set; } = null!;
-    public string Email { get; set; } = null!;
+    public string? Email { get; set; }
     public string? OrderNotes { get; set; }
     public string PaymentMethod { get; set; } = null!;
     public decimal TotalAmount { get; set; }

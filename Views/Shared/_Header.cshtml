@@ -26,14 +26,11 @@
                         <li>
                             <a href="#">Trang</a>
                             <ul class="header__menu__dropdown">
-                                @if (User.Identity!.IsAuthenticated)
+                                <li><a asp-controller="Cart" asp-action="Index">Giỏ hàng</a></li>
+                                @if (User.Identity?.IsAuthenticated == true && User.FindFirst("RoleId")?.Value == "0")
                                 {
-                                    @if (User.FindFirst("RoleId")?.Value == "0")
-                                    {
-                                        <li><a asp-controller="Admin" asp-action="Products">Quản lý sản phẩm</a></li>
-                                        <li><a asp-controller="Admin" asp-action="Categories">Quản lý danh mục</a></li>
-                                    }
-                                    <li><a asp-controller="Cart" asp-action="Index">Giỏ hàng</a></li>
+                                    <li><a asp-controller="Admin" asp-action="Products">Quản lý sản phẩm</a></li>
+                                    <li><a asp-controller="Admin" asp-action="Categories">Quản lý danh mục</a></li>
                                 }
                             </ul>
                         </li>
@@ -53,7 +50,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="header__login">
+                    <div class="header__login d-none-custom">
                         @if (User.Identity.IsAuthenticated)
                         {
                             <div class="dropdown d-inline-block">

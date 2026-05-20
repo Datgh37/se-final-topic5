@@ -1592,7 +1592,6 @@ html, body {
     font-size: 16px;
     color: #1c1c1c;
     font-weight: 700;
-    pointer-events: none; /* Already readonly, but this is safer */
 }
 
 /* Specific overrides for shopping cart table context */
@@ -3844,4 +3843,9 @@ html, body {
     color: white !important;
     font-weight: 700 !important;
     font-size: 14px !important;
+}
+
+/* Custom Display None Utility Class (No inline CSS) */
+.d-none-custom {
+    display: none !important;
 }
