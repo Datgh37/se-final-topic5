@@ -3,205 +3,249 @@ using Microsoft.EntityFrameworkCore;
 using WebUITopic5_Team4.Data;
 using WebUITopic5_Team4.Models;
 using WebUITopic5_Team4.Models.ViewModels;
-using WebUITopic5_Team4.Helpers;
-using System.Linq;
-using System;
-using Microsoft.AspNetCore.Http;
 
 namespace WebUITopic5_Team4.Controllers
 {
-    public class CheckoutController : Controller
+    public class CheckOutController : Controller
     {
         private readonly ElectronicShopContext _context;
 
-        public CheckoutController(ElectronicShopContext context)
+        public CheckOutController(ElectronicShopContext context)
         {
             _context = context;
         }
 
-        // Helper to get or create Cart ID from Cookie or Account
+        // =====================================
+        // HELPER: LẤY HOẶC TẠO CART ID
+        // =====================================
         private string GetOrCreateCartId()
         {
+            // USER LOGIN
             if (User.Identity?.IsAuthenticated == true)
             {
                 var accountId = User.FindFirst("AccountId")?.Value;
-                if (!string.IsNullOrEmpty(accountId))
+
+                var userCart = _context.Carts
+                    .FirstOrDefault(c => c.AccountId == accountId);
+
+                if (userCart != null)
+                    return userCart.CartId;
+
+                // Tạo cart mới
+                string newCartId = Guid.NewGuid().ToString();
+
+                var cart = new Cart
                 {
-                    // Find cart by AccountId
-                    var userCart = _context.Carts.FirstOrDefault(c => c.AccountId == accountId);
-                    if (userCart != null)
-                    {
-                        return userCart.CartId;
-                    }
+                    CartId = newCartId,
+                    AccountId = accountId
+                };
 
-                    // Otherwise, see if there's a guest cart in cookies that we can assign to this account
-                    if (Request.Cookies.TryGetValue("CartId", out string guestCartId))
-                    {
-                        var existingCart = _context.Carts.FirstOrDefault(c => c.CartId == guestCartId);
-                        if (existingCart != null && string.IsNullOrEmpty(existingCart.AccountId))
-                        {
-                            existingCart.AccountId = accountId;
-                            _context.SaveChanges();
-                            return guestCartId;
-                        }
-                    }
+                _context.Carts.Add(cart);
+                _context.SaveChanges();
 
-                    // Create new cart for account
-                    string newCartId = Guid.NewGuid().ToString();
-                    var newCart = new Cart
-                    {
-                        CartId = newCartId,
-                        AccountId = accountId
-                    };
-                    _context.Carts.Add(newCart);
-                    _context.SaveChanges();
-                    return newCartId;
-                }
+                return newCartId;
             }
 
-            // Guest flow
-            if (Request.Cookies.TryGetValue("CartId", out string cookieCartId))
+            // GUEST
+            if (Request.Cookies.TryGetValue("CartId", out string cartId))
             {
-                var existingCart = _context.Carts.FirstOrDefault(c => c.CartId == cookieCartId);
+                var existingCart = _context.Carts
+                    .FirstOrDefault(c => c.CartId == cartId);
+
                 if (existingCart != null)
-                {
-                    return cookieCartId;
-                }
+                    return cartId;
             }
 
-            // Create new guest cart
+            // TẠO CART GUEST MỚI
             string freshCartId = Guid.NewGuid().ToString();
+
             var guestCart = new Cart
             {
                 CartId = freshCartId,
                 AccountId = null
             };
+
             _context.Carts.Add(guestCart);
             _context.SaveChanges();
 
-            var cookieOptions = new CookieOptions
+            Response.Cookies.Append("CartId", freshCartId, new CookieOptions
             {
                 Expires = DateTime.Now.AddDays(30),
                 HttpOnly = true,
                 IsEssential = true,
                 Path = "/"
-            };
-            Response.Cookies.Append("CartId", freshCartId, cookieOptions);
+            });
 
             return freshCartId;
         }
 
-        // ================================
-        // 1. HIỂN THỊ TRANG CHECKOUT
-        // ================================
+        // =====================================
+        // GET: CHECKOUT PAGE
+        // =====================================
+        [HttpGet]
         public IActionResult Index()
         {
             var cartId = GetOrCreateCartId();
+
             var cart = _context.Carts
-                .Include(x => x.CartItems)
-                .ThenInclude(x => x.Product)
-                .FirstOrDefault(x => x.CartId == cartId);
+                .Include(c => c.CartItems)
+                .ThenInclude(ci => ci.Product)
+                .FirstOrDefault(c => c.CartId == cartId);
 
             if (cart == null || !cart.CartItems.Any())
+            {
+                TempData["error"] = "Giỏ hàng đang trống!";
                 return RedirectToAction("Index", "Cart");
+            }
 
-            return View(cart);
+            var vm = new CheckoutPageViewModel
+            {
+                Cart = cart,
+                Checkout = new CheckOutViewModel()
+            };
+
+            return View(vm);
         }
 
-        // ================================
-        // 2. ĐẶT HÀNG (POST)
-        // ================================
+        // =====================================
+        // POST: PLACE ORDER
+        // =====================================
         [HttpPost]
-        public IActionResult PlaceOrder(CheckOutViewModel model)
+        [ValidateAntiForgeryToken]
+        public IActionResult PlaceOrder(CheckoutPageViewModel vm)
         {
+            // LOAD CART
             var cartId = GetOrCreateCartId();
+
             var cart = _context.Carts
-                .Include(x => x.CartItems)
-                .ThenInclude(x => x.Product)
-                .FirstOrDefault(x => x.CartId == cartId);
+                .Include(c => c.CartItems)
+                .ThenInclude(ci => ci.Product)
+                .FirstOrDefault(c => c.CartId == cartId);
 
+            // GÁN LẠI CART CHO VIEWMODEL
+            vm.Cart = cart;
+
+            // CHECK CART
             if (cart == null || !cart.CartItems.Any())
+            {
+                TempData["error"] = "Giỏ hàng đang trống!";
                 return RedirectToAction("Index", "Cart");
+            }
 
+            // VALIDATION FAIL
             if (!ModelState.IsValid)
-                return View("Index", cart);
+            {
+                return View("Index", vm);
+            }
 
-            // Kiểm tra tồn kho trước khi đặt hàng (Fix TC_E2E_02)
+            // CHECK STOCK
             foreach (var item in cart.CartItems)
             {
-                var product = _context.Products.Find(item.ProductId);
-                if (product == null || product.StockQuantity < item.Quantity)
+                var product = _context.Products
+                    .FirstOrDefault(p => p.ProductId == item.ProductId);
+
+                if (product == null)
                 {
-                    ModelState.AddModelError(string.Empty, $"Sản phẩm '{item.Product.ProductName}' đã hết hàng hoặc không đủ số lượng (Chỉ còn {product?.StockQuantity ?? 0}). Vui lòng cập nhật lại giỏ hàng.");
-                    return View("Index", cart);
+                    TempData["error"] =
+                        $"Không tìm thấy sản phẩm {item.Product.ProductName}";
+
+                    return RedirectToAction("Index", "Cart");
+                }
+
+                if (product.StockQuantity < item.Quantity)
+                {
+                    TempData["error"] =
+                        $"Sản phẩm {item.Product.ProductName} không đủ hàng!";
+
+                    return RedirectToAction("Index", "Cart");
                 }
             }
 
-            // tính tổng tiền
-            decimal total = cart.CartItems.Sum(x => x.Product.UnitPrice * x.Quantity);
+            // TÍNH TỔNG TIỀN
+            decimal total = cart.CartItems.Sum(x =>
+                x.Product.UnitPrice * x.Quantity
+            );
 
-            // ================================
-            // 3. TẠO ORDER
-            // ================================
+            // TẠO ORDER
             var order = new Order
             {
-                AccountId = User.Identity?.IsAuthenticated == true ? User.FindFirst("AccountId")?.Value : null,
+                AccountId = User.Identity?.IsAuthenticated == true
+                    ? User.FindFirst("AccountId")?.Value
+                    : null,
+
                 OrderDate = DateTime.Now,
-                FullName = model.FullName,
-                PhoneNumber = model.Phone,
-                Email = model.Email,
-                Address = model.Address,
-                TownCity = model.Province,
-                OrderNotes = model.Note,
-                PaymentMethod = model.PaymentMethod,
+
+                FullName = vm.Checkout.FullName,
+
+                PhoneNumber = vm.Checkout.Phone,
+
+                Email = vm.Checkout.Email,
+
+                Address = vm.Checkout.Address,
+
+                TownCity = vm.Checkout.Province,
+
+                OrderNotes = vm.Checkout.Note,
+
+                PaymentMethod = vm.Checkout.PaymentMethod,
+
                 TotalAmount = total,
-                StatusId = 1 // 1 = Pending
+
+                // FIX THEO DATABASE CỦA BẠN
+                StatusId = 1
             };
 
             _context.Orders.Add(order);
-            _context.SaveChanges(); // phải save để có OrderId
 
-            // ================================
-            // 4. TẠO ORDER DETAILS VÀ TRỪ TỒN KHO
-            // ================================
+            _context.SaveChanges();
+
+            // ORDER DETAILS + TRỪ KHO
             foreach (var item in cart.CartItems)
             {
                 var detail = new OrderDetail
                 {
                     OrderId = order.OrderId,
+
                     ProductId = item.ProductId,
+
                     Quantity = item.Quantity,
+
                     UnitPrice = item.Product.UnitPrice
                 };
 
                 _context.OrderDetails.Add(detail);
 
-                // Trừ số lượng tồn kho theo UC-ORDR-02
-                var product = _context.Products.Find(item.ProductId);
-                if (product != null)
-                {
-                    product.StockQuantity -= item.Quantity;
-                }
+                // TRỪ KHO
+                item.Product.StockQuantity -= item.Quantity;
             }
 
-            // ================================
-            // 5. XOÁ GIỎ HÀNG TRONG DB
-            // ================================
+            // XOÁ CART ITEMS
             _context.CartItems.RemoveRange(cart.CartItems);
+
             _context.SaveChanges();
 
-            // ================================
-            // 6. CHUYỂN SANG TRANG SUCCESS
-            // ================================
-            return RedirectToAction("Success");
+            // SUCCESS
+            return RedirectToAction(
+                "Success",
+                new { id = order.OrderId }
+            );
         }
 
-        // ================================
-        // 7. TRANG ĐẶT HÀNG THÀNH CÔNG
-        // ================================
-        public IActionResult Success()
+        // =====================================
+        // SUCCESS PAGE
+        // =====================================
+        [HttpGet]
+        public IActionResult Success(int id)
         {
-            return View();
+            var order = _context.Orders
+                .FirstOrDefault(o => o.OrderId == id);
+
+            if (order == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(order);
         }
     }
 }
