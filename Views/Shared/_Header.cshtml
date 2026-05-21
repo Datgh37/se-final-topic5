@@ -11,16 +11,13 @@
         <div class="row">
             <div class="col-lg-2 col-md-2 col-12">
                 <div class="header__logo">
-                    <a asp-controller="Home" asp-action="Index"><h2 style="color:white;">Electronic</h2></a>
+                    <a asp-controller="Products" asp-action="Index"><h2 style="color:white;">Electronic</h2></a>
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 d-none d-lg-block">
                 <nav class="header__menu">
                     <ul>
-                        <li class="@(currentController == "Home" && currentAction == "Index" ? "active" : "")">
-                            <a asp-controller="Home" asp-action="Index">Trang chủ</a>
-                        </li>
-                        <li class="@(currentController == "Products" ? "active" : "")">
+                        <li class="@(currentController == "Products" && currentAction == "Index" ? "active" : "")">
                             <a asp-controller="Products" asp-action="Index">Cửa hàng</a>
                         </li>
                         <li>
@@ -42,7 +39,7 @@
                 <div class="h-right">
                     <div class="header__tabs">
                         <ul>
-                            <li><a asp-controller="Favorites" asp-action="Index"><i class="fa fa-heart"></i> <span id="favoriteCount">0</span></a></li>
+                            <li><i class="fa fa-heart"></i> <span id="favoriteCount">0</span></li>
                             <li class="cart-preview-wrapper">
                                 <div class="cart-vc-content">
                                     @await Component.InvokeAsync("Cart")

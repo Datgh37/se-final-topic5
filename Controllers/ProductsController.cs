@@ -32,32 +32,6 @@ namespace WebUITopic5_Team4.Controllers
             return PartialView("_ProductListPartial", model);
         }
 
-        // GET: /Products/Details/{id}
-        [HttpGet]
-        public async Task<IActionResult> Details(int id)
-        {
-            var product = await _context.Products
-                .Include(p => p.Category)
-                .FirstOrDefaultAsync(p => p.ProductId == id);
-
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            // Related products (same category, excluding current product)
-            var related = await _context.Products
-                .AsNoTracking()
-                .Where(p => p.CategoryId == product.CategoryId && p.ProductId != id)
-                .Take(4)
-                .ProjectToCard()
-                .ToListAsync();
-
-            ViewBag.RelatedProducts = related;
-
-            return View(product);
-        }
-
         // GET: /Products/LiveSearch?keyword=...
         [HttpGet]
         public async Task<IActionResult> LiveSearch(string keyword)
@@ -82,49 +56,6 @@ namespace WebUITopic5_Team4.Controllers
                 .ToListAsync();
 
             return Json(results);
-        }
-
-        // POST: /Products/ToggleFavorite
-        [HttpPost]
-        public IActionResult ToggleFavorite(int productId)
-        {
-            // Simple mock implementation of wishlist because we don't have a specific table for it in the schema,
-            // or just save it in session for demo purposes!
-            if (!User.Identity!.IsAuthenticated)
-            {
-                return Json(new { success = false, message = "Vui lòng đăng nhập để thực hiện chức năng này." });
-            }
-
-            var wishlist = HttpContext.Session.GetObjectFromJson<List<int>>("Wishlist") ?? new List<int>();
-            bool isAdded = false;
-
-            if (wishlist.Contains(productId))
-            {
-                wishlist.Remove(productId);
-                isAdded = false;
-            }
-            else
-            {
-                wishlist.Add(productId);
-                isAdded = true;
-            }
-
-            HttpContext.Session.SetObjectAsJson("Wishlist", wishlist);
-
-            return Json(new { 
-                success = true, 
-                isAdded = isAdded, 
-                totalCount = wishlist.Count, 
-                message = isAdded ? "Đã thêm vào danh sách yêu thích" : "Đã xóa khỏi danh sách yêu thích" 
-            });
-        }
-
-        // GET: /Products/GetFavoriteCount
-        [HttpGet]
-        public IActionResult GetFavoriteCount()
-        {
-            var wishlist = HttpContext.Session.GetObjectFromJson<List<int>>("Wishlist") ?? new List<int>();
-            return Json(wishlist.Count);
         }
 
         // Helper to query and filter products
@@ -192,16 +123,6 @@ namespace WebUITopic5_Team4.Controllers
                 .Take(pageSize)
                 .ProjectToCard()
                 .ToListAsync();
-
-            // Mock favorites status based on wishlist in session
-            var wishlist = HttpContext.Session.GetObjectFromJson<List<int>>("Wishlist") ?? new List<int>();
-            foreach (var item in productsList)
-            {
-                if (wishlist.Contains(item.ProductId))
-                {
-                    item.IsFavorite = true;
-                }
-            }
 
             // Get Sale Off products (for catalog carousel)
             var saleOff = await _context.Products

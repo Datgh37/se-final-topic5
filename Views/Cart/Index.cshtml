@@ -131,3 +131,23 @@
         }
     </div>
 </section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            @if (TempData["error"] != null)
+            {
+                <text>showToast('@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(TempData["error"]!.ToString()))', 'error');</text>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <text>showToast('@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(TempData["ErrorMessage"]!.ToString()))', 'error');</text>
+            }
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <text>showToast('@Html.Raw(System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(TempData["SuccessMessage"]!.ToString()))', 'success');</text>
+            }
+        });
+    </script>
+}
+

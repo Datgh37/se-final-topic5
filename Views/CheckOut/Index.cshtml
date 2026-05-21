@@ -25,32 +25,29 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="checkout__input">
                             <p>Họ và Tên<span>*</span></p>
-                            <input asp-for="Checkout.FullName" class="form-control">
-                            <span asp-validation-for="Checkout.FullName" class="text-danger"></span>
+                            <input asp-for="Checkout.FullName" placeholder="Nhập họ và tên">
+                            <span class="error-msg text-danger small d-block mt-1" id="error-Checkout_FullName"></span>
                         </div>
                         <div class="checkout__input">
                             <p>Số điện thoại<span>*</span></p>
-                            <input asp-for="Checkout.Phone" class="form-control">
-                            <span asp-validation-for="Checkout.Phone" class="text-danger"></span>
+                            <input asp-for="Checkout.Phone" placeholder="Nhập số điện thoại">
+                            <span class="error-msg text-danger small d-block mt-1" id="error-Checkout_Phone"></span>
                         </div>
                         <div class="checkout__input">
-                            <p>Email<span></span></p>
-                            <input asp-for="Checkout.Email" class="form-control">
-                            <span asp-validation-for="Checkout.Email" class="text-danger"></span>
+                            <p>Email<span>*</span></p>
+                            <input asp-for="Checkout.Email" placeholder="Nhập địa chỉ email">
+                            <span class="error-msg text-danger small d-block mt-1" id="error-Checkout_Email"></span>
                         </div>
                         <div class="checkout__input">
                             <p>Tỉnh / Thành phố <span>*</span></p>
-
                             <div class="custom-select">
-
                                 <!-- input search + hiển thị value -->
                                 <input type="text"
-                                       id="provinceInput"
                                        asp-for="Checkout.Province"
+                                       id="provinceInput"
                                        class="select-input"
                                        placeholder="Chọn tỉnh / thành phố"
                                        autocomplete="off">
-
                                 <!-- dropdown -->
                                 <div class="dropdown" id="provinceDropdown">
                                     <div class="option">TP Hà Nội</div>
@@ -89,23 +86,23 @@
                                     <div class="option">Vĩnh Long</div>
                                 </div>
                             </div>
+                            <span class="error-msg text-danger small d-block mt-1" id="error-provinceInput"></span>
                         </div>
                         <div class="checkout__input">
                             <p>Địa chỉ nhận hàng<span>*</span></p>
-                            <input asp-for="Checkout.Address" class="form-control">
-                            <span asp-validation-for="Checkout.Address" class="text-danger"></span>
+                            <input asp-for="Checkout.Address" placeholder="Nhập địa chỉ nhận hàng">
+                            <span class="error-msg text-danger small d-block mt-1" id="error-Checkout_Address"></span>
                         </div>
                         <div class="checkout__input">
                             <p>Ghi chú về đơn hàng<span></span></p>
-                            <input asp-for="Checkout.Note" class="form-control">
-                            <span asp-validation-for="Checkout.Note" class="text-danger"></span>
+                            <input asp-for="Checkout.Note" placeholder="Nhập ghi chú về đơn hàng (không bắt buộc)">
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6">
 
                         <div class="checkout-summary">
                             <div class="checkout__order__products">
-                                Products <span>Đơn hàng của bạn</span>
+                                <span>Đơn hàng của bạn</span>
                             </div>
                             <ul>
                                 @foreach (var item in Model.Cart.CartItems)
@@ -137,7 +134,7 @@
                             <div class="payment-methods">
                                 <h4>Phương thức thanh toán</h4>
                                 <div class="payment-method">
-                                    <input type="radio" asp-for="Checkout.PaymentMethod" value =" COD" checked>
+                                    <input type="radio" asp-for="Checkout.PaymentMethod" value="COD" checked>
                                     <label>Thanh toán khi nhận hàng (COD)</label>
                                 </div>
                                 <div class="payment-method">
@@ -148,9 +145,8 @@
                                     <input type="radio" asp-for="Checkout.PaymentMethod" value="Card">
                                     <label>Thẻ tín dụng / Ghi nợ</label>
                                 </div>
-                                <span asp-validation-for="Checkout.PaymentMethod" class="text-danger"></span>
                             </div>
-                            <button type="submit" class="btn-submit">XÁC NHẬN ĐẶT HÀNG</button>
+                            <button type="submit" class="btn-submit" id="btn-submit-order">XÁC NHẬN ĐẶT HÀNG</button>
                         </div>
                     </div>
                 </div>

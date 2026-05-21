@@ -106,62 +106,7 @@ $(document).ready(function () {
         $(this).find('input').val('');
     });
 
-    // 5. Toggle Wishlist Logic
-    $(document).on('click', '.toggle-favorite', function(e) {
-        e.preventDefault();
-        const $btn = $(this);
-        const productId = $btn.data('product-id');
-
-        $.ajax({
-            url: '/Products/ToggleFavorite',
-            type: 'POST',
-            data: { productId: productId },
-            success: function(response) {
-                if (response.success) {
-                    showToast(response.message, 'success');
-                    
-                    // Cập nhật số lượng trên header
-                    $('#favoriteCount, #favoriteCountMobile').text(response.totalCount);
-                    
-                    // Cập nhật UI icon (nếu là trang Details)
-                    if ($btn.hasClass('heart-icon')) {
-                        const icon = $btn.find('span');
-                        if (response.isAdded) {
-                            icon.removeClass('icon_heart_alt').addClass('icon_heart');
-                            $btn.addClass('active');
-                        } else {
-                            icon.removeClass('icon_heart').addClass('icon_heart_alt');
-                            $btn.removeClass('active');
-                        }
-                    } else {
-                        // Nếu là ở Product Card
-                        const icon = $btn.find('i');
-                        if (response.isAdded) {
-                            icon.addClass('is-favorite');
-                        } else {
-                            icon.removeClass('is-favorite');
-                        }
-                    }
-                } else {
-                    showToast(response.message, 'error');
-                }
-            },
-            error: function() {
-                const isEn = $('html').attr('lang') === 'en';
-                showToast(isEn ? "Please login to perform this action." : "Vui lòng đăng nhập để thực hiện chức năng này.", "error");
-            }
-        });
-    });
-
-    // Cập nhật số lượng yêu thích khi load trang
-    function updateFavCount() {
-        $.get('/Products/GetFavoriteCount', function(count) {
-            $('#favoriteCount, #favoriteCountMobile').text(count);
-        });
-    }
-    updateFavCount();
-
-    // 6. Xử lý dọn dẹp URL tìm kiếm (Clean URL)
+    // 5. Xử lý dọn dẹp URL tìm kiếm (Clean URL)
     $(document).on('submit', '.hero-search-container', function (e) {
         const $form = $(this);
         const keyword = $('#heroSearchInput').val().trim();
@@ -179,7 +124,7 @@ $(document).ready(function () {
         }
     });
 
-    // 7. Toggle Hamburger Language Dropdown on Click (Mobile Accordion style)
+    // 6. Toggle Hamburger Language Dropdown on Click (Mobile Accordion style)
     $(document).on('click', '.humberger__menu__widget .header__top__right__language', function (e) {
         // If clicking a link inside the dropdown list, let it navigate
         if ($(e.target).closest('ul').length > 0) {
