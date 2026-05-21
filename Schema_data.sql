@@ -75,7 +75,7 @@ INSERT INTO [dbo].[Products] (ProductID, ProductName, CategoryID, UnitPrice, Ima
 (33, N'Xiaomi Redmi Note 13 Pro', 2, 6990000, N'~/images/Products/Phones/Xiaomi_Redmi_Note_13Pro.jpg', N'Hãng: Xiaomi | Nhà cung cấp: FPT Shop', 5),
 (34, N'Xiaomi Poco X6 Pro', 2, 9490000, N'~/images/Products/Phones/Xiaomi_POCO_X6_Pro.png', N'Hãng: Xiaomi | Nhà cung cấp: CellphoneS', 5),
 (35, N'Vivo V30 5G', 2, 12490000, N'~/images/Products/Phones/Vivo_V30_5G.jpg', N'Hãng: Vivo | Nhà cung cấp: Thế Giới Di Động', 5),
-(36, N'Vivo Y50', 2, 6690000, N'~/images/Products/Phones/Vivo_Y50.jpg', N'Hãng: Vivo | Nhà cung cấp: Viettel Store', 5),
+(36, N'Vivo Y100', 2, 6690000, N'~/images/Products/Phones/Vivo_Y100.jpg', N'Hãng: Vivo | Nhà cung cấp: Viettel Store', 5),
 (37, N'Realme C67', 2, 5290000, N'~/images/Products/Phones/Realme_C67.webp', N'Hãng: Realme | Nhà cung cấp: FPT Shop', 5),
 (38, N'Realme 11', 2, 6290000, N'~/images/Products/Phones/Realme_11.jpg', N'Hãng: Realme | Nhà cung cấp: CellphoneS', 5),
 (39, N'Asus ROG Phone 8', 2, 24990000, N'~/images/Products/Phones/Asus_ROG_Phone8.jpg', N'Hãng: Asus | Nhà cung cấp: CellphoneS', 5),

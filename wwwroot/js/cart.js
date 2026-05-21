@@ -86,6 +86,8 @@ function addToCart(productId, quantity = 1) {
             if (response.success) {
                 reloadCartPreview();
                 showToast(response.message, 'success');
+                // TC_CART_09: Phát tín hiệu cho các tab khác biết giỏ hàng đã thay đổi
+                notifyCartChanged();
             } else {
                 showToast(response.message, 'error');
             }
@@ -164,6 +166,7 @@ function deleteCartItem(cartItemId, row, silent = false, onCancel) {
                     }
                     updateGlobalTotals(response.grandTotal, response.totalItems);
                     reloadCartPreview();
+                    notifyCartChanged(); // TC_CART_09: phát tín hiệu cho tab khác
                     if (!silent) {
                         showToast("Đã xóa sản phẩm khỏi giỏ hàng", "success");
                     }
@@ -197,6 +200,30 @@ function reloadCartPreview() {
         }
     });
 }
+
+// ============================================================
+// TC_CART_09: Cross-Tab Cart Sync
+// Khi tab khác thêm/xóa sản phẩm, tab hiện tại tự reload badge
+// Cơ chế: localStorage event (broadcast cross-tab) + visibilitychange
+// ============================================================
+function notifyCartChanged() {
+    // Ghi timestamp vào localStorage để các tab khác nhận được sự kiện 'storage'
+    localStorage.setItem('cart_updated', Date.now().toString());
+}
+
+// Lắng nghe tín hiệu từ tab khác (cross-tab sync)
+window.addEventListener('storage', function(e) {
+    if (e.key === 'cart_updated') {
+        reloadCartPreview();
+    }
+});
+
+// Khi người dùng quay lại tab này (từ tab khác) → reload badge ngay
+document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible') {
+        reloadCartPreview();
+    }
+});
 
 // ============================================================
 // 7. Update Totals in Cart Index Page

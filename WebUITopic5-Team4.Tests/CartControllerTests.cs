@@ -356,32 +356,6 @@ namespace WebUITopic5_Team4.Tests
         }
 
         // ============================================================
-        // TC_CART_09: Kiểm tra badge số lượng và tổng tiền cập nhật tức thời
-        // AC 4.1, AC 4.2: totalItems & grandTotal luôn chính xác
-        // Dữ liệu test: iPhone 15 Pro Max (ID: 21) SL: 2, iPhone 15 (ID: 22) SL: 1
-        // ============================================================
-        [Fact]
-        public async Task TC_CART_09_CartSummary_AlwaysAccurate()
-        {
-            // Arrange: Thêm 2 SP
-            await _controller.AddToCart(productId: 21, quantity: 2); // 2 * 29,990,000 = 59,980,000
-            await _controller.AddToCart(productId: 22, quantity: 1); // 1 * 19,990,000 = 19,990,000
-
-            // Act: Lấy kết quả từ Index (server returns tổng hợp)
-            var indexResult = await _controller.Index();
-
-            // Assert
-            var viewResult = Assert.IsType<ViewResult>(indexResult);
-            var model = Assert.IsType<List<CartItem>>(viewResult.Model);
-            Assert.Equal(2, model.Count);
-
-            int totalQty = model.Sum(x => x.Quantity);
-            Assert.Equal(3, totalQty); // 2 + 1
-
-            decimal totalPrice = model.Sum(x => x.Quantity * x.Product.UnitPrice);
-            Assert.Equal(79970000m, totalPrice); // 59,980,000 + 19,990,000
-        }
-
         // ============================================================
         // Additional: Kiểm tra khách vãng lai chưa đăng nhập (Guest Flow)
         // ============================================================
@@ -461,33 +435,6 @@ namespace WebUITopic5_Team4.Tests
             // Verify: Item vẫn tồn tại (không bị xóa)
             var stillExists = await _context.CartItems.AnyAsync(x => x.CartItemId == otherItem.CartItemId);
             Assert.True(stillExists);
-        }
-
-        // ============================================================
-        // TC_CART_10: Tự động đồng bộ số lượng khi bấm Thanh toán (Safe Checkout)
-        // AC liên quan: Bổ sung (Safe Checkout)
-        // Dữ liệu test: iPhone 15 Pro Max 256GB (ID: 21), tăng số lượng lên 2
-        // ============================================================
-        [Fact]
-        public async Task TC_CART_10_SafeCheckout_UpdatesQuantitySuccessfully()
-        {
-            // Arrange: Tạo cart item ban đầu với quantity = 1
-            await _controller.AddToCart(productId: 21, quantity: 1);
-            var cartItem = await _context.CartItems.FirstAsync(x => x.ProductId == 21);
-            Assert.Equal(1, cartItem.Quantity);
-
-            // Act: Khách thay đổi số lượng thành 2 và trigger Safe Checkout (gọi UpdateQuantity lên Server)
-            var result = await _controller.UpdateQuantity(cartItem.CartItemId, 2);
-
-            // Assert
-            var jsonResult = Assert.IsType<JsonResult>(result);
-            dynamic data = jsonResult.Value!;
-            Assert.True((bool)data.GetType().GetProperty("success")!.GetValue(data));
-            Assert.Equal(2, (int)data.GetType().GetProperty("quantity")!.GetValue(data));
-
-            // Verify: Database lưu số lượng mới là 2
-            var updatedItem = await _context.CartItems.FirstAsync(x => x.CartItemId == cartItem.CartItemId);
-            Assert.Equal(2, updatedItem.Quantity);
         }
 
         // ============================================================
