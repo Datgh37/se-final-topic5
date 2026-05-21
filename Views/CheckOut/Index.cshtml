@@ -25,15 +25,18 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="checkout__input">
                             <p>Họ và Tên<span>*</span></p>
-                            <input name="Checkout.FullName" type="text" required>
+                            <input asp-for="Checkout.FullName" class="form-control">
+                            <span asp-validation-for="Checkout.FullName" class="text-danger"></span>
                         </div>
                         <div class="checkout__input">
                             <p>Số điện thoại<span>*</span></p>
-                            <input name="Checkout.Phone" type="text" required>
+                            <input asp-for="Checkout.Phone" class="form-control">
+                            <span asp-validation-for="Checkout.Phone" class="text-danger"></span>
                         </div>
                         <div class="checkout__input">
-                            <p>Email<span>*</span></p>
-                            <input name="Checkout.Email" type="text">
+                            <p>Email<span></span></p>
+                            <input asp-for="Checkout.Email" class="form-control">
+                            <span asp-validation-for="Checkout.Email" class="text-danger"></span>
                         </div>
                         <div class="checkout__input">
                             <p>Tỉnh / Thành phố <span>*</span></p>
@@ -43,11 +46,10 @@
                                 <!-- input search + hiển thị value -->
                                 <input type="text"
                                        id="provinceInput"
-                                       name="Checkout.Province"
+                                       asp-for="Checkout.Province"
                                        class="select-input"
                                        placeholder="Chọn tỉnh / thành phố"
-                                       autocomplete="off"
-                                       required>
+                                       autocomplete="off">
 
                                 <!-- dropdown -->
                                 <div class="dropdown" id="provinceDropdown">
@@ -90,11 +92,13 @@
                         </div>
                         <div class="checkout__input">
                             <p>Địa chỉ nhận hàng<span>*</span></p>
-                            <input name="Checkout.Address" type="text" required>
+                            <input asp-for="Checkout.Address" class="form-control">
+                            <span asp-validation-for="Checkout.Address" class="text-danger"></span>
                         </div>
                         <div class="checkout__input">
                             <p>Ghi chú về đơn hàng<span></span></p>
-                            <input name="Checkout.Note" type="text">
+                            <input asp-for="Checkout.Note" class="form-control">
+                            <span asp-validation-for="Checkout.Note" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6">
@@ -133,17 +137,18 @@
                             <div class="payment-methods">
                                 <h4>Phương thức thanh toán</h4>
                                 <div class="payment-method">
-                                    <input type="radio" name="Checkout.PaymentMethod" value="COD" checked>
+                                    <input type="radio" asp-for="Checkout.PaymentMethod" value =" COD" checked>
                                     <label>Thanh toán khi nhận hàng (COD)</label>
                                 </div>
                                 <div class="payment-method">
-                                    <input type="radio" name="Checkout.PaymentMethod" value="Bank">
+                                    <input type="radio" asp-for="Checkout.PaymentMethod" value="Bank">
                                     <label>Chuyển khoản ngân hàng</label>
                                 </div>
                                 <div class="payment-method">
-                                    <input type="radio" name="Checkout.PaymentMethod" value="Card">
+                                    <input type="radio" asp-for="Checkout.PaymentMethod" value="Card">
                                     <label>Thẻ tín dụng / Ghi nợ</label>
                                 </div>
+                                <span asp-validation-for="Checkout.PaymentMethod" class="text-danger"></span>
                             </div>
                             <button type="submit" class="btn-submit">XÁC NHẬN ĐẶT HÀNG</button>
                         </div>
