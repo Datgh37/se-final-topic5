@@ -5,17 +5,16 @@
 $(document).ready(function () {
     const container = '#product-list-container';
     const paginationSelector = '.product__pagination a';
-    const filterFormSelector = '.price-filter-form, .filter__sort form';
-    
-    let currentViewMode = 'grid'; // Default to grid every time page loads
 
-    // 1. Global Preloader Safeguard
-    $(document).ajaxStart(function() {
-        $("#preloder").hide(); // Force hide preloader during AJAX
-        $(".loader").hide();
+    let currentViewMode = 'grid';
+
+    // 1. Global Preloader Safeguard – ẩn preloader khi có AJAX để tránh đơ màn hình
+    $(document).ajaxStart(function () {
+        $('#preloder').hide();
+        $('.loader').hide();
     });
 
-    // 2. Handle Pagination Clicks
+    // 2. Handle Pagination Clicks (AJAX)
     $(document).on('click', paginationSelector, function (e) {
         e.preventDefault();
         const url = $(this).attr('href');
@@ -25,62 +24,46 @@ $(document).ready(function () {
     });
 
     // 3. Handle Filter/Sort Form Submissions (AJAX)
-    $(document).on('submit', filterFormSelector, function (e) {
+    $(document).on('submit', '.price-filter-form, .filter__sort form', function (e) {
         e.preventDefault();
         const $form = $(this);
-        const url = $form.attr('action');
+        const action = $form.attr('action') || '/Products';
         const formData = $form.serialize();
-        const fullUrl = url + (url.includes('?') ? '&' : '?') + formData;
+        const fullUrl = action + (action.includes('?') ? '&' : '?') + formData;
         loadProductList(fullUrl);
         window.history.pushState({ path: fullUrl }, '', fullUrl);
     });
 
-    // 4. Main AJAX Loader
+    // 4. Main AJAX Loader – chuyển đổi URL sang /Products/Filter để lấy partial view
     function loadProductList(url) {
-        let ajaxUrl = url.replace('/Products/Index', '/Products/Filter')
-                           .replace('/Products?', '/Products/Filter?')
-                           .replace('/Products#', '/Products/Filter#');
-        
+        // Chuyển đổi mọi dạng URL /Products... sang /Products/Filter...
+        let ajaxUrl = url
+            .replace(/\/Products\/Index(\?|$|#)/, '/Products/Filter$1')
+            .replace(/\/Products(\?|$|#)/, '/Products/Filter$1');
+
+        // Nếu URL không chứa /Filter sau khi replace, thêm vào
+        if (!/\/Products\/Filter/.test(ajaxUrl)) {
+            ajaxUrl = '/Products/Filter' + (ajaxUrl.includes('?') ? ajaxUrl.substring(ajaxUrl.indexOf('?')) : '');
+        }
+
         $(container).css('opacity', '0.5');
-        
-        // LOG debug dau vao truoc khi goi API
-        AppDebugger.info("Bat dau goi AJAX tai/loc danh sach san pham", { 
-            originalUrl: url, 
-            ajaxUrl: ajaxUrl 
-        });
-        
+
         $.ajax({
             url: ajaxUrl,
             type: 'GET',
             success: function (result) {
-                // LOG debug thanh cong khi nhan phan hoi
-                AppDebugger.api(ajaxUrl, 'GET', { originalUrl: url }, { 
-                    status: "Thanh cong", 
-                    bytesReceived: result.length,
-                    message: "HTML partial loaded successfully"
-                }, 200);
-
-                $(container).html(result);
-                $(container).css('opacity', '1');
+                $(container).html(result).css('opacity', '1');
                 applyCurrentViewMode();
                 initializePlugins();
             },
-            error: function (xhr, status, error) {
-                // LOG debug that bai va bat exception
-                AppDebugger.error("AJAX loadProductList gap loi", { 
-                    status: status, 
-                    error: error, 
-                    statusCode: xhr.status,
-                    responseText: xhr.responseText
-                });
-
+            error: function () {
                 $(container).css('opacity', '1');
                 alert('Có lỗi xảy ra khi tải danh sách sản phẩm.');
             }
         });
     }
 
-    // 5. View Mode Switcher with Animation
+    // 5. View Mode Switcher (Grid / List)
     $(document).on('click', '.view-mode-btn', function () {
         const $btn = $(this);
         if ($btn.hasClass('active')) return;
@@ -88,26 +71,22 @@ $(document).ready(function () {
         const mode = $btn.data('mode');
         const $partial = $('#product-list-partial');
 
-        // Start Transition Animation
         $partial.addClass('view-switching');
-
-        setTimeout(() => {
-            currentViewMode = mode; // Save to variable instead of localStorage
+        setTimeout(function () {
+            currentViewMode = mode;
             applyCurrentViewMode();
             $partial.removeClass('view-switching');
         }, 300);
     });
 
     function applyCurrentViewMode() {
-        const mode = currentViewMode; // Use the local variable
         const $partial = $('#product-list-partial');
-        
-        $partial.removeClass('grid-view list-view').addClass(mode + '-view');
+        $partial.removeClass('grid-view list-view').addClass(currentViewMode + '-view');
         $('.view-mode-btn').removeClass('active');
-        $('.view-mode-btn[data-mode="' + mode + '"]').addClass('active');
+        $('.view-mode-btn[data-mode="' + currentViewMode + '"]').addClass('active');
     }
 
-    // 6. Helpers
+    // 6. Reinitialize plugins after AJAX load
     function initializePlugins() {
         $('.set-bg').each(function () {
             var bg = $(this).data('setbg');
@@ -118,6 +97,7 @@ $(document).ready(function () {
         }
     }
 
+    // 7. Browser Back/Forward Navigation
     window.onpopstate = function (e) {
         if (e.state && e.state.path) {
             loadProductList(e.state.path);
