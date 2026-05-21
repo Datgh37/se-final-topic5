@@ -26,9 +26,9 @@
     </div>
 
     <!-- 2. Text Pillar -->
-    <div class="product__item__text cursor-pointer" onclick="window.location.href='@Url.Action("Details", "Products", new { id = Model.ProductId })'">
+    <div class="product__item__text">
         <span class="product-category-label d-block text-muted small mb-1">@Model.CategoryName</span>
-        <h6><a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId">@Model.ProductName</a></h6>
+        <h6>@Model.ProductName</h6>
         
         <!-- Detailed Info for List Mode -->
         <div class="product__item__list-meta mb-2">
@@ -49,10 +49,11 @@
 
     <!-- 3. Actions Pillar (Right side in List Mode) -->
     <div class="product__item__list-actions">
-        <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId"
-           class="primary-btn @(isOutOfStock ? "btn-disabled" : "")"
-           onclick="@(isOutOfStock ? "return false;" : null)">
-            @(isOutOfStock ? "Hết hàng" : "Chi tiết")
-        </a>
+        <button type="button"
+                class="primary-btn add-to-cart-btn @(isOutOfStock ? "btn-disabled" : "")"
+                data-product-id="@Model.ProductId"
+                @(isOutOfStock ? "disabled" : "")>
+            <i class="fa fa-shopping-cart mr-2"></i> @(isOutOfStock ? "Hết hàng" : "THÊM VÀO GIỎ")
+        </button>
     </div>
 </div>

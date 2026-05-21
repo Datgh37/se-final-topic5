@@ -11,7 +11,7 @@
                 <div class="latest-product__slider__item">
                     @foreach (var item in slide)
                     {
-                        <a asp-controller="Products" asp-action="Details" asp-route-id="@item.ProductId" class="latest-product__item">
+                        <div class="latest-product__item">
                             <div class="latest-product__item__pic">
                                 <img src="@Url.Content(item.PrimaryImage ?? "~/images/Others/lp-1.jpg")" alt="@item.ProductName" />
                             </div>
@@ -19,7 +19,7 @@
                                 <h6>@item.ProductName</h6>
                                 <span>@item.FinalPrice.ToString("N0")₫</span>
                             </div>
-                        </a>
+                        </div>
                     }
                 </div>
             }

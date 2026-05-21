@@ -16,7 +16,6 @@ namespace WebUITopic5_Team4.Helpers
                 CategoryName = x.Category.CategoryName,
                 PrimaryImage = x.ImageUrl,
                 StockQuantity = x.StockQuantity,
-                IsFavorite = false
             });
         }
     }

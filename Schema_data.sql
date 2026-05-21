@@ -49,7 +49,7 @@ INSERT INTO [dbo].[Products] (ProductID, ProductName, CategoryID, UnitPrice, Ima
 (7, N'HP Pavilion 14-dv2073TU', 1, 15490000, N'~/images/Products/Laptop/HP_Pavilion_14_dv2073TU.png', N'Hãng: HP | Nhà cung cấp: Thế Giới Di Động', 5),
 (8, N'HP Envy x360 14', 1, 22990000, N'~/images/Products/Laptop/HP_Envy_x360_14.jpg', N'Hãng: HP | Nhà cung cấp: CellphoneS', 5),
 (9, N'HP Omen 16', 1, 35990000, N'~/images/Products/Laptop/HP_Omen_16.png', N'Hãng: HP | Nhà cung cấp: FPT Shop', 5),
-(5, N'Asus Zenbook 14 OLED', 1, 24990000, N'~/images/Products/Laptop/Asus_Zenbook14_OLED.jpg', N'Hãng: Asus | Nhà cung cấp: Thế Giới Di Động', 20),
+(10, N'Asus Zenbook 14 OLED', 1, 24990000, N'~/images/Products/Laptop/Asus_Zenbook14_OLED.jpg', N'Hãng: Asus | Nhà cung cấp: Thế Giới Di Động', 20),
 (11, N'Asus Vivobook Go 14', 1, 5490000, N'~/images/Products/Laptop/Asus_Vivobook_Go14.jpg', N'Hãng: Asus | Nhà cung cấp: Viettel Store', 20),
 (12, N'Asus ROG Zephyrus G14', 1, 42990000, N'~/images/Products/Laptop/Asus_ROG_Zephyrus_G14.jpg', N'Hãng: Asus | Nhà cung cấp: CellphoneS', 5),
 (13, N'Lenovo ThinkPad X1 Carbon Gen 11', 1, 48990000, N'~/images/Products/Laptop/Lenovo_ThinkPad_X1_Carbon_Gen11.jpg', N'Hãng: Lenovo | Nhà cung cấp: FPT Shop', 5),

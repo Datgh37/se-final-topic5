@@ -102,7 +102,7 @@ CREATE TABLE [dbo].[Orders](
     [Address] [nvarchar](150) NOT NULL,
     [TownCity] [nvarchar](100) NOT NULL,
     [PhoneNumber] [nvarchar](24) NOT NULL, 
-    [Email] [nvarchar](50) NULL,
+    [Email] [nvarchar](50) NOT NULL,
     [OrderNotes] [nvarchar](max) NULL,
     [PaymentMethod] [nvarchar](50) NOT NULL DEFAULT (N'COD'),
     [TotalAmount] [decimal](18, 2) NOT NULL DEFAULT (0),

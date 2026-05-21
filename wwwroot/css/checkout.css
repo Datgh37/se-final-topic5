@@ -1,4 +1,4 @@
-﻿/* =====================================================
+/* =====================================================
    CHECKOUT PAGE
 ===================================================== */
 
@@ -237,3 +237,22 @@
         font-size: 20px;
     }
 }
+
+/* =====================================================
+   VALIDATION HIGHLIGHTS
+   ===================================================== */
+.checkout__input input.has-error,
+.checkout__input .select-input.has-error {
+    border-color: #e53637 !important;
+    background-color: #fff9f9 !important;
+    box-shadow: 0 0 0 3px rgba(229, 54, 55, 0.15) !important;
+}
+
+.checkout__input .error-msg {
+    color: #e53637;
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: 6px;
+    display: none;
+}
+

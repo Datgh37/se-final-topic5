@@ -12,6 +12,5 @@ namespace WebUITopic5_Team4.Models.ViewModels
         public int StockQuantity { get; set; }
         public bool IsOnSale => false;
         public bool IsInStock => StockQuantity > 0;
-        public bool IsFavorite { get; set; }
     }
 }

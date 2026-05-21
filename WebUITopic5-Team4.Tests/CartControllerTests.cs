@@ -66,41 +66,67 @@ namespace WebUITopic5_Team4.Tests
                 RoleId = 1
             });
 
-            // Tạo Category
-            _context.Categories.Add(new Category
-            {
-                CategoryId = 1,
-                CategoryName = "Điện thoại"
-            });
+            // Tạo Categories
+            _context.Categories.AddRange(
+                new Category { CategoryId = 1, CategoryName = "Laptop" },
+                new Category { CategoryId = 2, CategoryName = "Điện thoại" }
+            );
 
-            // Tạo Products (dùng cho các test case)
+            // Tạo Products (Khớp 100% với Schema_data.sql và CSV Test Cases)
             _context.Products.AddRange(
                 new Product
                 {
                     ProductId = 1,
-                    ProductName = "iPhone 16 Pro Max",
-                    UnitPrice = 34990000,
-                    StockQuantity = 10,
+                    ProductName = "MacBook Air M2 8GB/256GB",
+                    UnitPrice = 24990000,
+                    StockQuantity = 1, // Tồn kho thực tế = 1
                     CategoryId = 1,
-                    ImageUrl = "~/images/Products/iphone16.jpg"
+                    ImageUrl = "~/images/Products/Laptop/Macbook_Air_M2_256GB.jpg"
                 },
                 new Product
                 {
                     ProductId = 2,
-                    ProductName = "Samsung Galaxy S25 Ultra",
-                    UnitPrice = 29990000,
+                    ProductName = "MacBook Pro M3 16GB/512GB",
+                    UnitPrice = 45990000,
                     StockQuantity = 5,
                     CategoryId = 1,
-                    ImageUrl = "~/images/Products/samsung-s25.jpg"
+                    ImageUrl = "~/images/Products/Laptop/Macbook_Pro_M3_512GB.jpg"
                 },
                 new Product
                 {
                     ProductId = 3,
-                    ProductName = "Laptop Dell XPS 15",
-                    UnitPrice = 45000000,
+                    ProductName = "MacBook Air M3 16GB/512GB",
+                    UnitPrice = 32990000,
+                    StockQuantity = 5,
+                    CategoryId = 1,
+                    ImageUrl = "~/images/Products/Laptop/Macbook_Air_M3_512GB.jpg"
+                },
+                new Product
+                {
+                    ProductId = 6,
+                    ProductName = "Dell Vostro 3430",
+                    UnitPrice = 12490000,
                     StockQuantity = 0, // Hết hàng
                     CategoryId = 1,
-                    ImageUrl = "~/images/Products/dell-xps.jpg"
+                    ImageUrl = "~/images/Products/Laptop/Dell_Vostro_3430.jpg"
+                },
+                new Product
+                {
+                    ProductId = 21,
+                    ProductName = "iPhone 15 Pro Max 256GB",
+                    UnitPrice = 29990000,
+                    StockQuantity = 5,
+                    CategoryId = 2,
+                    ImageUrl = "~/images/Products/Phones/iphone15_ProMax_256gb.jpg"
+                },
+                new Product
+                {
+                    ProductId = 22,
+                    ProductName = "iPhone 15 128GB",
+                    UnitPrice = 19990000,
+                    StockQuantity = 15,
+                    CategoryId = 2,
+                    ImageUrl = "~/images/Products/Phones/iphone15_128GB.jpg"
                 }
             );
 
@@ -115,14 +141,14 @@ namespace WebUITopic5_Team4.Tests
 
         // ============================================================
         // TC_CART_01: Thêm sản phẩm vào giỏ hàng thành công
-        // AC 1.1: Nếu nhập số lượng hợp lệ và bấm ADD TO CART,
-        //         sản phẩm được thêm vào giỏ và có thông báo thành công
+        // AC 1.1: Thêm sản phẩm hợp lệ, hiển thị thông báo thành công
+        // Dữ liệu test: iPhone 15 Pro Max 256GB (ID: 21), Số lượng: 1
         // ============================================================
         [Fact]
         public async Task TC_CART_01_AddToCart_ValidQuantity_ReturnsSuccess()
         {
-            // Act
-            var result = await _controller.AddToCart(productId: 1, quantity: 2);
+            // Act: Thêm sản phẩm iPhone 15 Pro Max 256GB (ID: 21) với số lượng = 1
+            var result = await _controller.AddToCart(productId: 21, quantity: 1);
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);
@@ -132,69 +158,79 @@ namespace WebUITopic5_Team4.Tests
             Assert.Equal("Đã thêm vào giỏ hàng",
                 (string)data.GetType().GetProperty("message")!.GetValue(data));
 
-            // Verify: Cart item tồn tại trong DB với quantity = 2
-            var cartItem = await _context.CartItems.FirstOrDefaultAsync(x => x.ProductId == 1);
+            // Verify: Cart item tồn tại trong DB với quantity = 1
+            var cartItem = await _context.CartItems.FirstOrDefaultAsync(x => x.ProductId == 21);
             Assert.NotNull(cartItem);
-            Assert.Equal(2, cartItem.Quantity);
+            Assert.Equal(1, cartItem.Quantity);
         }
 
         // ============================================================
         // TC_CART_02: Thêm sản phẩm đã tồn tại → cộng dồn
         // AC 1.2: Sản phẩm đã có trong giỏ → cộng dồn số lượng
+        // Dữ liệu test: iPhone 15 Pro Max 256GB (ID: 21), Số lượng: 1 + 1 = 2
         // ============================================================
         [Fact]
         public async Task TC_CART_02_AddToCart_ExistingProduct_QuantityAccumulates()
         {
-            // Arrange: Thêm lần 1 với quantity = 2
-            await _controller.AddToCart(productId: 1, quantity: 2);
+            // Arrange: Thêm lần 1 với quantity = 1
+            await _controller.AddToCart(productId: 21, quantity: 1);
 
             // Act: Thêm lần 2 với quantity = 1
-            var result = await _controller.AddToCart(productId: 1, quantity: 1);
+            var result = await _controller.AddToCart(productId: 21, quantity: 1);
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);
             dynamic data = jsonResult.Value!;
             Assert.True((bool)data.GetType().GetProperty("success")!.GetValue(data));
 
-            // Verify: Chỉ có 1 CartItem, quantity = 3 (cộng dồn)
-            var cartItems = await _context.CartItems.Where(x => x.ProductId == 1).ToListAsync();
+            // Verify: Chỉ có 1 CartItem, quantity = 2 (cộng dồn)
+            var cartItems = await _context.CartItems.Where(x => x.ProductId == 21).ToListAsync();
             Assert.Single(cartItems);
-            Assert.Equal(3, cartItems[0].Quantity);
+            Assert.Equal(2, cartItems[0].Quantity);
         }
 
         // ============================================================
-        // TC_CART_03: Thêm sản phẩm vượt tồn kho → chặn
-        // AC 1.3: Số lượng > tồn kho → chặn và báo lỗi
+        // TC_CART_03: Thêm sản phẩm vượt quá số lượng tồn kho hiện có
+        // AC 1.3: Thêm quá stock -> Lần 1 thành công, lần 2 bị chặn
+        // Dữ liệu test: MacBook Air M2 8GB/256GB (ID: 1 - tồn kho thực tế = 1), số lượng thêm: 1+1 = 2
         // ============================================================
         [Fact]
         public async Task TC_CART_03_AddToCart_ExceedsStock_ReturnsFail()
         {
-            // Act: Thêm 15 sản phẩm (tồn kho chỉ có 10)
-            var result = await _controller.AddToCart(productId: 1, quantity: 15);
+            // Act - Lần 1: Thêm 1 sản phẩm ID 1 (tồn kho = 1) -> Thành công
+            var result1 = await _controller.AddToCart(productId: 1, quantity: 1);
+            var jsonResult1 = Assert.IsType<JsonResult>(result1);
+            dynamic data1 = jsonResult1.Value!;
+            Assert.True((bool)data1.GetType().GetProperty("success")!.GetValue(data1));
+
+            // Act - Lần 2: Thêm tiếp 1 sản phẩm ID 1 nữa -> Bị chặn
+            var result2 = await _controller.AddToCart(productId: 1, quantity: 1);
 
             // Assert
-            var jsonResult = Assert.IsType<JsonResult>(result);
-            dynamic data = jsonResult.Value!;
-            Assert.False((bool)data.GetType().GetProperty("success")!.GetValue(data));
+            var jsonResult2 = Assert.IsType<JsonResult>(result2);
+            dynamic data2 = jsonResult2.Value!;
+            Assert.False((bool)data2.GetType().GetProperty("success")!.GetValue(data2));
 
-            var message = (string)data.GetType().GetProperty("message")!.GetValue(data);
-            Assert.Contains("10", message); // Phải chứa số tồn kho
+            var message = (string)data2.GetType().GetProperty("message")!.GetValue(data2);
+            Assert.Equal("Chỉ còn 1 sản phẩm trong kho", message);
 
-            // Verify: Không có CartItem nào được tạo
-            var cartItems = await _context.CartItems.ToListAsync();
-            Assert.Empty(cartItems);
+            // Verify: Số lượng trong DB vẫn chỉ là 1
+            var cartItem = await _context.CartItems.FirstOrDefaultAsync(x => x.ProductId == 1);
+            Assert.NotNull(cartItem);
+            Assert.Equal(1, cartItem.Quantity);
         }
 
         // ============================================================
-        // TC_CART_04: Cập nhật số lượng hợp lệ
+        // TC_CART_04: Cập nhật số lượng sản phẩm hợp lệ trong giỏ hàng
         // AC 2.1: Cập nhật thành công → Total thay đổi
+        // Dữ liệu test: iPhone 15 Pro Max 256GB (ID: 21), Đơn giá: 29.990.000đ, Cập nhật lên số lượng: 3
         // ============================================================
         [Fact]
         public async Task TC_CART_04_UpdateQuantity_ValidQuantity_ReturnsNewTotals()
         {
             // Arrange: Tạo cart item
-            await _controller.AddToCart(productId: 1, quantity: 1);
-            var cartItem = await _context.CartItems.FirstAsync(x => x.ProductId == 1);
+            await _controller.AddToCart(productId: 21, quantity: 1);
+            var cartItem = await _context.CartItems.FirstAsync(x => x.ProductId == 21);
 
             // Act: Cập nhật số lượng thành 3
             var result = await _controller.UpdateQuantity(cartItem.CartItemId, 3);
@@ -205,14 +241,15 @@ namespace WebUITopic5_Team4.Tests
             Assert.True((bool)data.GetType().GetProperty("success")!.GetValue(data));
             Assert.Equal(3, (int)data.GetType().GetProperty("quantity")!.GetValue(data));
 
-            // Verify subtotal = 34,990,000 * 3 = 104,970,000
+            // Verify subtotal = 29,990,000 * 3 = 89,970,000
             var subtotal = (string)data.GetType().GetProperty("subtotal")!.GetValue(data);
-            Assert.Equal("104,970,000", subtotal);
+            Assert.Equal("89,970,000", subtotal);
         }
 
         // ============================================================
-        // TC_CART_05: Cập nhật số lượng không hợp lệ (0, -1, NaN)
+        // TC_CART_05: Cập nhật số lượng sản phẩm không hợp lệ (số âm, 0, chữ)
         // AC 2.2: Reset về 1 hoặc báo lỗi
+        // Dữ liệu test: iPhone 15 Pro Max 256GB (ID: 21), cập nhật về 0, -1
         // ============================================================
         [Theory]
         [InlineData(0)]
@@ -221,8 +258,8 @@ namespace WebUITopic5_Team4.Tests
         public async Task TC_CART_05_UpdateQuantity_InvalidValues_ReturnsResetQty(int invalidQty)
         {
             // Arrange
-            await _controller.AddToCart(productId: 1, quantity: 2);
-            var cartItem = await _context.CartItems.FirstAsync(x => x.ProductId == 1);
+            await _controller.AddToCart(productId: 21, quantity: 2);
+            var cartItem = await _context.CartItems.FirstAsync(x => x.ProductId == 21);
 
             // Act
             var result = await _controller.UpdateQuantity(cartItem.CartItemId, invalidQty);
@@ -237,26 +274,27 @@ namespace WebUITopic5_Team4.Tests
         }
 
         // ============================================================
-        // TC_CART_06: Cập nhật số lượng lớn hơn tồn kho
+        // TC_CART_06: Cập nhật số lượng lớn hơn mức tồn kho
         // AC 2.3: Báo lỗi và trả về maxStock
+        // Dữ liệu test: MacBook Pro M3 16GB/512GB (ID: 2 - tồn kho thực tế = 5), Cập nhật lên: 8
         // ============================================================
         [Fact]
         public async Task TC_CART_06_UpdateQuantity_ExceedsStock_ReturnsMaxStock()
         {
             // Arrange
-            await _controller.AddToCart(productId: 1, quantity: 1);
-            var cartItem = await _context.CartItems.FirstAsync(x => x.ProductId == 1);
+            await _controller.AddToCart(productId: 2, quantity: 1);
+            var cartItem = await _context.CartItems.FirstAsync(x => x.ProductId == 2);
 
-            // Act: Cập nhật thành 15 (tồn kho = 10)
-            var result = await _controller.UpdateQuantity(cartItem.CartItemId, 15);
+            // Act: Cập nhật thành 8 (tồn kho = 5)
+            var result = await _controller.UpdateQuantity(cartItem.CartItemId, 8);
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);
             dynamic data = jsonResult.Value!;
             Assert.False((bool)data.GetType().GetProperty("success")!.GetValue(data));
 
-            // Server phải trả maxStock = 10
-            Assert.Equal(10, (int)data.GetType().GetProperty("maxStock")!.GetValue(data));
+            // Server phải trả maxStock = 5
+            Assert.Equal(5, (int)data.GetType().GetProperty("maxStock")!.GetValue(data));
 
             // Verify: Quantity trong DB vẫn giữ nguyên giá trị cũ (1)
             var updatedItem = await _context.CartItems.FirstAsync(x => x.CartItemId == cartItem.CartItemId);
@@ -264,20 +302,21 @@ namespace WebUITopic5_Team4.Tests
         }
 
         // ============================================================
-        // TC_CART_07: Xóa một sản phẩm bất kỳ
+        // TC_CART_07: Xóa một sản phẩm bất kỳ khỏi giỏ hàng
         // AC 3.1: SP bị xóa, trừ tiền, giảm badge
+        // Dữ liệu test: Thêm iPhone 15 Pro Max (ID: 21) và iPhone 15 (ID: 22), Xóa ID 22
         // ============================================================
         [Fact]
         public async Task TC_CART_07_DeleteCartItem_Success_ReducesTotals()
         {
             // Arrange: Thêm 2 sản phẩm khác nhau
-            await _controller.AddToCart(productId: 1, quantity: 1);
-            await _controller.AddToCart(productId: 2, quantity: 1);
+            await _controller.AddToCart(productId: 21, quantity: 1);
+            await _controller.AddToCart(productId: 22, quantity: 1);
             var cartItems = await _context.CartItems.ToListAsync();
             Assert.Equal(2, cartItems.Count);
 
-            // Act: Xóa sản phẩm thứ 2
-            var itemToDelete = cartItems.First(x => x.ProductId == 2);
+            // Act: Xóa sản phẩm iPhone 15 128GB (ID: 22)
+            var itemToDelete = cartItems.First(x => x.ProductId == 22);
             var result = await _controller.DeleteCartItem(itemToDelete.CartItemId);
 
             // Assert
@@ -285,21 +324,21 @@ namespace WebUITopic5_Team4.Tests
             dynamic data = jsonResult.Value!;
             Assert.True((bool)data.GetType().GetProperty("success")!.GetValue(data));
 
-            // Verify: Chỉ còn 1 sản phẩm trong giỏ
+            // Verify: Chỉ còn 1 sản phẩm trong giỏ (ID: 21)
             var remaining = await _context.CartItems.ToListAsync();
             Assert.Single(remaining);
-            Assert.Equal(1, remaining[0].ProductId);
+            Assert.Equal(21, remaining[0].ProductId);
         }
 
         // ============================================================
-        // TC_CART_08: Xóa sản phẩm cuối cùng → giỏ hàng trống
-        // AC 3.2: Hiển thị "Giỏ hàng trống", ẩn nút Checkout
+        // TC_CART_08: Xóa sản phẩm cuối cùng khiến giỏ hàng trống
+        // AC 3.2: Hiển thị "Giỏ hàng trống", ẩn nút PROCEED TO CHECKOUT
         // ============================================================
         [Fact]
         public async Task TC_CART_08_DeleteLastItem_CartBecomesEmpty()
         {
             // Arrange: Chỉ thêm 1 sản phẩm
-            await _controller.AddToCart(productId: 1, quantity: 1);
+            await _controller.AddToCart(productId: 21, quantity: 1);
             var cartItem = await _context.CartItems.FirstAsync();
 
             // Act: Xóa sản phẩm duy nhất
@@ -317,15 +356,16 @@ namespace WebUITopic5_Team4.Tests
         }
 
         // ============================================================
-        // TC_CART_09: Badge số lượng cập nhật tức thời (kiểm tra server-side)
+        // TC_CART_09: Kiểm tra badge số lượng và tổng tiền cập nhật tức thời
         // AC 4.1, AC 4.2: totalItems & grandTotal luôn chính xác
+        // Dữ liệu test: iPhone 15 Pro Max (ID: 21) SL: 2, iPhone 15 (ID: 22) SL: 1
         // ============================================================
         [Fact]
         public async Task TC_CART_09_CartSummary_AlwaysAccurate()
         {
             // Arrange: Thêm 2 SP
-            await _controller.AddToCart(productId: 1, quantity: 2); // 2 * 34,990,000 = 69,980,000
-            await _controller.AddToCart(productId: 2, quantity: 1); // 1 * 29,990,000 = 29,990,000
+            await _controller.AddToCart(productId: 21, quantity: 2); // 2 * 29,990,000 = 59,980,000
+            await _controller.AddToCart(productId: 22, quantity: 1); // 1 * 19,990,000 = 19,990,000
 
             // Act: Lấy kết quả từ Index (server returns tổng hợp)
             var indexResult = await _controller.Index();
@@ -339,7 +379,7 @@ namespace WebUITopic5_Team4.Tests
             Assert.Equal(3, totalQty); // 2 + 1
 
             decimal totalPrice = model.Sum(x => x.Quantity * x.Product.UnitPrice);
-            Assert.Equal(99_970_000m, totalPrice); // 69,980,000 + 29,990,000
+            Assert.Equal(79970000m, totalPrice); // 59,980,000 + 19,990,000
         }
 
         // ============================================================
@@ -358,7 +398,7 @@ namespace WebUITopic5_Team4.Tests
             };
 
             // Act
-            var result = await guestController.AddToCart(productId: 1, quantity: 1);
+            var result = await guestController.AddToCart(productId: 21, quantity: 1);
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);
@@ -367,7 +407,7 @@ namespace WebUITopic5_Team4.Tests
 
             // Verify: CartItem và Cart vãng lai được tạo trong DB với AccountId = null
             var cartItems = await _context.CartItems.Include(x => x.Cart).ToListAsync();
-            var guestItem = cartItems.FirstOrDefault(x => x.ProductId == 1);
+            var guestItem = cartItems.FirstOrDefault(x => x.ProductId == 21);
             Assert.NotNull(guestItem);
             Assert.Null(guestItem.Cart.AccountId);
             Assert.Equal(1, guestItem.Quantity);
@@ -403,7 +443,7 @@ namespace WebUITopic5_Team4.Tests
             _context.CartItems.Add(new CartItem
             {
                 CartId = "OTHER-CART",
-                ProductId = 1,
+                ProductId = 21,
                 Quantity = 1
             });
             await _context.SaveChangesAsync();
@@ -426,15 +466,14 @@ namespace WebUITopic5_Team4.Tests
         // ============================================================
         // TC_CART_10: Tự động đồng bộ số lượng khi bấm Thanh toán (Safe Checkout)
         // AC liên quan: Bổ sung (Safe Checkout)
-        // Kịch bản: Khách tăng số lượng của sản phẩm nhưng không nhấn nút cập nhật, 
-        //           hệ thống tự động kích hoạt đồng bộ UpdateQuantity thành công lên server.
+        // Dữ liệu test: iPhone 15 Pro Max 256GB (ID: 21), tăng số lượng lên 2
         // ============================================================
         [Fact]
         public async Task TC_CART_10_SafeCheckout_UpdatesQuantitySuccessfully()
         {
             // Arrange: Tạo cart item ban đầu với quantity = 1
-            await _controller.AddToCart(productId: 1, quantity: 1);
-            var cartItem = await _context.CartItems.FirstAsync(x => x.ProductId == 1);
+            await _controller.AddToCart(productId: 21, quantity: 1);
+            var cartItem = await _context.CartItems.FirstAsync(x => x.ProductId == 21);
             Assert.Equal(1, cartItem.Quantity);
 
             // Act: Khách thay đổi số lượng thành 2 và trigger Safe Checkout (gọi UpdateQuantity lên Server)
@@ -453,20 +492,19 @@ namespace WebUITopic5_Team4.Tests
 
         // ============================================================
         // TC_E2E_01: Kiểm thử Tích hợp (E2E) luồng đặt hàng toàn diện
-        // Người thực thi: Trịnh Thành Đạt (Task 3.3)
-        // Kịch bản: Thêm 2 SP → Cập nhật SL SP1 lên 2 → Verify tổng
-        //           → Verify tồn kho không bị trừ trước khi đặt hàng
         // AC liên quan: AC 1.1 → AC 9.6 (toàn bộ luồng)
+        // Dữ liệu test: MacBook Pro M3 16GB/512GB (ID: 2), iPhone 15 128GB (ID: 22)
+        //               Sửa số lượng SP 1 (ID 2) từ 1 lên 2
         // ============================================================
         [Fact]
         public async Task TC_E2E_01_FullCartFlow_AddUpdateVerifyTotals()
         {
             // ─── B1: Khách thêm 2 sản phẩm khác nhau vào giỏ ───
-            var addResult1 = await _controller.AddToCart(productId: 1, quantity: 1);
+            var addResult1 = await _controller.AddToCart(productId: 2, quantity: 1);
             var addJson1 = Assert.IsType<JsonResult>(addResult1);
             Assert.True((bool)addJson1.Value!.GetType().GetProperty("success")!.GetValue(addJson1.Value));
 
-            var addResult2 = await _controller.AddToCart(productId: 2, quantity: 1);
+            var addResult2 = await _controller.AddToCart(productId: 22, quantity: 1);
             var addJson2 = Assert.IsType<JsonResult>(addResult2);
             Assert.True((bool)addJson2.Value!.GetType().GetProperty("success")!.GetValue(addJson2.Value));
 
@@ -475,7 +513,7 @@ namespace WebUITopic5_Team4.Tests
             Assert.Equal(2, cartItemsAfterAdd.Count);
 
             // ─── B2: Vào giỏ hàng, cập nhật số lượng SP1 lên 2 ───
-            var item1 = cartItemsAfterAdd.First(x => x.ProductId == 1);
+            var item1 = cartItemsAfterAdd.First(x => x.ProductId == 2);
             var updateResult = await _controller.UpdateQuantity(item1.CartItemId, 2);
             var updateJson = Assert.IsType<JsonResult>(updateResult);
             dynamic updateData = updateJson.Value!;
@@ -483,9 +521,9 @@ namespace WebUITopic5_Team4.Tests
             Assert.Equal(2, (int)updateData.GetType().GetProperty("quantity")!.GetValue(updateData));
 
             // ─── B5: Kiểm tra tổng tiền và số lượng chính xác ───
-            // SP1: iPhone 16 Pro Max → 34,990,000 × 2 = 69,980,000
-            // SP2: Samsung Galaxy S25 Ultra → 29,990,000 × 1 = 29,990,000
-            // Grand Total = 99,970,000
+            // SP 1: MacBook Pro M3 (ID: 2) -> 45,990,000 × 2 = 91,980,000đ
+            // SP 2: iPhone 15 128GB (ID: 22) -> 19,990,000 × 1 = 19,990,000đ
+            // Grand Total = 111,970,000đ
             var indexResult = await _controller.Index();
             var viewResult = Assert.IsType<ViewResult>(indexResult);
             var model = Assert.IsType<List<CartItem>>(viewResult.Model);
@@ -496,42 +534,40 @@ namespace WebUITopic5_Team4.Tests
             Assert.Equal(3, totalQty); // 2 + 1
 
             decimal grandTotal = model.Sum(x => x.Quantity * x.Product.UnitPrice);
-            Assert.Equal(99_970_000m, grandTotal);
+            Assert.Equal(111970000m, grandTotal);
 
             // ─── Verify: Tồn kho chưa bị trừ (chưa đặt hàng) ───
-            var product1 = await _context.Products.FindAsync(1);
-            var product2 = await _context.Products.FindAsync(2);
-            Assert.Equal(10, product1!.StockQuantity); // Vẫn nguyên 10
-            Assert.Equal(5, product2!.StockQuantity);  // Vẫn nguyên 5
+            var product1 = await _context.Products.FindAsync(2);
+            var product2 = await _context.Products.FindAsync(22);
+            Assert.Equal(5, product1!.StockQuantity); // Vẫn nguyên 5
+            Assert.Equal(15, product2!.StockQuantity);  // Vẫn nguyên 15
 
             // ─── Verify: Subtotal từng dòng chính xác ───
-            var sp1InCart = model.First(x => x.ProductId == 1);
-            var sp2InCart = model.First(x => x.ProductId == 2);
-            Assert.Equal(69_980_000m, sp1InCart.Quantity * sp1InCart.Product.UnitPrice);
-            Assert.Equal(29_990_000m, sp2InCart.Quantity * sp2InCart.Product.UnitPrice);
+            var sp1InCart = model.First(x => x.ProductId == 2);
+            var sp2InCart = model.First(x => x.ProductId == 22);
+            Assert.Equal(91980000m, sp1InCart.Quantity * sp1InCart.Product.UnitPrice);
+            Assert.Equal(19990000m, sp2InCart.Quantity * sp2InCart.Product.UnitPrice);
         }
 
         // ============================================================
         // TC_E2E_02: E2E Đặt hàng thất bại do hết tồn kho đột xuất (Tranh chấp tồn kho ngầm)
-        // Kịch bản: Khách thêm SP MacBook Air M2 (tồn kho ban đầu = 1) vào giỏ.
-        //           Trước khi thanh toán/đặt hàng, giả lập tồn kho SP đó bị đổi về 0.
-        //           Khi đặt hàng hoặc cập nhật giỏ hàng sẽ bị chặn.
+        // Dữ liệu test: MacBook Air M2 8GB/256GB (ID: 1 - tồn kho ban đầu = 1)
         // ============================================================
         [Fact]
         public async Task TC_E2E_02_StockDepletion_ReturnsFail()
         {
-            // Arrange: Sản phẩm 2 (Samsung S25 Ultra) có tồn kho = 5.
-            await _controller.AddToCart(productId: 2, quantity: 5);
-            var cartItem = await _context.CartItems.FirstAsync(x => x.ProductId == 2);
-            Assert.Equal(5, cartItem.Quantity);
+            // Arrange: Thêm sản phẩm MacBook Air M2 (tồn kho ban đầu = 1)
+            await _controller.AddToCart(productId: 1, quantity: 1);
+            var cartItem = await _context.CartItems.FirstAsync(x => x.ProductId == 1);
+            Assert.Equal(1, cartItem.Quantity);
 
-            // Giả lập tồn kho của sản phẩm 2 bị thay đổi về 0 (do khách khác mua mất)
-            var product = await _context.Products.FindAsync(2);
+            // Giả lập tồn kho của sản phẩm 1 bị thay đổi về 0 (do khách khác mua mất)
+            var product = await _context.Products.FindAsync(1);
             product!.StockQuantity = 0;
             await _context.SaveChangesAsync();
 
             // Act: Khách hiện tại cố gắng cập nhật giỏ hàng hoặc thực hiện hành động liên quan tới sản phẩm đó
-            var result = await _controller.UpdateQuantity(cartItem.CartItemId, 5);
+            var result = await _controller.UpdateQuantity(cartItem.CartItemId, 1);
 
             // Assert
             var jsonResult = Assert.IsType<JsonResult>(result);
@@ -543,44 +579,33 @@ namespace WebUITopic5_Team4.Tests
 
         // ============================================================
         // TC_E2E_03: E2E Thao tác giỏ hàng phức tạp và Thanh toán an toàn ngầm (Safe Checkout)
-        // Kịch bản: Thêm 3 sản phẩm (ID 1, ID 2, ID 4) -> Xóa sản phẩm ID 4 ->
-        //           Tăng sản phẩm ID 2 từ 1 lên 2 (không bấm nút cập nhật giỏ hàng) ->
-        //           Đồng bộ ngầm (gọi UpdateQuantity và Delete) ->
-        //           Kiểm tra Database thấy giỏ hàng chỉ còn ID 1 (1 cái) và ID 2 (2 cái).
+        // Dữ liệu test:
+        // - Sản phẩm A: MacBook Pro M3 16GB/512GB (ID: 2)
+        // - Sản phẩm B: iPhone 15 128GB (ID: 22)
+        // - Sản phẩm C: MacBook Air M3 16GB/512GB (ID: 3)
+        // Thao tác: Xóa C (ID 3), Tăng B (ID 22) từ 1 lên 2.
         // ============================================================
         [Fact]
         public async Task TC_E2E_03_ComplexCartOperations_SafeCheckout_Success()
         {
-            // Seed thêm sản phẩm ID 4
-            _context.Products.Add(new Product
-            {
-                ProductId = 4,
-                ProductName = "MacBook Air M3",
-                UnitPrice = 32990000,
-                StockQuantity = 5,
-                CategoryId = 1,
-                ImageUrl = "~/images/Products/macbook-air.jpg"
-            });
-            await _context.SaveChangesAsync();
-
             // B1: Thêm 3 sản phẩm vào giỏ
-            await _controller.AddToCart(productId: 1, quantity: 1);
-            await _controller.AddToCart(productId: 2, quantity: 1);
-            await _controller.AddToCart(productId: 4, quantity: 1);
+            await _controller.AddToCart(productId: 2, quantity: 1); // Sản phẩm A
+            await _controller.AddToCart(productId: 22, quantity: 1); // Sản phẩm B
+            await _controller.AddToCart(productId: 3, quantity: 1); // Sản phẩm C
 
             var cartItems = await _context.CartItems.ToListAsync();
             Assert.Equal(3, cartItems.Count);
 
-            var itemA = cartItems.First(x => x.ProductId == 1);
-            var itemB = cartItems.First(x => x.ProductId == 2);
-            var itemC = cartItems.First(x => x.ProductId == 4);
+            var itemA = cartItems.First(x => x.ProductId == 2);
+            var itemB = cartItems.First(x => x.ProductId == 22);
+            var itemC = cartItems.First(x => x.ProductId == 3);
 
-            // B2: Nhấn "X" để xóa sản phẩm C (ID 4)
+            // B2: Nhấn "X" để xóa sản phẩm C (ID 3)
             var deleteResult = await _controller.DeleteCartItem(itemC.CartItemId);
             var deleteJson = Assert.IsType<JsonResult>(deleteResult);
             Assert.True((bool)deleteJson.Value!.GetType().GetProperty("success")!.GetValue(deleteJson.Value));
 
-            // B3: Bấm "+" để tăng sản phẩm B (ID 2) từ 1 lên 2 (đồng bộ Safe Checkout ngầm)
+            // B3: Bấm "+" để tăng sản phẩm B (ID 22) từ 1 lên 2 (đồng bộ Safe Checkout ngầm)
             var updateResult = await _controller.UpdateQuantity(itemB.CartItemId, 2);
             var updateJson = Assert.IsType<JsonResult>(updateResult);
             Assert.True((bool)updateJson.Value!.GetType().GetProperty("success")!.GetValue(updateJson.Value));
@@ -589,14 +614,14 @@ namespace WebUITopic5_Team4.Tests
             var finalCartItems = await _context.CartItems.Include(x => x.Product).ToListAsync();
             Assert.Equal(2, finalCartItems.Count); // Chỉ còn 2 sản phẩm A và B
 
-            var remainingA = finalCartItems.First(x => x.ProductId == 1);
-            var remainingB = finalCartItems.First(x => x.ProductId == 2);
+            var remainingA = finalCartItems.First(x => x.ProductId == 2);
+            var remainingB = finalCartItems.First(x => x.ProductId == 22);
 
             Assert.Equal(1, remainingA.Quantity);
             Assert.Equal(2, remainingB.Quantity);
 
-            // Tổng giá trị = 1 * 34,990,000 + 2 * 29,990,000 = 94,970,000
-            decimal expectedTotal = 1 * 34990000m + 2 * 29990000m;
+            // Tổng giá trị = 1 * 45,990,000 + 2 * 19,990,000 = 85,970,000đ
+            decimal expectedTotal = 1 * 45990000m + 2 * 19990000m;
             decimal actualTotal = finalCartItems.Sum(x => x.Quantity * x.Product.UnitPrice);
             Assert.Equal(expectedTotal, actualTotal);
         }
